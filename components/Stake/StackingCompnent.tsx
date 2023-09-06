@@ -1,34 +1,93 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useWeb3React } from "@web3-react/core";
 import Swal from "sweetalert2";
-import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi.json";
+import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import {
   ExternalProvider,
   JsonRpcFetchFunc,
   Web3Provider,
 } from "@ethersproject/providers";
-import { Contract } from "@ethersproject/contracts";
-import Web3 from "web3";
-import { ethers } from "ethers";
-import BigNumber from "bignumber.js";
+import { usePublicClient, useWalletClient } from "wagmi";
+import {
+  configureChains,
+  createConfig,
+  WagmiConfig,
+  useAccount,
+  useEnsName,
+  useContractWrite,
+  useContractRead,
+} from "wagmi";
 
 const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
 const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
 
 const OverviewComponent = () => {
-  const { account } = useWeb3React();
-  const context = useWeb3React();
-  const { library } = context;
-  const [loading, setLoading] = useState(false);
   const [unstakeStatus, setUnstakeStatus] = useState(false);
   const [rewards, setRewards] = useState(0);
+  const [getrewards, setgetRewards] = useState(0);
+  const [staked, setstaked] = useState();
 
+
+  const { address, isConnected } = useAccount();
   const [newrewards, setnewRewards] = useState(Number);
-  const user = account;
+  const publicClient = usePublicClient();
+  const { data: walletClient } = useWalletClient();
 
+
+  const { data: getRewards } = useContractRead({
+    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
+    abi: fourteenDayStackAbi,
+    functionName: "calculateRewardSinceLastClaim",
+    chainId: 1,
+    args: [address],
+    onSuccess(data) {
+      console.log("Success", getRewards);
+    },
+  });
+  const { data: unstaked } = useContractWrite({
+    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
+    abi: fourteenDayStackAbi,
+    functionName: "getTotalDividendsDistributed",
+    chainId: 1,
+    onSuccess(data) {
+      console.log("Success", unstake);
+    },
+  });
+  const { data: withdrawRewards } = useContractRead({
+    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
+    abi: fourteenDayStackAbi,
+    functionName: "withdrawReward",
+    chainId: 1,
+    args: [address],
+    onSuccess(data) {
+      console.log("Success", withdrawRewards);
+    },
+  });
+  const { data: balanceOf } = useContractRead({
+    address: "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A",
+    abi: LPTokenAbi,
+    functionName: "balanceOf",
+    chainId: 1,
+    args: [address],
+    onSuccess(data) {
+      console.log('Success',  balanceOf)
+    },
+  });
+  const { data: stake } = useContractRead({
+    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
+    abi: fourteenDayStackAbi,
+    functionName: "stake",
+    chainId: 1,
+    args: [address],
+    onSuccess(data) {
+      console.log('Success',  stake)
+    },
+  });
+
+  const [loading, setLoading] = useState(false);
   const unstackStatus = async () => {
-    if (!account) {
+    if (!address) {
       // Swal.fire({
       //   icon: "error",
       //   title: "Connect Your Wallet To Claim",
@@ -49,7 +108,7 @@ const OverviewComponent = () => {
       );
       console.log(fourteenDayContract);
 
-      const stacked = await fourteenDayContract.canUnstakeAny(account); //.claim()
+      const stacked = await fourteenDayContract.canUnstakeAny(address); //.claim()
       console.log(stacked, "STAKED");
       return stacked;
     } catch (error) {
@@ -66,7 +125,7 @@ const OverviewComponent = () => {
     }
   };
   useEffect(() => {
-    const fetchRewards = async (account: string) => {
+    const fetchRewards = async (address: string) => {
       try {
         setLoading(true);
         const provider = new Web3Provider(
@@ -78,10 +137,9 @@ const OverviewComponent = () => {
           fourteenDayStackAbi,
           signer
         );
-  
-        const calculatedRewards = await fourteenDayContract.calculateRewardSinceLastClaim(
-          account
-        );
+
+        const calculatedRewards =
+          await fourteenDayContract.calculateRewardSinceLastClaim(address);
         console.log(calculatedRewards, "Claimable Reward");
         setRewards(calculatedRewards.toNumber());
       } catch (error) {
@@ -92,8 +150,24 @@ const OverviewComponent = () => {
       }
     };
 
-    
-     async function rewards() {
+    function fetchgetRewards() {
+      try {
+        setLoading(true);
+       const stringed:string =  getRewards?.toString() as string
+        const fixedNumber = parseFloat(stringed).toFixed(6);
+        const NumberNum = Number(fixedNumber);
+        console.log(NumberNum, 'rewards for user');
+        setgetRewards(NumberNum);
+        return NumberNum;
+      } catch (error) {
+        console.log(error, "error 2");
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function rewards() {
       try {
         setLoading(true);
         const abi = fourteenDayStackAbi;
@@ -102,11 +176,15 @@ const OverviewComponent = () => {
         );
         const contractaddress = fourteenDayContractAddress; // "clienttokenaddress"
         const contract = new Contract(contractaddress, abi, provider);
-        const Reflections = await contract.calculateRewardSinceLastClaim(account); //.claim()
-    
-        const finalnumber = parseFloat(Web3.utils.fromWei(Reflections.toString()));
+        const Reflections = await contract.calculateRewardSinceLastClaim(
+          address
+        ); //.claim()
+
+        const finalnumber = parseFloat(
+          Web3.utils.fromWei(Reflections.toString())
+        );
         const formattedNumber = finalnumber.toFixed(4);
-          const NumberNum = Number(formattedNumber)
+        const NumberNum = Number(formattedNumber);
         setnewRewards(NumberNum);
         console.log(Reflections);
         console.log(finalnumber);
@@ -118,11 +196,11 @@ const OverviewComponent = () => {
       }
     }
     rewards();
-    fetchRewards(account);
-  }, [account, library]);
+    fetchRewards(`0x${String}`);
+  }, [address]);
 
   const unstake = async () => {
-    if (!account) {
+    if (!address) {
       Swal.fire({
         icon: "error",
         title: "Connect Your Wallet To Claim",
@@ -165,7 +243,7 @@ const OverviewComponent = () => {
   };
 
   const withdraw = async () => {
-    if (!account) {
+    if (!address) {
       Swal.fire({
         icon: "error",
         title: "Connect Your Wallet To Claim",
@@ -268,9 +346,7 @@ const OverviewComponent = () => {
 };
 
 const StackComponent = () => {
-  const { account } = useWeb3React();
-  const context = useWeb3React();
-  const { library } = context;
+  const { address, isConnected } = useAccount();
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("0");
   const [max, setMax] = useState("0");
@@ -291,7 +367,7 @@ const StackComponent = () => {
 
       setMax(Web3.utils.fromWei(balance.toString(), "ether"));
     }
-    if (!account) {
+    if (!address) {
       // Swal.fire({
       //   icon: "error",
       //   title: "Connect Your Wallet To Claim",
@@ -314,7 +390,7 @@ const StackComponent = () => {
   };
   const Claimtoken = async () => {
     console.log(amount, "AMOUNT");
-    if (!account) {
+    if (!address) {
       Swal.fire({
         icon: "error",
         title: "Connect Your Wallet To Claim",
@@ -462,4 +538,3 @@ const StackingCompnent = () => {
 };
 
 export default StackingCompnent;
-

@@ -10,6 +10,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: rgb(232, 232, 232);
+  background-image: url('../assets//images/backgroundnew.png');
+  background-size: cover;
+   /* Cover the entire container */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat;
 }
 
 .footer {

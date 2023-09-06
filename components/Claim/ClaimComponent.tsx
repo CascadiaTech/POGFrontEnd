@@ -168,8 +168,7 @@ Claimwrite()
           </div> */}
 
           {loading ? (
-         //   <Spin indicator={antIcon} className="add-spinner" /> <>
-         <></>
+            <Spin indicator={antIcon} className="add-spinner" />
           ) : (
             <>
                <div className="flex justify-center items-center mt-10 ">
@@ -177,7 +176,7 @@ Claimwrite()
                    style={{ fontFamily: "Azonix"}}
                    className="font-sans cursor-pointer text-[20px] rounded-lg text-center bg-gradient-to-r from-black to-black  text-white py-2 px-5 sm:px-10 md:px-10 lg:px-10"
                   type="button"
-                  onClick={() => Claim()}
+                  onClick={() => Claimwrite()}
                 >
                  LP CLAIM
                 </button>

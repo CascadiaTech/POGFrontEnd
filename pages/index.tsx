@@ -10,6 +10,7 @@ import { abiObject } from "../contracts/abi/abi.mjs";
 import { usePublicClient } from 'wagmi'
 import { useWalletClient } from 'wagmi'
 import { useEffect, useState } from 'react';
+import ClaimComponent from '../components/Claim/ClaimComponent';
 const Home: NextPage = () => {
   const [balance,setbalance]:any = useState()
   const publicClient = usePublicClient()
@@ -60,31 +61,25 @@ Claimwrite()
 
   return (
 
-    <div>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-
-      </h1>
-
-      <div>
-        <div>{address}</div>
-  
-      </div>
-
-
+    <div className="scroll-smooth ">
+    <header>
       <HeaderComponent />
-
-
-      <main className={styles.main}>
-        <ConnectButton />
-        {address}
-      <button onClick={() => x()}> hi claim me </button>
-
-      </main>
-
-      <footer className={styles.footer}>
-      </footer>
+    </header>
+    {/* <div className={"flex flex-col  z-10 mx-auto justify-center "}></div> */}
+  <main className={`${styles.main} `}>
+    <div className="w-full">
+      <div
+        className={` w-full lg:w-auto  flex justify-center mx-auto text-center`}
+        style={{ fontFamily: "Mandalore" }}
+      >
+        <div className={` text-center self-center justify-center`}>
+          <ClaimComponent />
+        </div>
+        <p className={"my-5"}></p>
+      </div>
     </div>
+  </main>
+</div>
   );
 };
 

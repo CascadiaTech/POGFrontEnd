@@ -92,7 +92,7 @@ const projectId = 'e860804a2106941d3e0efee245ad7d7a';
                     >
                       <li className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
                       style={{ fontFamily: "Azonix" }}>
-                        <Link href={"/"}>LP Claim</Link>
+                        <Link href={"/ClaimPage"}>LP Claim</Link>
                       </li>
                       <li style={{ fontFamily: "Azonix" }}
                         className="pt-1 hover:border-b-2 border-gray-300">
