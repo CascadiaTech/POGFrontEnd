@@ -1,28 +1,21 @@
-import "tailwindcss-elevation";
-import { useWeb3React } from "@web3-react/core";
-import Swal from "sweetalert2";
-import { Accordion } from "flowbite-react";
-import { useCallback, useEffect, useState } from "react";
-import Web3 from "web3";
-import {
-  ExternalProvider,
-  JsonRpcFetchFunc,
-  Web3Provider,
-} from "@ethersproject/providers";
-import { Contract } from "@ethersproject/contracts";
-import { abiObject } from "../../contracts/abi/abi.mjs";
-import { Web3ReactProvider } from "@web3-react/core";
-import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
-import ScrollpositionAnimation from "../../hooks/OnScroll";
 
+import { useCallback, useEffect, useState } from "react";
+import styles from '../styles/Home.module.css';
+import {
+  configureChains, createConfig, WagmiConfig, useAccount, useEnsName,
+} from 'wagmi';
+import { abiObject } from "../../contracts/abi/abi.mjs";
+import { usePublicClient } from 'wagmi'
+import { useWalletClient } from 'wagmi'
+import Web3 from "web3";
 export default function ClaimComponent() {
-  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-  const { account } = useWeb3React();
-  const context = useWeb3React();
+  const { address, isConnected } = useAccount()
+  const publicClient = usePublicClient()
+  const { data: walletClient } = useWalletClient()
+
   const [loading, setLoading] = useState(false);
   const [claim, setcanclaim] = useState(Boolean);
-  const { library } = context;
+
   const [Claimable, setClaimable] = useState(false);
 
   const [pendingreflections, setpendingreflections] = useState(Number);
@@ -31,19 +24,17 @@ export default function ClaimComponent() {
 
   useEffect(() => {
     async function Fetchbalance() {
-      if (!account) {
+      if (!address) {
         return;
       }
 
       try {
         setLoading(true);
         const abi = abiObject;
-        const provider = new Web3Provider(
-          library?.provider as ExternalProvider | JsonRpcFetchFunc
-        );
+
         const contractaddress = "0x3e34eabF5858a126cb583107E643080cEE20cA64"; // "clienttokenaddress"
         const contract = new Contract(contractaddress, abi, provider);
-        const balance = await new contract.balanceOf(account); //.claim(account,amount)
+        const balance = await new contract.balanceOf(address); //.claim(account,amount)
         const Claimtxid = await balance;
         const finalbalance = Number(balance);
         const Fixeddecimals = finalbalance.toFixed(2);
@@ -65,12 +56,10 @@ export default function ClaimComponent() {
       try {
         setLoading(true);
         const abi = abiObject;
-        const provider = new Web3Provider(
-          library?.provider as ExternalProvider | JsonRpcFetchFunc
-        );
+
         const contractaddress = "0x3e34eabF5858a126cb583107E643080cEE20cA64"; // "clienttokenaddress"
         const contract = new Contract(contractaddress, abi, provider);
-        const Reflections = await contract.withdrawableDividendOf(account); //.claim()
+        const Reflections = await contract.withdrawableDividendOf(address); //.claim()
         const finalnumber = Web3.utils.fromWei(Reflections.toString());
         const fixedNumber = parseFloat(finalnumber).toFixed(6);
         const NumberNum = Number(fixedNumber)
@@ -95,9 +84,7 @@ export default function ClaimComponent() {
       try {
         setLoading(true);
         const abi = abiObject;
-        const provider = new Web3Provider(
-          library?.provider as ExternalProvider | JsonRpcFetchFunc
-        );
+
         const contractaddress = "0x3e34eabF5858a126cb583107E643080cEE20cA64"; // "clienttokenaddress"
         const contract = new Contract(contractaddress, abi, provider);
         const rewardToken = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";
@@ -122,12 +109,8 @@ export default function ClaimComponent() {
   }, [account]);
 
   const Claimtoken = useCallback(async () => {
-    if (!account) {
-      Swal.fire({
-        icon: "error",
-        title: "Connect Your Wallet To Claim",
-        timer: 5000,
-      });
+    if (!address) {
+
     }
 
     try {
@@ -135,27 +118,21 @@ export default function ClaimComponent() {
       const data = abiObject;
       const abi = data;
       const contractaddress = "0x3e34eabF5858a126cb583107E643080cEE20cA64"; // "clienttokenaddress"
-      const provider = new Web3Provider(
-        library?.provider as ExternalProvider | JsonRpcFetchFunc
-      );
+
       const signer = provider.getSigner();
       const contract = new Contract(contractaddress, abi, signer);
       console.log(contract);
       const ClaimTokens = await contract.claim(); //.claim()
       const signtransaction = await signer.signTransaction(ClaimTokens);
       const Claimtxid = await signtransaction;
-      Swal.fire({
-        icon: "success",
-        title: "Congratulations you have Claimed all of your rewards",
-        text: "Go see them in your wallet, and stick around for the next drop",
-      });
+
       return Claimtxid;
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }, [account, library?.provider]);
+  }, [address, library?.provider]);
 
   return (
     <>
@@ -197,7 +174,8 @@ export default function ClaimComponent() {
           </div> */}
 
           {loading ? (
-            <Spin indicator={antIcon} className="add-spinner" />
+         //   <Spin indicator={antIcon} className="add-spinner" /> <>
+         <></>
           ) : (
             <>
                <div className="flex justify-center items-center mt-10 ">
