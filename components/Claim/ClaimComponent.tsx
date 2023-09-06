@@ -2,12 +2,12 @@
 import { useCallback, useEffect, useState } from "react";
 import styles from '../styles/Home.module.css';
 import {
-  configureChains, createConfig, WagmiConfig, useAccount, useEnsName,
+  configureChains, createConfig, WagmiConfig, useAccount, useEnsName, useContractWrite, useContractRead,
 } from 'wagmi';
 import { abiObject } from "../../contracts/abi/abi.mjs";
 import { usePublicClient } from 'wagmi'
 import { useWalletClient } from 'wagmi'
-import Web3 from "web3";
+
 export default function ClaimComponent() {
   const { address, isConnected } = useAccount()
   const publicClient = usePublicClient()
@@ -19,120 +19,115 @@ export default function ClaimComponent() {
   const [Claimable, setClaimable] = useState(false);
 
   const [pendingreflections, setpendingreflections] = useState(Number);
-  const [totaldistributed, settotaldistributed] = useState(Number);
-  const [balance, setbalance] = useState(Number);
-
-  useEffect(() => {
-    async function Fetchbalance() {
-      if (!address) {
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const abi = abiObject;
-
-        const contractaddress = "0x3e34eabF5858a126cb583107E643080cEE20cA64"; // "clienttokenaddress"
-        const contract = new Contract(contractaddress, abi, provider);
-        const balance = await new contract.balanceOf(address); //.claim(account,amount)
-        const Claimtxid = await balance;
-        const finalbalance = Number(balance);
-        const Fixeddecimals = finalbalance.toFixed(2);
-        const Numberify = Number(Fixeddecimals);
-        setbalance(Numberify);
-        console.log(Numberify);
-
-        return Claimtxid;
-        /////
-      } catch (error) {
-        console.log(error, "ERROR 1111");
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    async function PendingReflections() {
-      try {
-        setLoading(true);
-        const abi = abiObject;
-
-        const contractaddress = "0x3e34eabF5858a126cb583107E643080cEE20cA64"; // "clienttokenaddress"
-        const contract = new Contract(contractaddress, abi, provider);
-        const Reflections = await contract.withdrawableDividendOf(address); //.claim()
-        const finalnumber = Web3.utils.fromWei(Reflections.toString());
-        const fixedNumber = parseFloat(finalnumber).toFixed(6);
-        const NumberNum = Number(fixedNumber)
-
-        setpendingreflections(NumberNum);
-
-        if (finalnumber > 0) {
-          setClaimable(true);
-        }
-        console.log(NumberNum);
-        console.log(finalnumber);
-        return NumberNum;
-      } catch (error) {
-        console.log(error, "error 2");
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    async function FetchDistributed() {
-      try {
-        setLoading(true);
-        const abi = abiObject;
-
-        const contractaddress = "0x3e34eabF5858a126cb583107E643080cEE20cA64"; // "clienttokenaddress"
-        const contract = new Contract(contractaddress, abi, provider);
-        const rewardToken = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";
-        const Reflections = await contract.getTotalDividendsDistributed();
-        const formattedDistributed = Web3.utils.fromWei(Reflections.toString());
-        const fixedNumber = parseFloat(formattedDistributed).toFixed(6);
-        const NumberNum = Number(fixedNumber)
-        settotaldistributed(NumberNum);
-        console.log(formattedDistributed);
-        return NumberNum;
-      } catch (error) {
-        console.log(error, "error 3");
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    PendingReflections();
-    Fetchbalance();
-    FetchDistributed();
-  }, [account]);
-
-  const Claimtoken = useCallback(async () => {
+  const [totaldistributed, settotaldistributed]:any = useState(Number);
+  const [balance, setbalance]:any = useState(Number);
+  function Fetchbalance() {
     if (!address) {
-
+      return;
     }
 
     try {
       setLoading(true);
-      const data = abiObject;
-      const abi = data;
-      const contractaddress = "0x3e34eabF5858a126cb583107E643080cEE20cA64"; // "clienttokenaddress"
+      const { data: balanceOf } = useContractRead({
+        address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
+        abi: abiObject,
+        functionName: "balanceOf",
+        chainId: 1,
+        args: [address],
+        onSuccess(data) {
+          console.log('Success',  balanceOf)
+        },
+      });
+      setbalance(balanceOf);
 
-      const signer = provider.getSigner();
-      const contract = new Contract(contractaddress, abi, signer);
-      console.log(contract);
-      const ClaimTokens = await contract.claim(); //.claim()
-      const signtransaction = await signer.signTransaction(ClaimTokens);
-      const Claimtxid = await signtransaction;
 
-      return Claimtxid;
+      return balanceOf;
+      /////
     } catch (error) {
-      console.log(error);
+      console.log(error, "ERROR 1111");
+      setLoading(false);
     } finally {
       setLoading(false);
     }
-  }, [address, library?.provider]);
+  }
+
+ function PendingReflections() {
+    try {
+      setLoading(true);
+
+      const { data: PendingReflections } = useContractRead({
+        address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
+        abi: abiObject,
+        functionName: "withdrawableDividendOf",
+        chainId: 1,
+        args: [address],
+        onSuccess(data) {
+          console.log('Success',  PendingReflections)
+        },
+      });
+
+     const stringed:string =  PendingReflections?.toString() as string
+
+      const fixedNumber = parseFloat(stringed).toFixed(6);
+      const NumberNum = Number(fixedNumber)
+
+      setpendingreflections(NumberNum);
+
+      return NumberNum;
+    } catch (error) {
+      console.log(error, "error 2");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function FetchDistributed() {
+    try {
+      setLoading(true);
+      const abi = abiObject;
+
+      const { data: TotalDividends } = useContractRead({
+        address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
+        abi: abiObject,
+        functionName: "getTotalDividendsDistributed",
+        chainId: 1,
+        onSuccess(data) {
+          console.log('Success',  TotalDividends)
+        },
+      });
+      const stringed:string =  TotalDividends?.toString() as string
+      const fixedNumber = parseFloat(stringed).toFixed(6);
+      const NumberNum = Number(fixedNumber)
+      settotaldistributed(NumberNum);
+      return NumberNum;
+    } catch (error) {
+      console.log(error, "error 3");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
+  useEffect(() => {
+    PendingReflections();
+    Fetchbalance();
+    FetchDistributed();
+  }, [address]);
+
+
+const {write: Claimwrite } = useContractWrite({
+    address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
+    abi: abiObject,
+    functionName: 'claim',
+    account: address
+  })
+
+
+async function Claim(){
+Claimwrite()
+}
 
   return (
     <>
@@ -183,7 +178,7 @@ export default function ClaimComponent() {
                    style={{ fontFamily: "Azonix"}}
                    className="font-sans cursor-pointer text-[20px] rounded-lg text-center bg-gradient-to-r from-black to-black  text-white py-2 px-5 sm:px-10 md:px-10 lg:px-10"
                   type="button"
-                  onClick={() => Claimtoken()}
+                  onClick={() => Claim()}
                 >
                  LP CLAIM
                 </button>

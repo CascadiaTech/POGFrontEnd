@@ -2,7 +2,7 @@
 import ClaimComponent from "../components/Claim/ClaimComponent";
 import HeaderComponent from "../components/Header/HeaderComponent";
 
-export default function StakeComponent() {
+export default function ClaimPage() {
   return <main>
   <header>
     {" "}
