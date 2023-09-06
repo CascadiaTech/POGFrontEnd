@@ -21,26 +21,42 @@ export default function ClaimComponent() {
   const [pendingreflections, setpendingreflections] = useState(Number);
   const [totaldistributed, settotaldistributed]:any = useState(Number);
   const [balance, setbalance]:any = useState(Number);
+  const { data: PendingReflections } = useContractRead({
+    address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
+    abi: abiObject,
+    functionName: "withdrawableDividendOf",
+    chainId: 1,
+    args: [address],
+    onSuccess(data) {
+      console.log('Success',  PendingReflections)
+    },
+  });
+  const { data: TotalDividends } = useContractRead({
+    address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
+    abi: abiObject,
+    functionName: "getTotalDividendsDistributed",
+    chainId: 1,
+    onSuccess(data) {
+      console.log('Success',  TotalDividends)
+    },
+  });
+  const { data: balanceOf } = useContractRead({
+    address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
+    abi: abiObject,
+    functionName: "balanceOf",
+    chainId: 1,
+    args: [address],
+    onSuccess(data) {
+      console.log('Success',  balanceOf)
+    },
+  });
   function Fetchbalance() {
     if (!address) {
       return;
     }
-
     try {
       setLoading(true);
-      const { data: balanceOf } = useContractRead({
-        address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
-        abi: abiObject,
-        functionName: "balanceOf",
-        chainId: 1,
-        args: [address],
-        onSuccess(data) {
-          console.log('Success',  balanceOf)
-        },
-      });
       setbalance(balanceOf);
-
-
       return balanceOf;
       /////
     } catch (error) {
@@ -51,20 +67,11 @@ export default function ClaimComponent() {
     }
   }
 
- function PendingReflections() {
+ function fetchPendingReflections() {
     try {
       setLoading(true);
 
-      const { data: PendingReflections } = useContractRead({
-        address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
-        abi: abiObject,
-        functionName: "withdrawableDividendOf",
-        chainId: 1,
-        args: [address],
-        onSuccess(data) {
-          console.log('Success',  PendingReflections)
-        },
-      });
+
 
      const stringed:string =  PendingReflections?.toString() as string
 
@@ -87,18 +94,10 @@ export default function ClaimComponent() {
       setLoading(true);
       const abi = abiObject;
 
-      const { data: TotalDividends } = useContractRead({
-        address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
-        abi: abiObject,
-        functionName: "getTotalDividendsDistributed",
-        chainId: 1,
-        onSuccess(data) {
-          console.log('Success',  TotalDividends)
-        },
-      });
+
       const stringed:string =  TotalDividends?.toString() as string
-      const fixedNumber = parseFloat(stringed).toFixed(6);
-      const NumberNum = Number(fixedNumber)
+      const fixedNumber = parseFloat(stringed)
+      const NumberNum = Number(fixedNumber.toFixed(2))
       settotaldistributed(NumberNum);
       return NumberNum;
     } catch (error) {
@@ -111,7 +110,7 @@ export default function ClaimComponent() {
 
 
   useEffect(() => {
-    PendingReflections();
+    fetchPendingReflections()
     Fetchbalance();
     FetchDistributed();
   }, [address]);
