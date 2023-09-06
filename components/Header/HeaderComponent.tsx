@@ -95,7 +95,7 @@ const projectId = 'e860804a2106941d3e0efee245ad7d7a';
                         <Link href={"/ClaimPage"}>LP Claim</Link>
                       </li>
                       <li style={{ fontFamily: "Azonix" }}
-                        className="pt-1 hover:border-b-2 border-gray-300">
+                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]">
                         <Link href={"/Dapp/LPstakingpage"}>LP StaQing</Link>
                       </li>
                       <li className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
