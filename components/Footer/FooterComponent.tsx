@@ -1,14 +1,12 @@
-import emailjs from "@emailjs/browser";
 //import useScrollPosition from '@react-hook/window-scroll'
 import React, { useEffect, useState } from "react";
-import { animated, useTransition } from "react-spring";
 import Swal from "sweetalert2";
 export default function FooterComponent() {
   const [hidden, sethidden] = useState(true);
   //const ScrollY = useScrollPosition()
   const [message, setmessage] = useState(String);
   const [emails, setemail] = useState(String);
-
+  
   const SERVICE_ID = "service_pbjqier";
   const TEMPLATE_ID = "contact_form";
   const USER_ID = "iBjsKXibozEgEn3zJ";
@@ -16,40 +14,7 @@ export default function FooterComponent() {
 
   const form = React.useRef() as React.MutableRefObject<HTMLFormElement>;
 
-  const sendEmail = (e: any) => {
-    e.preventDefault();
 
-    emailjs
-      .sendForm(
-        SERVICE_ID,
-        TEMPLATE_ID,
-        form.current as unknown as string,
-        USER_ID
-      )
-      .then(
-        (result: any) => {
-          console.log(result.text);
-          Swal.fire({
-            icon: "success",
-            title: "Message Sent Successfully",
-          });
-        },
-        (error: any) => {
-          console.log(error.text);
-          Swal.fire({
-            icon: "error",
-            title: "Ooops, something went wrong",
-          });
-        }
-      );
-  };
-
-  const transitions = useTransition(!hidden, null, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-    config: { delay: 5000, duration: 1000 },
-  });
 
   return (
     <div>
