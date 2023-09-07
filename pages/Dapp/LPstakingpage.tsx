@@ -45,7 +45,7 @@ return (
       <main className={`${styles.main} `}>
         {/* <div className="mt-12 w-[170px] sm:w-[300px] md:w-[350px] lg:w-[500px] "> */}
         <div className=" flex flex-col justify-center items-center w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px]  ">
-          <div className="flex justify-center -mt-40 items-center self-center">
+          <div className="flex justify-center -mt-20 items-center self-center">
             <Image
               src={logoImage}
               alt="Logo"
@@ -54,6 +54,12 @@ return (
               className="self-center  "
             />
           </div>
+          <h1
+          className="text-black font-sans flex justify-center mb-5 text-center items-center text-[30px]"
+          style={{ fontFamily: "GroupeMedium" }}
+        >
+          Please Connect your wallet
+        </h1>
         <div className="flex flex-row mb-5 justify-center items-center space-x-10">
           <a
             href="https://youtube.com/@LINQGROUP?si=f_3whNeXvi20t9Ux"

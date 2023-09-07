@@ -7,6 +7,7 @@ import {
 import { abiObject } from "../../contracts/abi/abi.mjs";
 import { usePublicClient } from 'wagmi'
 import { useWalletClient } from 'wagmi'
+import { Spin } from "antd";
 
 export default function ClaimComponent() {
   const { address, isConnected } = useAccount()
@@ -74,13 +75,15 @@ export default function ClaimComponent() {
 
 
      const stringed:string =  PendingReflections?.toString() as string
-
+     const divisor = 1e18
       const fixedNumber = parseFloat(stringed).toFixed(6);
       const NumberNum = Number(fixedNumber)
+      const formattedNumber = NumberNum / divisor
+      const roundedNumber = Math.round(formattedNumber * 1e6) / 1e6;
+      console.log(roundedNumber); 
+      setpendingreflections(roundedNumber);
 
-      setpendingreflections(NumberNum);
-
-      return NumberNum;
+      return roundedNumber;
     } catch (error) {
       console.log(error, "error 2");
       setLoading(false);
@@ -94,12 +97,14 @@ export default function ClaimComponent() {
       setLoading(true);
       const abi = abiObject;
 
-
+      const divisor = 1e18
       const stringed:string =  TotalDividends?.toString() as string
       const fixedNumber = parseFloat(stringed)
       const NumberNum = Number(fixedNumber.toFixed(2))
-      settotaldistributed(NumberNum);
-      return NumberNum;
+      const formattedNumber = NumberNum / divisor
+      const roundedNumber = Math.round(formattedNumber * 1e6) / 1e6;
+      settotaldistributed(roundedNumber);
+      return roundedNumber;
     } catch (error) {
       console.log(error, "error 3");
       setLoading(false);
@@ -144,7 +149,6 @@ Claimwrite()
             text-[10px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
             style={{ fontFamily: "GroupeMedium" }}>
               {pendingreflections}
-              {/* 23123.23213232312321321231232 */}
               </p>
           </div>
 
@@ -155,7 +159,6 @@ Claimwrite()
             text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]" 
             style={{ fontFamily: "GroupeMedium" }}>
               {totaldistributed}
-              {/* 23123.23213232312321321231232 */}
               </p>
           </div>
           {/* <div className="grid grid-cols-2 font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
@@ -167,9 +170,10 @@ Claimwrite()
               </p>
           </div> */}
 
-          {loading ? (
+          {/* {loading ? (
             <Spin indicator={antIcon} className="add-spinner" />
           ) : (
+            )}*/}
             <>
                <div className="flex justify-center items-center mt-10 ">
                 <button
@@ -182,7 +186,6 @@ Claimwrite()
                 </button>
               </div>
             </>
-          )}
         </div>
       {/* </div> */}
 
