@@ -6,7 +6,6 @@ import LinqLogo from "../../assets/images/LinqLogo.png";
 import MENUBar from "../../assets/images/menuBars.png";
 import LINQLogo from "../../assets/images/logoNew.png";
 
-import { ConnectWallet } from "../Web3Modal/WalletConnect";
 import { useRouter } from "next/router";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 export default function HeaderComponent() {
