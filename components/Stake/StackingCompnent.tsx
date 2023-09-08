@@ -25,16 +25,6 @@ const OverviewComponent = () => {
     functionName: "withdrawReward",
     account: address,
   });
-  const { data: UserBalanceInStaking } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "getLpDepositsForUser",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      console.log("Success", UserBalanceInStaking);
-    },
-  });
   const { data: UserClaimableBalance } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
@@ -133,6 +123,8 @@ const StackComponent = () => {
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("0");
   const [max, setMax] = useState("0");
+  const [currentStaked, setCurrentStaked] = useState(Number);
+  const [balance, setbalance] = useState(Number);
 
   const { address } = useAccount();
 
@@ -153,18 +145,7 @@ const StackComponent = () => {
     args: [(stake_amount * 10 ** 18)],
     account: address,
   });
-console.log(stake_amount * 10 ** 18)
-  const { data: balanceOf } = useContractRead({
-    address: LPtokenContract,
-    abi: LPTokenAbi,
-    functionName: "balanceOf",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      console.log("Success", balanceOf);
-    },
-  });
-  console.log("This is my balance", balanceOf)
+
 
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
@@ -175,7 +156,72 @@ console.log(stake_amount * 10 ** 18)
   });
   const refinedAllowance = allowance ? Number(allowance) : 0;
 
-  // they fetched users linq balance
+  const { data: UserBalanceInStaking } = useContractRead({
+    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
+    abi: fourteenDayStackAbi,
+    functionName: "getLpDepositsForUser",
+    chainId: 1,
+    args: [address],
+    onSuccess(data) {
+      console.log("Success", UserBalanceInStaking);
+    },
+  });
+
+  function Fetchcurrentstaked() {
+    if (!address) {
+      return;
+    }
+    try {
+      setLoading(true);
+      const divisor = 1e18;
+      const NumberBalance = Number(UserBalanceInStaking)
+      const formattedNumber = NumberBalance / divisor
+      const finalNumber = formattedNumber.toFixed(6);
+      const realNumber = Number(finalNumber)
+      setCurrentStaked(realNumber);
+      return realNumber;
+      /////
+    } catch (error) {
+      console.log(error, "ERROR 1111");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  
+  const { data: balanceOf } = useContractRead({
+    address: LPtokenContract,
+    abi: LPTokenAbi,
+    functionName: "balanceOf",
+    chainId: 1,
+    args: [address],
+    onSuccess(data) {
+      console.log("Success", balanceOf);
+    },
+  });
+  function Fetchbalance() {
+    if (!address) {
+      return;
+    }
+    try {
+      setLoading(true);
+      const divisor = 1e18;
+      const NumberBalance = Number(balanceOf)
+      const formattedNumber = NumberBalance / divisor
+      const finalNumber = formattedNumber.toFixed(6);
+      const realNumber = Number(finalNumber)
+      setbalance(realNumber);
+      return realNumber;
+      /////
+    } catch (error) {
+      console.log(error, "ERROR 1111");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+  
 
   const handleMaxClick = () => {
     if (max === "0") {
@@ -188,6 +234,10 @@ console.log(stake_amount * 10 ** 18)
       setAmount(max);
     }
   };
+  useEffect(() => {
+    Fetchbalance();
+    Fetchcurrentstaked();
+  }, [address]);
 
   return (
     <div
@@ -196,8 +246,8 @@ console.log(stake_amount * 10 ** 18)
     >
       <div className="flex flex-col ">
         <div className="relative self-center rounded-lg p-2">
-          <label htmlFor="stakeIpnut " className="text-sm">
-            Available Tokens : {max}
+          <label htmlFor="stakeIpnut " className="text-lg">
+            Available Tokens: {balance}
           </label>
           <input
             type="text"
@@ -212,12 +262,6 @@ console.log(stake_amount * 10 ** 18)
               }
             }}
           />
-          <button
-            onClick={handleMaxClick}
-            className="absolute top-[65px] self-center transform -translate-y-1/2 w-[80px] h-[50px] right-2 bg-transparent border-0 outline-none bg-black text-black"
-          >
-            MAX
-          </button>
         </div>
         <div className="flex justify-center items-center">
           {" "} 
@@ -248,6 +292,27 @@ console.log(stake_amount * 10 ** 18)
             </>
           )}
         </div>
+
+        <div className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
+          <p
+            className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px]"
+            style={{ textAlign: "initial", fontFamily: "GroupeMedium" }}
+          >
+            Amount of tokens you currently have Staked{" "}
+          </p>
+          {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
+          <p
+            className="mr-6 flex justify-start
+            text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
+            style={{ fontFamily: "GroupeMedium" }}
+          >
+            {currentStaked} LP tokens
+          </p>
+        </div>
+        
+        <label className="text-lg text-center mx-auto">
+            Note: You must stake minimum 3LP
+          </label>
       </div>
     </div>
   );

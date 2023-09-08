@@ -42,13 +42,11 @@ export default function HeaderComponent() {
 
   return (
     <>
-      <nav
-        className="px-2 sm:px-4 bg-none py-2 mt-1 -my-10 sm:my-0 sm:py-2 w-full fixed z-20 top-0"
-      >
-      <div className="w-fit h-fit text-center mt-2  mx-auto justify-center py-2 ">
-        <ConnectButton />
-      </div>
-        <div 
+      <nav className="px-2 sm:px-4 bg-none py-2 mt-1 -my-10 sm:my-0 sm:py-2 w-full fixed z-20 top-0">
+        <div className="w-fit h-fit text-center mt-2  mx-auto justify-center py-2 ">
+          <ConnectButton />
+        </div>
+        <div
           className="justify-left  self-center items-left text-left w-full flex h-fit w-auto order-1"
           id="navbar-sticky"
         >
@@ -76,21 +74,30 @@ export default function HeaderComponent() {
               }
             >
               <div className=" flex transition-all flex-col items-center ">
-                <div
-                  onClick={() => Onclick()}
-                  className="bg-purplegif rounded-full w-fit px-2 ml-12"
-                  ref={headerRef}
-                >
-                  <Image
-                    className={`rotate-${hidden.rotate.toString()} text-black transition-all duration-300 cursor-pointer`}
-                    height={35}
-                    width={35}
-                    src={MENUBar}
-                    alt={""}
-                  />
+                <div className={"flex flex-row"}>
+                  <p
+                    className="pt-1 hover:border-b-2 text-white border-gray-300 text-[16px]"
+                    style={{ fontFamily: "Azonix" }}
+                  >
+                    Menu
+                  </p>
+                  <div
+                    onClick={() => Onclick()}
+                    className="bg-purplegif rounded-full w-fit px-2"
+                    ref={headerRef}
+                  >
+                    <Image
+                      className={`rotate-${hidden.rotate.toString()} text-black transition-all duration-300 cursor-pointer`}
+                      height={35}
+                      width={35}
+                      src={MENUBar}
+                      alt={""}
+                    />
+                  </div>
                 </div>
-                <div 
-               style={{ backgroundColor: '#131313' }}
+
+                <div
+                  style={{ backgroundColor: "#131313" }}
                   className={`w-fit h-fit opacity-${hidden.hidden} transition-all duration-300`}
                 >
                   <ul

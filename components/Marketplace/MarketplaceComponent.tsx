@@ -23,13 +23,14 @@ export default function MarketplaceComponent() {
     <>
       {/* <div className="mt-12 w-[170px] sm:w-[300px] md:w-[350px] lg:w-[500px] "> */}
       <p
-          className="text-3xl lg:text-3xl mt-40 font-semibold px-5 text-white"
+          className="text-3xl lg:text-3xl mt-40 text-center font-semibold px-5 text-white"
           style={{ fontFamily: "Azonix" }}
         >
           LP Marketplace
         </p>
       <iframe
         width="400"
+        className={'mx-auto justify-center'}
         height="720"
         allow="clipboard-read *; clipboard-write *; web-share *; accelerometer *; autoplay *; camera *; gyroscope *; payment *; geolocation *"
         src="https://flooz.xyz/embed/trade?swapDisabled=false&swapToTokenAddress=0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A&swapLockToToken=true&onRampDisabled=false&onRampAsDefault=false&onRampTokenAddress=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&onRampLockToken=true&stakeDisabled=true&network=eth&lightMode=false&primaryColor=%23404040&backgroundColor=transparent&roundedCorners=25&padding=20&refId=5IihQp"
