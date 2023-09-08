@@ -34,7 +34,7 @@ const OverviewComponent = () => {
     account: address,
     args: [user],
     onSuccess(data) {
-      console.log("Success", getStakeRewards);
+      console.log("StakeRewards Success", getStakeRewards);
     },
   });
 
@@ -60,7 +60,7 @@ const OverviewComponent = () => {
     },
   });
 
-  function FetchRewards() {
+  function Fetchbalance() {
     try {
       setLoading(true);
       const divisor = 1e18;
@@ -78,8 +78,9 @@ const OverviewComponent = () => {
       setLoading(false);
     }
   }
+  console.log(stakeRewards, 'StakeRewards')
   useEffect(() => {
-    FetchRewards();
+    Fetchbalance();
   }, [address]);
   const [loading, setLoading] = useState(false);
   const [unstakeStatus, setUnstakeStatus] = useState(false);
