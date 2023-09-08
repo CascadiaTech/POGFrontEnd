@@ -60,12 +60,13 @@ const OverviewComponent = () => {
     >
       {/* Rewards Section */}
       <div className="flex flex-col items-center border border-gray-300 p-4 md:p-6 rounded-lg">
-        <p 
-          className="text-xl text-gray-700 font-semibold mb-2">
+        <p className="text-xl text-gray-700 font-semibold mb-2">
           Available Rewards:
         </p>
-        <p style={{ fontFamily: "ethnocentricRg" }} 
-         className="text-xl text-gray-700 font-semibold border-[1px] text-center border-black rounded-md px-2 md:px-4 py-1 w-36">
+        <p
+          style={{ fontFamily: "ethnocentricRg" }}
+          className="text-xl text-gray-700 font-semibold border-[1px] text-center border-black rounded-md px-2 md:px-4 py-1 w-36"
+        >
           {newrewards ? newrewards : "0"}
         </p>
 
@@ -142,10 +143,9 @@ const StackComponent = () => {
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
     functionName: "stake",
-    args: [(stake_amount * 10 ** 18)],
+    args: [stake_amount * 10 ** 18],
     account: address,
   });
-
 
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
@@ -174,10 +174,10 @@ const StackComponent = () => {
     try {
       setLoading(true);
       const divisor = 1e18;
-      const NumberBalance = Number(UserBalanceInStaking)
-      const formattedNumber = NumberBalance / divisor
+      const NumberBalance = Number(UserBalanceInStaking);
+      const formattedNumber = NumberBalance / divisor;
       const finalNumber = formattedNumber.toFixed(6);
-      const realNumber = Number(finalNumber)
+      const realNumber = Number(finalNumber);
       setCurrentStaked(realNumber);
       return realNumber;
       /////
@@ -189,7 +189,6 @@ const StackComponent = () => {
     }
   }
 
-  
   const { data: balanceOf } = useContractRead({
     address: LPtokenContract,
     abi: LPTokenAbi,
@@ -207,10 +206,10 @@ const StackComponent = () => {
     try {
       setLoading(true);
       const divisor = 1e18;
-      const NumberBalance = Number(balanceOf)
-      const formattedNumber = NumberBalance / divisor
-      const finalNumber = formattedNumber.toFixed(6);
-      const realNumber = Number(finalNumber)
+      const NumberBalance = Number(balanceOf);
+      const formattedNumber = NumberBalance / divisor;
+      const finalNumber = formattedNumber.toFixed(1);
+      const realNumber = Number(finalNumber);
       setbalance(realNumber);
       return realNumber;
       /////
@@ -221,7 +220,6 @@ const StackComponent = () => {
       setLoading(false);
     }
   }
-  
 
   const handleMaxClick = () => {
     if (max === "0") {
@@ -257,14 +255,14 @@ const StackComponent = () => {
             style={{ fontFamily: "ethnocentricRg" }}
             onChange={(e) => {
               const value = parseFloat(e.target.value); // Parse the input value as a float
-              if (!isNaN(value)) {
+              if (!isNaN(value) && value >= 3) {
                 set_stake_amount(value); // Set the parsed value to the state
               }
             }}
           />
         </div>
         <div className="flex justify-center items-center">
-          {" "} 
+          {" "}
           {refinedAllowance > stake_amount ? (
             <>
               {" "}
@@ -309,10 +307,10 @@ const StackComponent = () => {
             {currentStaked} LP tokens
           </p>
         </div>
-        
+
         <label className="text-lg text-center mx-auto">
-            Note: You must stake minimum 3LP
-          </label>
+          Note: You must stake minimum 3LP
+        </label>
       </div>
     </div>
   );
