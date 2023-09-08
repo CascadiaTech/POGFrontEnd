@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HeaderComponent from "../../components/Header/HeaderComponent";
 import styles from "../../styles/Home.module.css";
 import StackingCompnent from "../../components/Stake/StackingCompnent";
@@ -15,6 +15,33 @@ const StackingOverview = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const videoRefMobile = useRef(null);
+  const videoRefNonMobile = useRef(null);
+  const [isMobile, setIsMobile] = useState(Boolean);
+  const attemptPlay = (videoRef: any) => {
+    videoRef && videoRef.current && videoRef.current.defaultMuted == false;
+    videoRef.current.load() &&
+      videoRef.current.play().catch((error: any) => {
+        console.log("error attempting to play", error);
+      });
+  };
+
+  useEffect(() => {
+    const videoRef = isMobile ? videoRefMobile : videoRefNonMobile;
+    attemptPlay(videoRef);
+  }, [isMobile]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 800);
+
+    handleResize(); // set initial value
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  console.log(isMobile);
+
   useEffect(() => {
     if (!address) {
       router.push("/Dapp/LPstakingpage");
@@ -25,10 +52,34 @@ const StackingOverview = () => {
     <header>
       <HeaderComponent />
     </header>
-    <main className={`${styles.main} `}>
-    <div className="bg-white p-2 mt-11   rounded-xl text-center w-min  sm:text-[12px] md:justify-center lg:justify-center flex justify-center sm:justify-end justify-self-end text-black">
-          <p className=" font-bold mt-1 text-sm md:text-xl">{address}</p>
-        </div> 
+    <main className={`${styles.mainPage} `}>
+    {isMobile ? (
+          <video
+            ref={videoRefMobile}
+            className="min-w-full z-0 min-h-full relative object-cover"
+            playsInline
+            autoPlay
+            loop
+            muted
+          >
+            <source src="/LinqMobileNew.mp4" type="video/mp4" />
+            Your browser does not support the video tag, update your browser
+          </video>
+        ) : (
+          <video
+            ref={videoRefNonMobile}
+            className="min-w-full z-0 min-h-full relative object-cover"
+            playsInline
+            autoPlay
+            loop
+            muted
+          >
+            <source src="/LinqDesktopNew.mp4" type="video/mp4" />
+            Your browser does not support the video tag, update your browser
+          </video>
+        )}
+         <div className="absolute z-10">
+       
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 m-auto">
         {/* <div className="bg-white p-2 mt-4 rounded-xl text-center w-full sm:w-[150px] flex items-end md:justify-center lg:justify-center   justify-center justify-self-end sm:justify-end text-black">
           <p className="text-xl font-bold mt-1">5,000,000</p>
@@ -42,6 +93,7 @@ const StackingOverview = () => {
         {/* <div className="w-full">
           <PerpetualStacking />
         </div> */}
+      </div>
       </div>
     </main>
   </>

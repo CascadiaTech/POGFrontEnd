@@ -150,10 +150,10 @@ const StackComponent = () => {
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
     functionName: "stake",
-    args: [stake_amount],
+    args: [(stake_amount * 10 ** 18)],
     account: address,
   });
-
+console.log(stake_amount * 10 ** 18)
   const { data: balanceOf } = useContractRead({
     address: LPtokenContract,
     abi: LPTokenAbi,
@@ -164,6 +164,7 @@ const StackComponent = () => {
       console.log("Success", balanceOf);
     },
   });
+  console.log("This is my balance", balanceOf)
 
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
@@ -267,6 +268,12 @@ const StackingCompnent = () => {
           style={{ fontFamily: "GroupeMedium" }}
         >
           14 Day Staking
+        </h1>
+        <h1
+          className="text-black font-sans flex justify-center text-center items-center text-[18px]"
+          style={{ fontFamily: "GroupeMedium" }}
+        >
+          You must Approve before you can Stake
         </h1>
         <div className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5"></div>
         <div className="flex justify-center items-center">
