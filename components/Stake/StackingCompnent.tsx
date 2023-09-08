@@ -11,6 +11,7 @@ const OverviewComponent = () => {
   const fourteenDayContractAddress =
     "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
   const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
+  const [stakeRewards, setStakeRewards] = useState(Number);
 
   const { write: unstake } = useContractWrite({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
@@ -23,6 +24,12 @@ const OverviewComponent = () => {
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
     functionName: "withdrawReward",
+    account: address,
+  });
+  const { write: getStakeRewards } = useContractWrite({
+    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
+    abi: fourteenDayStackAbi,
+    functionName: "calculateRewardsForStake",
     account: address,
   });
   const { data: UserClaimableBalance } = useContractRead({
@@ -47,6 +54,30 @@ const OverviewComponent = () => {
     },
   });
 
+  function FetchStakeRewards() {
+    if (!address) {
+      return;
+    }
+    try {
+      setLoading(true);
+      const divisor = 1e18;
+      const NumberBalance = Number(getStakeRewards);
+      const formattedNumber = NumberBalance / divisor;
+      const finalNumber = formattedNumber.toFixed(2);
+      const realNumber = Number(finalNumber);
+      setStakeRewards(realNumber);
+      return realNumber;
+      /////
+    } catch (error) {
+      console.log(error, "ERROR 1111");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    FetchStakeRewards();
+  }, [address]);
   const [loading, setLoading] = useState(false);
   const [unstakeStatus, setUnstakeStatus] = useState(false);
   const [rewards, setRewards] = useState(0);
@@ -67,7 +98,7 @@ const OverviewComponent = () => {
           style={{ fontFamily: "ethnocentricRg" }}
           className="text-xl text-gray-700 font-semibold border-[1px] text-center border-black rounded-md px-2 md:px-4 py-1 w-36"
         >
-          {newrewards ? newrewards : "0"}
+          {stakeRewards ? stakeRewards : "0"}
         </p>
 
         <button
