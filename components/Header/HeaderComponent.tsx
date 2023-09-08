@@ -75,12 +75,6 @@ export default function HeaderComponent() {
             >
               <div className=" flex transition-all flex-col items-center ">
                 <div className={"flex flex-row"}>
-                  <p
-                    className="pt-1 hover:border-b-2 text-white border-gray-300 text-[16px]"
-                    style={{ fontFamily: "Azonix" }}
-                  >
-                    Menu
-                  </p>
                   <div
                     onClick={() => Onclick()}
                     className="bg-purplegif rounded-full w-fit px-2"

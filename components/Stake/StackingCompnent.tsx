@@ -7,11 +7,12 @@ const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
 const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
 
 const OverviewComponent = () => {
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const fourteenDayContractAddress =
     "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
   const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
   const [stakeRewards, setStakeRewards] = useState(Number);
+  const user = address;
 
   const { write: unstake } = useContractWrite({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
@@ -26,12 +27,17 @@ const OverviewComponent = () => {
     functionName: "withdrawReward",
     account: address,
   });
-  const { write: getStakeRewards } = useContractWrite({
+  const { data: getStakeRewards } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
-    functionName: "calculateRewardsForStake",
+    functionName: "calculateRewardSinceLastClaim",
     account: address,
+    args: [user],
+    onSuccess(data) {
+      console.log("Success", getStakeRewards);
+    },
   });
+
   const { data: UserClaimableBalance } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
@@ -54,17 +60,14 @@ const OverviewComponent = () => {
     },
   });
 
-  function FetchStakeRewards() {
-    if (!address) {
-      return;
-    }
+  function FetchRewards() {
     try {
       setLoading(true);
       const divisor = 1e18;
-      const NumberBalance = Number(getStakeRewards);
-      const formattedNumber = NumberBalance / divisor;
-      const finalNumber = formattedNumber.toFixed(2);
-      const realNumber = Number(finalNumber);
+      const NumberBalance = Number(getStakeRewards)
+      const formattedNumber = NumberBalance / divisor
+      const finalNumber = formattedNumber.toFixed(5);
+      const realNumber = Number(finalNumber)
       setStakeRewards(realNumber);
       return realNumber;
       /////
@@ -76,7 +79,7 @@ const OverviewComponent = () => {
     }
   }
   useEffect(() => {
-    FetchStakeRewards();
+    FetchRewards();
   }, [address]);
   const [loading, setLoading] = useState(false);
   const [unstakeStatus, setUnstakeStatus] = useState(false);
@@ -98,7 +101,7 @@ const OverviewComponent = () => {
           style={{ fontFamily: "ethnocentricRg" }}
           className="text-xl text-gray-700 font-semibold border-[1px] text-center border-black rounded-md px-2 md:px-4 py-1 w-36"
         >
-          {stakeRewards ? stakeRewards : "0"}
+          {stakeRewards}
         </p>
 
         <button
