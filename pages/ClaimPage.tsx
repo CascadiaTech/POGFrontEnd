@@ -67,7 +67,7 @@ export default function ClaimPage() {
             className={` w-full lg:w-auto  flex justify-center mx-auto text-center`}
             style={{ fontFamily: "Mandalore" }}
           >
-            <div className={` text-center self-center justify-center`}>
+            <div className={`  text-center self-center justify-center`}>
               <ClaimComponent />
             </div>
             <p className={"my-5"}></p>

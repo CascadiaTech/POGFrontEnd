@@ -118,6 +118,12 @@ export default function HeaderComponent() {
                       <Link href={"/Dapp/LPstakingpage"}>LP StaQing</Link>
                     </li>
                     <li
+                      style={{ fontFamily: "Azonix" }}
+                      className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
+                    >
+                      <Link href={"/LPMarketplace"}>LP Marketplace</Link>
+                    </li>
+                    <li
                       className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
                       style={{ fontFamily: "Azonix" }}
                     >
