@@ -165,6 +165,7 @@ const StackComponent = () => {
   const [balance, setbalance] = useState(Number);
   const [userUnlockTime, setUserUnlockTime] = useState({ days: 0, hours: 0 });
   const [LpPrice, setLPPrice] = useState();
+  const [lockTime, setLockTime] = useState({ days: 0, hours: 0 });
 
   const [timeClicked, setTimeClicked] = useState(false);
   const [APRClicked, setAPRClicked] = useState(false);
@@ -229,10 +230,12 @@ const StackComponent = () => {
     chainId: 1,
     args: [address],
     onSuccess(data) {
-      console.log("UserUnlockTime", UserUnlocktime);
+      const firstLockTime = UserUnlocktime as any
+      setLockTime(firstLockTime[0])
       console.log(error);
     },
   });
+  console.log("firstLockTime", lockTime);
 
   function secondsToDhms(seconds: number) {
     const days = Math.floor(seconds / (3600 * 24));
@@ -246,7 +249,7 @@ const StackComponent = () => {
     }
     try {
       setLoading(true);
-      const bigIntValue = UserUnlocktime;
+      const bigIntValue = lockTime;
       const regularNumber = Number(bigIntValue);
       const NumberTime = Number(regularNumber); // Convert UserUnlockTime to a number
       const { days, hours } = secondsToDhms(NumberTime); // Use the secondsToDhms function
@@ -330,7 +333,7 @@ const StackComponent = () => {
    // FetchLPPrice(LPPrice);
     FetchUserUnlockTime();
     Fetchcurrentstaked();
-  }, [address]);
+  }, [address, lockTime]);
 
   return (
     <div
