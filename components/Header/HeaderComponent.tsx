@@ -53,7 +53,7 @@ export default function HeaderComponent() {
           <ul className="h-auto  flex flex-row justify-left self-center sm:my-0 text-left items-left p-4 mt-4 rounded-lg md:mt-0 md:text-md ">
             <div
               className={
-                " flex flex-row  top-0 left-0 absolute self-center mt-4 px-1 sm:px-4 md:px-4 lg:px-4 "
+                " flex flex-row top-0 left-0 absolute self-center mt-4 md:px-4 lg:px-4 "
               }
             >
               <li className={"self-center  md:mt-0 lg:mt-0 "}>
@@ -70,10 +70,10 @@ export default function HeaderComponent() {
 
             <ul
               className={
-                "text-xl flex flex-row  text-center -translate-x-2 z-30 absolute mt-14 mt-5 top-0 right-0 overflow-hidden rounded-lg"
+                "text-xl flex flex-row text-center translate-x-2 z-30 absolute mt-14 mt-5 top-0 right-0 overflow-hidden rounded-lg"
               }
             >
-              <div className=" flex transition-all flex-col items-center ">
+              <div className="flex transition-all flex-col items-center ">
                 <div className={"flex flex-row"}>
                   <div
                     onClick={() => Onclick()}
@@ -122,7 +122,7 @@ export default function HeaderComponent() {
                       style={{ fontFamily: "Azonix" }}
                       className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
                     >
-                      <Link href={"/LPMarketplace"}>LP Marketplace</Link>
+                      <Link href={"/LPMarketplace"}>LP Market</Link>
                     </li>
                     <li
                       className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"

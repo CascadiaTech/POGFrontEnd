@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi.json";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
+import error from "next/error";
 const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
 const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
 
@@ -61,13 +62,14 @@ const OverviewComponent = () => {
   });
 
   function Fetchbalance() {
+    if (!address) return {};
     try {
       setLoading(true);
       const divisor = 1e18;
-      const NumberBalance = Number(getStakeRewards)
-      const formattedNumber = NumberBalance / divisor
+      const NumberBalance = Number(getStakeRewards);
+      const formattedNumber = NumberBalance / divisor;
       const finalNumber = formattedNumber.toFixed(5);
-      const realNumber = Number(finalNumber)
+      const realNumber = Number(finalNumber);
       setStakeRewards(realNumber);
       return realNumber;
       /////
@@ -78,7 +80,7 @@ const OverviewComponent = () => {
       setLoading(false);
     }
   }
-  console.log(stakeRewards, 'StakeRewards')
+  console.log(stakeRewards, "StakeRewards");
   useEffect(() => {
     Fetchbalance();
   }, [address]);
@@ -90,11 +92,11 @@ const OverviewComponent = () => {
 
   return (
     <div
-      style={{ fontFamily: "GroupeMedium" }}
+      style={{ fontFamily: "ethnocentricRg" }}
       className="grid grid-cols-1 gap-6 md:grid-cols-2"
     >
       {/* Rewards Section */}
-      <div className="flex flex-col items-center border border-gray-300 p-4 md:p-6 rounded-lg">
+      <div className="flex flex-col text-center items-center border border-gray-300 p-4 md:p-6 rounded-lg">
         <p className="text-xl text-gray-700 font-semibold mb-2">
           Available Rewards:
         </p>
@@ -118,7 +120,7 @@ const OverviewComponent = () => {
             className={`cursor-pointer block text-sm sm:text-base text-center ${
               rewards === 0 ? "text-gray-600" : "text-gray-400"
             } rounded`}
-            style={{ fontFamily: "GroupeMedium" }}
+            style={{ fontFamily: "ethnocentricRg" }}
           >
             Collect Reward
           </p>
@@ -161,7 +163,26 @@ const StackComponent = () => {
   const [max, setMax] = useState("0");
   const [currentStaked, setCurrentStaked] = useState(Number);
   const [balance, setbalance] = useState(Number);
+  const [userUnlockTime, setUserUnlockTime] = useState({ days: 0, hours: 0 });
+  const [LpPrice, setLPPrice] = useState();
 
+  const [timeClicked, setTimeClicked] = useState(false);
+  const [APRClicked, setAPRClicked] = useState(false);
+  const [tokensClicked, setTokensClicked] = useState(false);
+  const [lpPriceClicked, setlpPriceClicked] = useState(false);
+
+  const toggleTime = () => {
+    setTimeClicked(!timeClicked);
+  };
+  const toggleAPR = () => {
+    setAPRClicked(!APRClicked);
+  };
+  const toggleTokens = () => {
+    setTokensClicked(!tokensClicked);
+  };
+  const toggleLp = () => {
+    setlpPriceClicked(!lpPriceClicked);
+  };
   const { address } = useAccount();
 
   const { write: Approval } = useContractWrite({
@@ -190,7 +211,6 @@ const StackComponent = () => {
     args: [address, "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb"],
   });
   const refinedAllowance = allowance ? Number(allowance) : 0;
-
   const { data: UserBalanceInStaking } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
@@ -202,6 +222,44 @@ const StackComponent = () => {
     },
   });
 
+  const { data: UserUnlocktime } = useContractRead({
+    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
+    abi: fourteenDayStackAbi,
+    functionName: "checkRemainingTime",
+    chainId: 1,
+    args: [address],
+    onSuccess(data) {
+      console.log("UserUnlockTime", UserUnlocktime);
+      console.log(error);
+    },
+  });
+
+  function secondsToDhms(seconds: number) {
+    const days = Math.floor(seconds / (3600 * 24));
+    seconds -= days * 3600 * 24;
+    const hours = Math.floor(seconds / 3600);
+    return { days, hours };
+  }
+  function FetchUserUnlockTime() {
+    if (!address) {
+      return;
+    }
+    try {
+      setLoading(true);
+      const bigIntValue = UserUnlocktime;
+      const regularNumber = Number(bigIntValue);
+      const NumberTime = Number(regularNumber); // Convert UserUnlockTime to a number
+      const { days, hours } = secondsToDhms(NumberTime); // Use the secondsToDhms function
+      setUserUnlockTime({ days, hours }); // Update state with an object containing days and hours
+      /////
+    } catch (error) {
+      console.log(error, "ERROR 1111");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   function Fetchcurrentstaked() {
     if (!address) {
       return;
@@ -211,7 +269,7 @@ const StackComponent = () => {
       const divisor = 1e18;
       const NumberBalance = Number(UserBalanceInStaking);
       const formattedNumber = NumberBalance / divisor;
-      const finalNumber = formattedNumber.toFixed(6);
+      const finalNumber = formattedNumber.toFixed(1);
       const realNumber = Number(finalNumber);
       setCurrentStaked(realNumber);
       return realNumber;
@@ -269,13 +327,15 @@ const StackComponent = () => {
   };
   useEffect(() => {
     Fetchbalance();
+   // FetchLPPrice(LPPrice);
+    FetchUserUnlockTime();
     Fetchcurrentstaked();
   }, [address]);
 
   return (
     <div
       style={{ fontFamily: "ethnocentricRg" }}
-      className="py-6 px-4 m-auto sm:p-10 w-[350px] sm:w-[350px] md:w-[550px] lg:w-[450px]"
+      className="py-4 px-4 m-auto sm:p-10 w-[350px] sm:w-[350px] md:w-[550px] lg:w-[450px]"
     >
       <div className="flex flex-col ">
         <div className="relative self-center rounded-lg p-2">
@@ -285,7 +345,7 @@ const StackComponent = () => {
           <input
             type="text"
             id="stakeInput"
-            className="w-full border border-gray-300 outline-none p-2 pr-10 text-black"
+            className="w-full border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
             value={stake_amount} // Convert the number to a string for input value
             style={{ fontFamily: "ethnocentricRg" }}
             onChange={(e) => {
@@ -296,7 +356,7 @@ const StackComponent = () => {
             }}
           />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center my-3 items-center">
           {" "}
           {refinedAllowance > stake_amount ? (
             <>
@@ -326,27 +386,98 @@ const StackComponent = () => {
           )}
         </div>
 
-        <div className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
-          <p
-            className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px]"
-            style={{ textAlign: "initial", fontFamily: "GroupeMedium" }}
-          >
-            Amount of tokens you currently have Staked{" "}
-          </p>
-          {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
-          <p
-            className="mr-6 flex justify-start
-            text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
-            style={{ fontFamily: "GroupeMedium" }}
-          >
-            {currentStaked} LP tokens
-          </p>
-        </div>
-
         <label className="text-lg text-center mx-auto">
           Note: You must stake minimum 3LP
         </label>
+
+        <div
+          className={
+            "grid-cols-1 grid md:grid-cols-2 my-3 gap-2 justify-center mx-auto"
+          }
+        >
+          <div
+            onClick={() => toggleTime()}
+            style={{ backgroundColor: "#dbdbdb" }}
+            className={
+              "self-center cursor-pointer border-2 border-gray-400 rounded-2xl w-fit h-fit px-3 py-3"
+            }
+          >
+            <p
+              className="flex text-center justify-start mb-2
+            text-[12px] sm:text-[15px] border-b border-black md:text-[15px] lg:text-[16px] max-w-[270px]"
+              style={{ fontFamily: "ethnocentricRg" }}
+            >
+              Total time left in stake:
+            </p>
+            <p className={"mx-2"}></p>
+            {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
+            {timeClicked && (
+              <p
+                className="flex text-center justify-center text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
+                style={{ fontFamily: "ethnocentricRg" }}
+              >
+                {userUnlockTime.days}d {userUnlockTime.hours}h
+              </p>
+            )}
+          </div>
+
+          <div
+            onClick={() => toggleTokens()}
+            style={{ backgroundColor: "#dbdbdb" }}
+            className={
+              "border-2 border-gray-400 cursor-pointer rounded-2xl w-fit h-fit px-3 py-3"
+            }
+          >
+            <p
+              className="flex text-center justify-start mb-2
+            text-[12px] sm:text-[15px] border-b border-black md:text-[15px] lg:text-[16px] max-w-[270px]"
+              style={{ fontFamily: "ethnocentricRg" }}
+            >
+              Tokens you have staked:
+            </p>
+            <p className={"mx-2"}></p>
+            {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
+            {tokensClicked && (
+              <p
+                className="flex text-center justify-center text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
+                style={{ fontFamily: "ethnocentricRg" }}
+              >
+                {currentStaked} LP Tokens
+              </p>
+            )}
+          </div>
+        </div>
+          <div
+            onClick={() => toggleAPR()}
+            style={{ backgroundColor: "#dbdbdb" }}
+            className={
+              "self-center cursor-pointer mt-4 justify-center border-2 border-gray-400 rounded-2xl w-fit h-fit px-3 py-3"
+            }
+          >
+            <p
+              className="flex text-center justify-start mb-2
+            text-[12px] sm:text-[15px] border-b border-black md:text-[15px] lg:text-[16px] max-w-[270px]"
+              style={{ fontFamily: "ethnocentricRg" }}
+            >
+              Current APR:
+            </p>
+            <p className={"mx-2"}></p>
+            {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
+            {APRClicked && (
+              <p
+                className="flex text-center justify-center text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
+                style={{ fontFamily: "ethnocentricRg" }}
+              >
+                Approx 500%
+              </p>
+            )}
+          </div>
       </div>
+      <div className={'mt-5 justify-center flex flex-col'}>
+          <label className="text-lg text-center mx-auto">
+          Click to reveal information
+        </label>
+        </div>
     </div>
   );
 };
@@ -360,7 +491,7 @@ const StackingCompnent = () => {
 
   return (
     <>
-      <div className="py-5 px-4 sm:p-5 mt-5 sm:mt-10 md:mt-10 lg:mt-15  w-[350px] sm:w-[350px] md:w-[550px] min-h-[450px] lg:w-[700px] bg-white">
+      <div className="py-5 px-4 sm:p-5 mt-5 sm:mt-10 md:mt-10 lg:mt-10  w-[350px] sm:w-[350px] md:w-[550px] min-h-[450px] lg:w-[700px] bg-white">
         <h1
           className="text-black font-sans flex justify-center text-center items-center text-[30px]"
           style={{ fontFamily: "GroupeMedium" }}
@@ -377,7 +508,7 @@ const StackingCompnent = () => {
         <div className="flex justify-center items-center">
           <button
             style={{ fontFamily: "GroupeMedium" }}
-            className={`font-sans mr-6  cursor-pointer md:text-[20px] lg:text-[20px] sm:text-[10px]  rounded-lg text-center border-black border-2 py-2 px-5 sm:px-10 md:px-10 lg:px-10 ${
+            className={`font-sans mr-6  cursor-pointer md:text-[20px] lg:text-[20px] sm:text-[10px]  rounded-lg text-center border-black border-2 py-2 px-5 sm:px-10 md:px-6 lg:px-6 ${
               activeStep === "overview"
                 ? "text-black bg-gray-300"
                 : "text-gray-500"
@@ -389,7 +520,7 @@ const StackingCompnent = () => {
           </button>
           <button
             style={{ fontFamily: "GroupeMedium" }}
-            className={`font-sans ml-6  cursor-pointer  md:text-[20px] lg:text-[20px] sm:text-[10px] rounded-lg text-center border-black border-2 py-2 px-5 sm:px-10 md:px-10 lg:px-10 ${
+            className={`font-sans ml-6  cursor-pointer  md:text-[20px] lg:text-[20px] sm:text-[10px] rounded-lg text-center border-black border-2 py-2 px-5 sm:px-10 md:px-6 lg:px-6 ${
               activeStep === "stack"
                 ? "text-black bg-gray-300"
                 : "text-gray-500"

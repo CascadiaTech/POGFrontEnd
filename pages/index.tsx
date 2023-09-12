@@ -3,9 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import {
-  configureChains,
   createConfig,
-  WagmiConfig,
   useAccount,
   useEnsName,
   useContractRead,
@@ -21,11 +19,24 @@ import { useWalletClient } from "wagmi";
 import { useEffect, useRef, useState } from "react";
 import ClaimComponent from "../components/Claim/ClaimComponent";
 import Link from "next/link";
+import { WagmiConfig, configureChains } from "wagmi";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";import {
+  arbitrum,
+  goerli,
+  mainnet,
+  optimism,
+  polygon,
+  base,
+  zora,
+} from 'wagmi/chains';
+import { publicProvider } from "wagmi/providers/public";
 const Home: NextPage = () => {
-  const [balance, setbalance]: any = useState();
-  const publicClient = usePublicClient();
   const { address, isConnected } = useAccount();
   const { data: walletClient }: any = useWalletClient();
+
+
 
   const videoRefMobile = useRef(null);
   const videoRefNonMobile = useRef(null);

@@ -1,33 +1,39 @@
 import { useCallback, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
-import {
-  configureChains,
-  createConfig,
-  WagmiConfig,
-  useAccount,
-  useEnsName,
-  useContractWrite,
-  useContractRead,
-} from "wagmi";
-import { abiObject } from "../../contracts/abi/abi.mjs";
-import { usePublicClient } from "wagmi";
+import { configureChains, useAccount, Chain, PublicClient } from "wagmi";
 import { useWalletClient } from "wagmi";
-import { Spin } from "antd";
+import { Provider } from "react-redux";
+import "@uniswap/widgets/fonts.css";
+import {
+  arbitrum,
+  goerli,
+  mainnet,
+  optimism,
+  polygon,
+  base,
+  zora,
+} from "wagmi/chains";
+//import { Provider } from "@ethersproject/providers";
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
 export default function MarketplaceComponent() {
   const { address, isConnected } = useAccount();
-  const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
+
+  const jsonRpcUrls = {
+    1: "https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad",
+    3: "https://ropsten.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad",
+  };
 
   return (
     <>
       {/* <div className="mt-12 w-[170px] sm:w-[300px] md:w-[350px] lg:w-[500px] "> */}
       <p
-          className="text-3xl lg:text-3xl mt-40 text-center font-semibold px-5 text-white"
-          style={{ fontFamily: "Azonix" }}
-        >
-          LP Marketplace
-        </p>
+        className="text-3xl lg:text-3xl mt-40 text-center font-semibold px-5 text-white"
+        style={{ fontFamily: "Azonix" }}
+      >
+        LP Marketplace
+      </p>
       <iframe
         width="400"
         className={'mx-auto justify-center'}
