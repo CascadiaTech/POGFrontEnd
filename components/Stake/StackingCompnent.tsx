@@ -129,11 +129,6 @@ const OverviewComponent = () => {
 
       {/* Unstake Section */}
       <div className="flex flex-col items-center justify-center border border-gray-300 p-4 md:p-6 rounded-lg">
-        <p className="text-xl text-gray-700 font-semibold">Unstake Status:</p>
-        <p className="text-xl text-gray-700 font-semibold  px-2 md:px-4 py-1  text-center">
-          {" "}
-          {unstakeStatus ? "Available" : "Unavailable"}{" "}
-        </p>
         <button
           type="button"
           onClick={() => unstake()}
