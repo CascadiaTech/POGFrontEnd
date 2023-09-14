@@ -199,6 +199,25 @@ const StackComponent = () => {
     account: address,
   });
 
+  function NoStake() {
+    if (!address) {
+      return;
+    }
+    try {
+      setLoading(true);
+      Swal.fire('Error!', 'Stake has been turned off', 'error');
+      set_stake_amount(stake_amount);
+      return;
+      /////
+    } catch (error) {
+      console.log(error, "ERROR 1111");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+  
+
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
     abi: LPTokenAbi,
@@ -207,6 +226,7 @@ const StackComponent = () => {
     args: [address, "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb"],
   });
   const refinedAllowance = allowance ? Number(allowance) : 0;
+  
   const { data: UserBalanceInStaking } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
@@ -225,8 +245,8 @@ const StackComponent = () => {
     chainId: 1,
     args: [address],
     onSuccess(data) {
-      const firstLockTime = UserUnlocktime as any
-      setLockTime(firstLockTime[0])
+      const firstLockTime = UserUnlocktime as any;
+      setLockTime(firstLockTime[0]);
       console.log(error);
     },
   });
@@ -325,7 +345,7 @@ const StackComponent = () => {
   };
   useEffect(() => {
     Fetchbalance();
-   // FetchLPPrice(LPPrice);
+    // FetchLPPrice(LPPrice);
     FetchUserUnlockTime();
     Fetchcurrentstaked();
   }, [address, lockTime]);
@@ -363,8 +383,7 @@ const StackComponent = () => {
                 style={{ fontFamily: "GroupeMedium" }}
                 className="font-sans cursor-pointer text-[20px] rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-black border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
                 type="button"
-                onClick={() => Stake()}
-                disabled={loading}
+                onClick={() => Swal.fire('Error!', 'Staking for this contract has been turned off in preparation for our new staking contract to be released next week', 'error')}
               >
                 Stake
               </button>
@@ -445,37 +464,37 @@ const StackComponent = () => {
             )}
           </div>
         </div>
-          <div
-            onClick={() => toggleAPR()}
-            style={{ backgroundColor: "#dbdbdb" }}
-            className={
-              "self-center cursor-pointer mt-4 justify-center border-2 border-gray-400 rounded-2xl w-fit h-fit px-3 py-3"
-            }
-          >
-            <p
-              className="flex text-center justify-start mb-2
+        <div
+          onClick={() => toggleAPR()}
+          style={{ backgroundColor: "#dbdbdb" }}
+          className={
+            "self-center cursor-pointer mt-4 justify-center border-2 border-gray-400 rounded-2xl w-fit h-fit px-3 py-3"
+          }
+        >
+          <p
+            className="flex text-center justify-start mb-2
             text-[12px] sm:text-[15px] border-b border-black md:text-[15px] lg:text-[16px] max-w-[270px]"
+            style={{ fontFamily: "ethnocentricRg" }}
+          >
+            Current APR:
+          </p>
+          <p className={"mx-2"}></p>
+          {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
+          {APRClicked && (
+            <p
+              className="flex text-center justify-center text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
               style={{ fontFamily: "ethnocentricRg" }}
             >
-              Current APR:
+              Approx 500%
             </p>
-            <p className={"mx-2"}></p>
-            {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
-            {APRClicked && (
-              <p
-                className="flex text-center justify-center text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
-                style={{ fontFamily: "ethnocentricRg" }}
-              >
-                Approx 500%
-              </p>
-            )}
-          </div>
+          )}
+        </div>
       </div>
-      <div className={'mt-5 justify-center flex flex-col'}>
-          <label className="text-lg text-center mx-auto">
+      <div className={"mt-5 justify-center flex flex-col"}>
+        <label className="text-lg text-center mx-auto">
           Click to reveal information
         </label>
-        </div>
+      </div>
     </div>
   );
 };
