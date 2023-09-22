@@ -70,7 +70,7 @@ export default function HeaderComponent() {
 
             <ul
               className={
-                "text-xl flex flex-row text-center translate-x-2 z-30 absolute mt-14 mt-5 top-0 right-0 overflow-hidden rounded-lg"
+                "text-xl flex flex-row text-center translate-x-5 md:-translate-x-5 z-30 absolute mt-14 mt-5 top-0 right-0 overflow-hidden rounded-lg"
               }
             >
               <div className="flex transition-all flex-col items-center ">
@@ -81,7 +81,7 @@ export default function HeaderComponent() {
                     ref={headerRef}
                   >
                     <Image
-                      className={`rotate-${hidden.rotate.toString()} text-black transition-all duration-300 cursor-pointer`}
+                      className={`${hidden.toString()} text-black transition-all duration-300 cursor-pointer`}
                       height={35}
                       width={35}
                       src={MENUBar}
@@ -91,57 +91,67 @@ export default function HeaderComponent() {
                 </div>
 
                 <div
-                  style={{ backgroundColor: "#131313" }}
+                  style={{ backgroundColor: "#131313",  width: 160 }}
                   className={`w-fit h-fit opacity-${hidden.hidden} transition-all duration-300`}
                 >
-                  <ul
-                    style={{
-                      fontFamily: "Mandalore",
-                    }}
-                    className="text-xl  text-white rounded-xl px-2 py-2"
-                  >
-                    <li
-                      className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
-                      style={{ fontFamily: "Azonix" }}
+                  {hidden.hidden === 0 ? null : ( // Check if the menu is closed // Render nothing when the menu is closed
+                    <ul
+                      style={{
+                        fontFamily: "Mandalore",
+                      }}
+                      className="text-xl  text-white rounded-xl px-2 py-2"
                     >
-                      <Link href={"/"}>Dashboard</Link>
-                    </li>
-                    <li
-                      className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
-                      style={{ fontFamily: "Azonix" }}
-                    >
-                      <Link href={"/ClaimPage"}>LP Claim</Link>
-                    </li>
-                    <li
-                      style={{ fontFamily: "Azonix" }}
-                      className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
-                    >
-                      <Link href={"/Dapp/LPstakingpage"}>LP StaQing</Link>
-                    </li>
-                    <li
-                      style={{ fontFamily: "Azonix" }}
-                      className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
-                    >
-                      <Link href={"/LPMarketplace"}>LP Market</Link>
-                    </li>
-                    <li
-                      className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
-                      style={{ fontFamily: "Azonix" }}
-                    >
-                      <Link href={"https://linktr.ee/linqgroup"}>
-                        Link Tree
-                      </Link>
-                    </li>
-                    <li>
-                      <a
-                        onClick={() => window.open("https://www.linqgroup.io/")}
-                        className=" cursor-pointer block px-4 pt-2 hover:border-b-2 border-gray-300 text-[16px]"
+                      <li
+                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
                         style={{ fontFamily: "Azonix" }}
                       >
-                        Website
-                      </a>
-                    </li>
-                  </ul>
+                        <Link href={"/"}>Dashboard</Link>
+                      </li>
+                      <li
+                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
+                        style={{ fontFamily: "Azonix" }}
+                      >
+                        <Link href={"/ClaimPage"}>LP Claim</Link>
+                      </li>
+                      <li
+                        style={{ fontFamily: "Azonix" }}
+                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
+                      >
+                        <Link href={"/Dapp/LPstakingpage"}>LP StaQing</Link>
+                      </li>
+                      <li
+                        style={{ fontFamily: "Azonix" }}
+                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
+                      >
+                        <Link href={"/LPMarketplace"}>LP Market</Link>
+                      </li>
+                      <li
+                        style={{ fontFamily: "Azonix" }}
+                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
+                      >
+                        <Link href={"/NewStake"}>New Stake</Link>
+                      </li>
+                      <li
+                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
+                        style={{ fontFamily: "Azonix" }}
+                      >
+                        <Link href={"https://linktr.ee/linqgroup"}>
+                          Link Tree
+                        </Link>
+                      </li>
+                      <li>
+                        <a
+                          onClick={() =>
+                            window.open("https://www.linqgroup.io/")
+                          }
+                          className=" cursor-pointer block px-4 pt-2 hover:border-b-2 border-gray-300 text-[16px]"
+                          style={{ fontFamily: "Azonix" }}
+                        >
+                          Website
+                        </a>
+                      </li>
+                    </ul>
+                  )}
                 </div>
               </div>
             </ul>

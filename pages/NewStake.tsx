@@ -3,11 +3,19 @@ import ClaimComponent from "../components/Claim/ClaimComponent";
 import HeaderComponent from "../components/Header/HeaderComponent";
 import { useEffect, useRef, useState } from "react";
 import NewStakeComponent from "../components/Stake/NewStakeComponent";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function ClaimPage() {
   const videoRefMobile = useRef(null);
   const videoRefNonMobile = useRef(null);
   const [isMobile, setIsMobile] = useState(Boolean);
+  const [normalStakeModal, setNormalStakeModal] = useState(Boolean);
+  const toggleNormalStakeModal = () => {
+    setNormalStakeModal(!normalStakeModal);
+  };
+  
+  const notify = () => toast("Wow so easy !");
   const attemptPlay = (videoRef: any) => {
     videoRef && videoRef.current && videoRef.current.defaultMuted == false;
     videoRef.current.load() &&
@@ -53,8 +61,9 @@ export default function ClaimPage() {
         ) : (
           <video
             ref={videoRefNonMobile}
-            className="min-w-full z-0 min-h-full relative object-cover"
+            className="min-w-full z-0 relative"
             playsInline
+            height={300}
             autoPlay
             loop
             muted
@@ -63,10 +72,9 @@ export default function ClaimPage() {
             Your browser does not support the video tag, update your browser
           </video>
         )}
-        <div className="w-full absolute z-10">
+        <div className="absolute z-10">
           <div
-            className={` w-full lg:w-auto  flex justify-center mx-auto text-center`}
-            style={{ fontFamily: "Mandalore" }}
+            className={`flex flex-col justify-center mx-auto text-center`}
           >
             <div className={`  text-center self-center justify-center`}>
               <NewStakeComponent />

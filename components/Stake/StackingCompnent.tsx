@@ -3,6 +3,8 @@ import Swal from "sweetalert2";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi.json";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import error from "next/error";
 const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
 const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
@@ -167,6 +169,15 @@ const StackComponent = () => {
   const [tokensClicked, setTokensClicked] = useState(false);
   const [lpPriceClicked, setlpPriceClicked] = useState(false);
 
+  const notify = () => toast("Wow so easy !");
+
+  const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 3000));
+  toast.promise(resolveAfter3Sec, {
+    pending: "Promise is pending",
+    success: "Promise resolved 👌",
+    error: "Promise rejected 🤯",
+  });
+
   const toggleTime = () => {
     setTimeClicked(!timeClicked);
   };
@@ -199,13 +210,37 @@ const StackComponent = () => {
     account: address,
   });
 
+  const stakeWithPromise = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await Stake(); // Call the Stake function
+        resolve(result); // Resolve the promise if successful
+      } catch (error) {
+        reject(error); // Reject the promise if there's an error
+      }
+    });
+  };
+
+  // Use toast.promise to handle the promise
+  const handleStake = () => {
+    toast.promise(
+      stakeWithPromise(),
+      {
+        pending: 'Staking in progress...',
+        success: 'Stake completed successfully 🚀',
+        error: 'Stake failed 😔',
+      }
+    );
+  };
+
+
   function NoStake() {
     if (!address) {
       return;
     }
     try {
       setLoading(true);
-      Swal.fire('Error!', 'Stake has been turned off', 'error');
+      Swal.fire("Error!", "Stake has been turned off", "error");
       set_stake_amount(stake_amount);
       return;
       /////
@@ -216,7 +251,6 @@ const StackComponent = () => {
       setLoading(false);
     }
   }
-  
 
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
@@ -226,7 +260,7 @@ const StackComponent = () => {
     args: [address, "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb"],
   });
   const refinedAllowance = allowance ? Number(allowance) : 0;
-  
+
   const { data: UserBalanceInStaking } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
@@ -354,7 +388,7 @@ const StackComponent = () => {
     <div
       style={{ fontFamily: "ethnocentricRg" }}
       className="py-4 px-4 m-auto sm:p-10 w-[350px] sm:w-[350px] md:w-[550px] lg:w-[450px]"
-    >
+    > 
       <div className="flex flex-col ">
         <div className="relative self-center rounded-lg p-2">
           <label htmlFor="stakeIpnut " className="text-lg">
@@ -368,7 +402,7 @@ const StackComponent = () => {
             style={{ fontFamily: "ethnocentricRg" }}
             onChange={(e) => {
               const value = parseFloat(e.target.value); // Parse the input value as a float
-              if (!isNaN(value) && value >= 3) {
+              if (!isNaN(value) && value >= 2) {
                 set_stake_amount(value); // Set the parsed value to the state
               }
             }}
@@ -378,12 +412,12 @@ const StackComponent = () => {
           {" "}
           {refinedAllowance > stake_amount ? (
             <>
-              {" "}
+          
               <button
                 style={{ fontFamily: "GroupeMedium" }}
                 className="font-sans cursor-pointer text-[20px] rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-black border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
                 type="button"
-                onClick={() => Swal.fire('Error!', 'Staking for this contract has been turned off in preparation for our new staking contract to be released next week', 'error')}
+                onClick={() => handleStake()}
               >
                 Stake
               </button>

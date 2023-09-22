@@ -14,6 +14,8 @@ import { usePublicClient } from "wagmi";
 import { useWalletClient } from "wagmi";
 import { Spin } from "antd";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
+import { toast, ToastContainer, ToastContainerProps, Slide } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
 const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
 
@@ -25,7 +27,7 @@ export default function ClaimComponent() {
   const [loading, setLoading] = useState(false);
   const [claim, setcanclaim] = useState(Boolean);
 
-  const [Claimable, setClaimable] = useState(false);
+  const [Claimerish, setClaim] = useState(false);
 
   const [pendingreflections, setpendingreflections] = useState(Number);
   const [totaldistributed, settotaldistributed]: any = useState(Number);
@@ -71,6 +73,9 @@ export default function ClaimComponent() {
       const formattedNumber = NumberBalance / divisor
       const finalNumber = formattedNumber.toFixed(6);
       const realNumber = Number(finalNumber)
+      if (Number.isNaN(realNumber)) {
+        return 0;
+      }
       setbalance(realNumber);
       return realNumber;
       /////
@@ -93,6 +98,9 @@ export default function ClaimComponent() {
       const NumberNum = Number(fixedNumber);
       const formattedNumber = NumberNum / divisor;
       const roundedNumber = Math.round(formattedNumber * 1e6) / 1e6;
+      if (Number.isNaN(roundedNumber)) {
+        return 0;
+      }
       console.log(roundedNumber);
       setpendingreflections(roundedNumber);
 
@@ -139,8 +147,29 @@ export default function ClaimComponent() {
     account: address,
   });
 
-  async function Claim() {
-    Claimwrite();
+  const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 3000));
+
+  async function claimWithPromise() {
+    const toastId = 'fetched-nationalities';
+    try {
+      await Claimwrite();
+      toast.success('🦄 Wow so easy!', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+    } catch (err) {
+      console.log(`err: ${console.error()}`);
+      toast.error('Cound not fetch nationalities, please try again later', {
+        position: toast.POSITION.TOP_RIGHT,
+        toastId
+      });
+    }
   }
 
   return (
@@ -148,7 +177,7 @@ export default function ClaimComponent() {
       {/* <div className="mt-12 w-[170px] sm:w-[300px] md:w-[350px] lg:w-[500px] "> */}
       <div className="-translate-y-40 md:-translate-y-20 py-6 px-4 sm:p-10 mt-5 sm:mt-10 md:mt-10 lg:mt-15 inline-block w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px] overflow-x-auto opacity-80 bg-white">
         <p
-          className="text-[15px] sm:text-[20px]  md:text-[23px] lg:md:text-[25px] font-semibold text-black"
+          className="text-[15px] sm:text-[20px] md:text-[23px] lg:md:text-[25px] font-semibold text-black"
           style={{ fontFamily: "Azonix" }}
         >
           CLAIM LP REWARDS
@@ -222,7 +251,7 @@ export default function ClaimComponent() {
               style={{ fontFamily: "Azonix" }}
               className="font-sans cursor-pointer text-[20px] rounded-lg text-center bg-gradient-to-r from-black to-black  text-white py-2 px-5 sm:px-10 md:px-10 lg:px-10"
               type="button"
-              onClick={() => Claimwrite()}
+              onClick={() => claimWithPromise()}
             >
               LP CLAIM
             </button>

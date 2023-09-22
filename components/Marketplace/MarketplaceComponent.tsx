@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import { configureChains, useAccount, Chain, PublicClient } from "wagmi";
 import { useWalletClient } from "wagmi";
-//import { JsonRpcProvider, Theme } from '@uniswap/widgets/dist';
-//import { SwapWidget } from "@uniswap/widgets";
-//import '@uniswap/widgets/fonts.css';
+import { JsonRpcProvider, Theme } from '@uniswap/widgets/dist';
+import { SwapWidget } from "@uniswap/widgets";
+import '@uniswap/widgets/fonts.css';
 import {
   arbitrum,
   goerli,
@@ -35,7 +35,8 @@ export default function MarketplaceComponent() {
       >
         LP Marketplace
       </p>
-      <div style={{background: 'linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)'}} className="fixed mb-10 px-2 sm:px-5 md:px-10 lg:px-10 left-0 bottom-0 bg-transparent  w-full  grid grid-cols-2 ">
+      <SwapWidget></SwapWidget>
+      <div className="fixed mb-10 px-2 sm:px-5 md:px-10 lg:px-10 left-0 bottom-0 bg-transparent  w-full  grid grid-cols-2 ">
         <p
           className="font-sans text-white text-[18px] sm:text-[15px] md:text-[15px] lg:text-[16px] 
         col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 "
