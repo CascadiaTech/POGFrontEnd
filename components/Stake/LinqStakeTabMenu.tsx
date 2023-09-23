@@ -42,7 +42,6 @@ export default function LinqStakeTabMenu({
 
   const notify = () => toast("Wow so easy !");
 
-
   const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 3000));
   toast.promise(resolveAfter3Sec, {
     pending: "Promise is pending",
@@ -50,14 +49,16 @@ export default function LinqStakeTabMenu({
     error: "Promise rejected 🤯",
   });
 
+  //Beginning of determining Block.Timestamp
 
-    //Beginning of determining Block.Timestamp
+  const EthereumRPC =
+    "https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"; // Replace with your Infura project ID
 
-    const EthereumRPC = 'https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad'; // Replace with your Infura project ID
-
-    const getCurrentBlockTimestamp = async () => {
-      try {
-        const response = await fetch('https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad', {
+  const getCurrentBlockTimestamp = async () => {
+    try {
+      const response = await fetch(
+        "https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad",
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -68,23 +69,22 @@ export default function LinqStakeTabMenu({
             params: ["latest", false],
             id: 5,
           }),
-        });
-        const data = await response.json();
-        console.log(data, "Here is the data")
-        if (data.result) {
-          const blockNumberHex = data.result.timestamp;
-          const blockNumber = parseInt(blockNumberHex, 16); 
-          console.log("Block Number:", blockNumber);
-          setBlockNumber(blockNumber);
         }
-      } catch (error) {
-        console.error("Error fetching block timestamp:", error);
+      );
+      const data = await response.json();
+      console.log(data, "Here is the data");
+      if (data.result) {
+        const blockNumberHex = data.result.timestamp;
+        const blockNumber = parseInt(blockNumberHex, 16);
+        console.log("Block Number:", blockNumber);
+        setBlockNumber(blockNumber);
       }
-    };
-    const [blockNumber, setBlockNumber] = useState(Number);
-    console.log(blockNumber, "Here is the block number")
-
-
+    } catch (error) {
+      console.error("Error fetching block timestamp:", error);
+    }
+  };
+  const [blockNumber, setBlockNumber] = useState(Number);
+  console.log(blockNumber, "Here is the block number");
 
   const { write: Approval } = useContractWrite({
     address: linqAddress,
@@ -96,35 +96,24 @@ export default function LinqStakeTabMenu({
   const [Allowance, setAllowance]: any = useState();
 
   const { data: allowance } = useContractRead({
-    address: LPtokenContract,
-    abi: LPTokenAbi,
+    address: linqAddress,
+    abi: linqABI,
     functionName: "allowance",
     chainId: current_chain,
     args: [address, StaqeFarm],
     onSuccess(data: any) {
-      setAllowance(data);
-      console.log(Number(data.toString()) / 10 ** 18);
+      setAllowance(Number(data.toString()) / 10 ** 18);
     },
   });
 
-  const [_amountLinQ, set_amountLinQ] = useState(0);
-  const [_amountMilQ, set_amountMilQ] = useState(0);
-
-  const linqValue = _token === 0 ? _amountLinQ : 0;
-  const milqValue = _token === 1 ? _amountMilQ : 0;
-
+  const [_amtLinQ, set_amtLinQ] = useState(0);
   const { write: StaQe } = useContractWrite({
     address: StaqeFarm,
     abi: MilqFarmABI,
     functionName: "staQe",
-    args: [_amountLinQ * 10 ** 18, 0, 0],
+    args: [_amtLinQ * 10 ** 18, 0, 0],
     account: address,
   });
-
-  const [_amtLinQ, set_amtLinQ] = useState(0);
-  const [_amtMilQ, set_amtMilQ] = useState(0);
-
-
 
   const { write: unStaqe } = useContractWrite({
     address: StaqeFarm,
@@ -139,7 +128,28 @@ export default function LinqStakeTabMenu({
         title: "you have successfully UnStaQed your LP",
       });
     },
+    onError(data) {},
+  });
+
+  const { write: RequestUnlock } = useContractWrite({
+    address: StaqeFarm,
+    abi: MilqFarmABI,
+    chainId: current_chain,
+    functionName: "roundUpCows",
+    args: [0],
+    account: address,
+    onSuccess(data) {
+      Swal.fire({
+        icon: "success",
+        title: "you have successfully Requested Unlock",
+      });
+    },
     onError(data) {
+      Swal.fire({
+        icon: "error",
+        title:
+          "An error occured with Requesting Unlock please contact support if issue perists",
+      });
     },
   });
 
@@ -156,8 +166,8 @@ export default function LinqStakeTabMenu({
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with Claiming please contact support if issue perists"
-      })
+          "An error occured with Claiming please contact support if issue perists",
+      });
     },
   });
 
@@ -189,7 +199,6 @@ export default function LinqStakeTabMenu({
       setLoading(false);
     }
   }
-
 
   const [newUserBalance, setNewUserBalance] = useState(Number);
   const { data: UserBalanceInStaking } = useContractRead({
@@ -276,7 +285,33 @@ console.log(userUnlockTime, "this is user unlock time")
    }
  }
 }*/
-//UserUnlockTime Section --^
+  //UserUnlockTime Section --^
+
+  const [userdetails, setUserDetails]: any = useState();
+  const [stakedBalance,setStakedBalance ]:any = useState(0)
+  const { data: UserDetails } = useContractRead({
+    address: StaqeFarm,
+    abi: MilqFarmABI,
+    functionName: "LilQerParlours",
+    chainId: current_chain,
+    args: [address],
+    onSuccess(data: any) {
+      setUserDetails(data);
+      setStakedBalance(Number(data[0].toString()) / 10 ** 18)
+    },
+  });
+  const [pendingRewards, setPendingRewards] = useState(0);
+
+  const { data: PendingRewards } = useContractRead({
+    address: StaqeFarm,
+    abi: MilqFarmABI,
+    functionName: "howMuchMilk",
+    chainId: current_chain,
+    args: [address],
+    onSuccess(data: any) {
+      setPendingRewards(Number(data[1].toString()) / 10 ** 18);
+    },
+  });
 
   const [totalLinqStaked, settotalLinqStaked] = useState(0);
 
@@ -290,18 +325,44 @@ console.log(userUnlockTime, "this is user unlock time")
       settotalLinqStaked(Number(data.toString()) / 10 ** 18);
     },
   });
-function FetchDaisies(){
-  daisys;
-}
+
+  const { write: PerpSwitch } = useContractWrite({
+    address: StaqeFarm,
+    abi: MilqFarmABI,
+    chainId: current_chain,
+    functionName: "ownCows",
+    account: address,
+    args: [0],
+    onSuccess(data) {
+      Swal.fire({
+        icon: "success",
+        title: "you have successfully Switched to Perpetual",
+      });
+    },
+    onError(data) {
+      Swal.fire({
+        icon: "error",
+        title:
+          "An error occured with Switching please contact support if issue perists",
+    
+      });
+    },
+  });
+
+  function FetchDetails() {
+    UserDetails;
+    PendingRewards;
+    daisys;
+    allowance;
+  }
+  useEffect(() => {
+    FetchDetails();
+  }, [address]);
 
   useEffect(() => {
     FetchRewards();
     Fetchcurrentstaked();
-    FetchDaisies();
-
-   // FetchUserUnlockTime();
   }, [address]);
-
 
   const [tab_variant, settab_variant] = useState("Regular");
 
@@ -385,7 +446,7 @@ function FetchDaisies(){
                     type="number"
                     id="stakeInput"
                     className="w-full border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-                    value={_amountLinQ} // Display the current value
+                    value={_amtLinQ} // Display the current value
                     style={{ fontFamily: "ethnocentricRg" }}
                     onChange={(e) => {
                       const value = e.target.valueAsNumber; // Get the input value as a number
@@ -395,42 +456,51 @@ function FetchDaisies(){
                     }}
                   />
                   <div className="flex-row justify-center my-3 items-center">
-                    <button
-                      style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans cursor-pointer text-md mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                      type="button"
-                      onClick={() => StaQe()}
-                    >
-                      Stake
-                    </button>
-                    <button
-                      style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                      type="button"
-                      onClick={() => Approval()}
-                    >
-                      Approve
-                    </button>
+                    {Allowance >= _amtLinQ ? (
+                      <>
+                        <button
+                          style={{ fontFamily: "GroupeMedium" }}
+                          className="font-sans cursor-pointer text-md mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                          type="button"
+                          onClick={() => StaQe()}
+                        >
+                          Stake
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          style={{ fontFamily: "GroupeMedium" }}
+                          className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                          type="button"
+                          onClick={() => Approval()}
+                        >
+                          Approve
+                        </button>
+                      </>
+                    )}
                   </div>
                   <div className="flex-row justify-center my-3 items-center">
                     <button
                       style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans  cursor-pointer text-md mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                      className="font-sans cursor-pointer text-md w-32 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                      type="button"
+                      onClick={() => unStaqe()}
+                    >
+                      UnStake
+                    </button>
+                    <button
+                      style={{ fontFamily: "GroupeMedium" }}
+                      className="font-sans  cursor-pointer text-md mx-4 w-32 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                       type="button"
                       onClick={() => Claim()}
                     >
                       Claim
                     </button>
                   </div>
+
                   <button
-                  style={{ fontFamily: "GroupeMedium" }}
-                  className="font-sans w-fit cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                  type="button"
-                  onClick={() => unStaqe()}
-                >
-                  UnStake
-                </button>
-                  <button
+                  onClick={() => PerpSwitch()}
                     style={{ fontFamily: "GroupeMedium" }}
                     className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
                     type="button"
@@ -438,7 +508,6 @@ function FetchDaisies(){
                     Switch to Perpetual
                   </button>
                 </div>
-      
 
                 <div
                   style={{ fontFamily: "BebasNeue" }}
@@ -467,7 +536,7 @@ function FetchDaisies(){
                       pool percentage
                     </h2>
                     <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                     User Unlock time: <br />
+                      User Unlock time: <br />
                     </h2>
                   </div>
                 </div>
@@ -498,23 +567,34 @@ function FetchDaisies(){
                   />
 
                   <div className="flex-row justify-center my-3 items-center">
-                    <button
-                      style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans cursor-pointer text-md mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                      type="button"
-                    >
-                      Stake
-                    </button>
-                    <button
-                      style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans  cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                      type="button"
-                    >
-                      Approve
-                    </button>
+                    {Allowance >= _amtLinQ ? (
+                      <>
+                        <button
+                        onClick={() => StaQe()}
+                          style={{ fontFamily: "GroupeMedium" }}
+                          className="font-sans cursor-pointer text-md mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+                          type="button"
+                        >
+                          Stake
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        <button
+                        onClick={() => Approval()}
+                          style={{ fontFamily: "GroupeMedium" }}
+                          className="font-sans  cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+                          type="button"
+                        >
+                          Approve
+                        </button>
+                      </>
+                    )}
                   </div>
                   <div className="flex-row justify-center my-3 items-center">
                     <button
+                      onClick={() => Claim()}
                       style={{ fontFamily: "GroupeMedium" }}
                       className="font-sans  cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
                       type="button"
@@ -523,6 +603,7 @@ function FetchDaisies(){
                     </button>
                   </div>
                   <button
+                    onClick={() => RequestUnlock()}
                     style={{ fontFamily: "GroupeMedium" }}
                     className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
                     type="button"
@@ -543,7 +624,7 @@ function FetchDaisies(){
                       Your StaQed Linq Balance: 234234234{" "}
                     </h2>
                     <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Your rewards pending: 2342{" "}
+                      Your rewards pending: {pendingRewards}
                     </h2>
                     <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
                       Time remaining in pool: 3 days 23 hours{" "}
