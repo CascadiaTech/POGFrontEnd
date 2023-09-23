@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import HeaderComponent from "../Header/HeaderComponent";
 import FooterComponent from "../Footer/FooterComponent";
 import { Carousel, CarouselProps } from "flowbite-react";
-import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi.json";
+import { MilqFarmABI } from "../../contracts/abi/MilqFarmAbi.mjs";
 import { useContext } from "react";
 import { Tooltip } from "react-tooltip";
 import linqabi from "../../contracts/abi/abi.json";
@@ -27,7 +27,7 @@ export default function LpStakeTabMenu({
   setToken,
 }: LpStakeTabMenuProps) {
   const { address } = useAccount();
-  const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
+  const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   let current_chain = 5;
   const LPtokenContract = "0xbD08FcFd3b2a7bB90196F056dea448841FC5A580";
   const linqContract = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";

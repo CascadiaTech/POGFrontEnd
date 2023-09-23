@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
-import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi.json";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,17 +19,6 @@ const OverviewComponent = () => {
 
 
 
-  const { data: UserTimeLeft } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "checkRemainingTime",
-    args: [address],
-    chainId: 1,
-    onSuccess(data) {
-      console.log("Success", UserTimeLeft);
-      //Currently returning an array, not a number representing the usertimeleft
-    },
-  });
 
   const [MilqBalance, setMilqBalance] = useState(0);
 
@@ -175,35 +163,14 @@ const StackComponent = () => {
 
   const [stake_amount, set_stake_amount] = useState<number>(0);
 
-  const { write: Stake } = useContractWrite({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "stake",
-    args: [stake_amount * 10 ** 18],
-    account: address,
-  });
+ 
 
   const stakeWithPromise = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const result = await Stake(); // Call the Stake function
-        resolve(result); // Resolve the promise if successful
-      } catch (error) {
-        reject(error); // Reject the promise if there's an error
+    return null
       }
-    });
-  };
 
   // Use toast.promise to handle the promise
   const handleStake = () => {
-    toast.promise(
-      stakeWithPromise(),
-      {
-        pending: 'Staking in progress...',
-        success: 'Stake completed successfully 🚀',
-        error: 'Stake failed 😔',
-      }
-    );
   };
 
 
@@ -234,31 +201,7 @@ const StackComponent = () => {
   });
   const refinedAllowance = allowance ? Number(allowance) : 0;
 
-  const { data: UserBalanceInStaking } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "getLpDepositsForUser",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      console.log("Success", UserBalanceInStaking);
-    },
-  });
-
-  const { data: UserUnlocktime } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "checkRemainingTime",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      const firstLockTime = UserUnlocktime as any;
-      setLockTime(firstLockTime[0]);
-      console.log(error);
-    },
-  });
-  console.log("firstLockTime", lockTime);
-
+  
   function secondsToDhms(seconds: number) {
     const days = Math.floor(seconds / (3600 * 24));
     seconds -= days * 3600 * 24;
@@ -285,27 +228,7 @@ const StackComponent = () => {
     }
   }
 
-  function Fetchcurrentstaked() {
-    if (!address) {
-      return;
-    }
-    try {
-      setLoading(true);
-      const divisor = 1e18;
-      const NumberBalance = Number(UserBalanceInStaking);
-      const formattedNumber = NumberBalance / divisor;
-      const finalNumber = formattedNumber.toFixed(1);
-      const realNumber = Number(finalNumber);
-      setCurrentStaked(realNumber);
-      return realNumber;
-      /////
-    } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  }
+
 
   const { data: balanceOf } = useContractRead({
     address: LPtokenContract,
@@ -354,7 +277,6 @@ const StackComponent = () => {
     Fetchbalance();
     // FetchLPPrice(LPPrice);
     FetchUserUnlockTime();
-    Fetchcurrentstaked();
   }, [address, lockTime]);
 
   return (
