@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import HeaderComponent from "../Header/HeaderComponent";
 import FooterComponent from "../Footer/FooterComponent";
 import { Carousel, CarouselProps } from "flowbite-react";
-import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi.json";
+import { MilqFarmABI } from "../../contracts/abi/MilqFarmAbi.mjs";
 import { useContext } from "react";
 import { Tooltip } from "react-tooltip";
 import info from "../../public/info.png";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
+import linqABI from "../../contracts/abi/abi.json";
 import Image from "next/image";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import error from "next/error";
+import Swal from "sweetalert2";
 
 interface LpStakeTabMenuProps {
   _token: number;
@@ -23,9 +25,9 @@ export default function LinqStakeTabMenu({
   setToken,
 }: LpStakeTabMenuProps) {
   const { address } = useAccount();
-  const fourteenDayContractAddress =
-    "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
+  const StakingAddress = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
+  const linqAddress = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
   const [loading, setLoading] = useState(false);
   const [unstakeStatus, setUnstakeStatus] = useState(false);
   const [rewards, setRewards] = useState(0);
@@ -33,14 +35,13 @@ export default function LinqStakeTabMenu({
   const [currentStaked, setCurrentStaked] = useState(Number);
   const [currentPerpStaked, setCurrentPerpStaked] = useState(Number);
   const [balance, setbalance] = useState(Number);
-  const [lockTime, setLockTime] = useState({ days: 0, hours: 0 });
-  const [userUnlockTime, setUserUnlockTime] = useState({ days: 0, hours: 0 });
   const router = useRouter();
   const [stakeRewards, setStakeRewards] = useState(Number);
   const user = address;
 
   const notify = () => toast("Wow so easy !");
 
+  let chainId = 5;
   const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 3000));
   toast.promise(resolveAfter3Sec, {
     pending: "Promise is pending",
@@ -48,28 +49,62 @@ export default function LinqStakeTabMenu({
     error: "Promise rejected 🤯",
   });
 
-  //Begin all functions for Regular Linq Staqing
-  const { write: unstake } = useContractWrite({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "unstake",
-    account: address,
-  });
+
+    //Beginning of determining Block.Timestamp
+
+    const EthereumRPC = 'https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad'; // Replace with your Infura project ID
+
+    const getCurrentBlockTimestamp = async () => {
+      try {
+        const response = await fetch('https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            jsonrpc: "2.0",
+            method: "eth_getBlockByNumber",
+            params: ["latest", false],
+            id: 5,
+          }),
+        });
+        const data = await response.json();
+        console.log(data, "Here is the data")
+        if (data.result) {
+          const blockNumberHex = data.result.timestamp;
+          const blockNumber = parseInt(blockNumberHex, 16); 
+          console.log("Block Number:", blockNumber);
+          setBlockNumber(blockNumber);
+        }
+      } catch (error) {
+        console.error("Error fetching block timestamp:", error);
+      }
+    };
+    const [blockNumber, setBlockNumber] = useState(Number);
+    console.log(blockNumber, "Here is the block number")
+
+
+
   const { write: Approval } = useContractWrite({
-    address: LPtokenContract,
-    abi: LPTokenAbi,
+    address: linqAddress,
+    abi: linqABI,
     functionName: "approve",
-    args: [fourteenDayContractAddress, "1000000000000000000000000000"],
+    args: [StakingAddress, "1000000000000000000000000000"],
     account: address,
   });
+  const [Allowance, setAllowance]: any = useState();
+
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
     abi: LPTokenAbi,
     functionName: "allowance",
-    chainId: 1,
-    args: [address, "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb"],
+    chainId: 5,
+    args: [address, StakingAddress],
+    onSuccess(data: any) {
+      setAllowance(data);
+      console.log(Number(data.toString()) / 10 ** 18);
+    },
   });
-  const refinedAllowance = allowance ? Number(allowance) : 0;
 
   const [_amountLinQ, set_amountLinQ] = useState(0);
   const [_amountMilQ, set_amountMilQ] = useState(0);
@@ -78,46 +113,73 @@ export default function LinqStakeTabMenu({
   const milqValue = _token === 1 ? _amountMilQ : 0;
 
   const { write: StaQe } = useContractWrite({
-    address: "0x91603Fa0a2b854F059C66d276b5782C263D31582",
-    abi: fourteenDayStackAbi,
+    address: StakingAddress,
+    abi: MilqFarmABI,
     functionName: "staQe",
     args: [_amountLinQ * 10 ** 18, 0 * 10 ** 18, _token],
     account: address,
   });
-  console.log(_amountLinQ, "Here is my linq", _amountMilQ, "here is my milk");
 
-  console.log(_token, "This is my Token NUMBER");
+  const [_amtLinQ, set_amtLinQ] = useState(0);
+  const [_amtMilQ, set_amtMilQ] = useState(0);
 
+  const unstakeLinqValue = _token === 0 ? _amtLinQ : 0;
+  const unstakeMilqValue = _token === 1 ? _amtMilQ : 0;
 
-  const { write: WithdrawRewards } = useContractWrite({
-    address: "0x91603Fa0a2b854F059C66d276b5782C263D31582",
-    abi: fourteenDayStackAbi,
-    functionName: "withdrawReward",
+  const { write: unStaqe } = useContractWrite({
+    address: StakingAddress,
+    abi: MilqFarmABI,
+    functionName: "unstaQe",
+    args: [_amtLinQ * 10 ** 18, 0 * 10 ** 18, _token],
     account: address,
-  });
-
-  const { data: getStakeRewards }: { data: any } = useContractRead({
-    address: "0x91603Fa0a2b854F059C66d276b5782C263D31582",
-    abi: fourteenDayStackAbi,
-    functionName: "checkEstMilQRewards", 
-    args: [address],
     onSuccess(data) {
-      console.log("StakeRewards Success. These are my getStakeRewards", getStakeRewards);
+      Swal.fire({
+        icon: "success",
+        title: "you have successfully UnStaQed your LP",
+      });
+    },
+    onError(data) {
     },
   });
-  
+
+  const { write: Claim } = useContractWrite({
+    address: StakingAddress,
+    abi: MilqFarmABI,
+    chainId: 5,
+    functionName: "shipMilk",
+    account: address,
+    onSuccess(data) {
+      Swal.fire({ icon: "success", title: "you have successfully Claimed" });
+    },
+    onError(data) {
+      Swal.fire({
+        icon: "error",
+        title:
+          "An error occured with Claiming please contact support if issue perists"
+      })
+    },
+  });
+
+  const { data: getStakeRewards } = useContractRead({
+    address: StakingAddress,
+    abi: MilqFarmABI,
+    functionName: "checkEstMilQRewards",
+    args: [address],
+    onSuccess(data) {},
+    onError(error) {
+      console.error("Error fetching rewards:", error);
+    },
+  });
+
   function FetchRewards() {
     try {
       setLoading(true);
       const divisor = 1e18;
-      const milkFromDaisysValue = getStakeRewards[0];
-      const NumberBalance = Number(milkFromDaisysValue);
-      const formattedNumber = NumberBalance / divisor;
-      const finalNumber = formattedNumber.toFixed(5);
-      const realNumber = Number(finalNumber);
+      const NumberBalance = Number(getStakeRewards) / divisor;
+      const formattedNumber = NumberBalance.toFixed(2);
+      const realNumber = Number(formattedNumber);
       setStakeRewards(realNumber);
       return realNumber;
-      /////
     } catch (error) {
       console.log(error, "ERROR 1111");
       setLoading(false);
@@ -125,17 +187,20 @@ export default function LinqStakeTabMenu({
       setLoading(false);
     }
   }
-  console.log(stakeRewards, "These are my stake rewards!!!!");
 
+  let current_chain = 5;
 
+  const [newUserBalance, setNewUserBalance] = useState(Number);
   const { data: UserBalanceInStaking } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "getLpDepositsForUser",
-    chainId: 1,
+    address: StakingAddress,
+    abi: MilqFarmABI,
+    functionName: "LinQerParlours",
+    chainId: current_chain,
     args: [address],
-    onSuccess(data) {
-      console.log("Success", UserBalanceInStaking);
+    onSuccess(data: any) {
+      const firstValueString = data[0].toString(); // Convert the first value to a string
+      const firstValue = parseFloat(firstValueString); // Parse the string as a JavaScript number
+      setNewUserBalance(firstValue);
     },
   });
   function Fetchcurrentstaked() {
@@ -145,7 +210,7 @@ export default function LinqStakeTabMenu({
     try {
       setLoading(true);
       const divisor = 1e18;
-      const NumberBalance = Number(UserBalanceInStaking);
+      const NumberBalance = Number(newUserBalance);
       const formattedNumber = NumberBalance / divisor;
       const finalNumber = formattedNumber.toFixed(1);
       const realNumber = Number(finalNumber);
@@ -160,48 +225,74 @@ export default function LinqStakeTabMenu({
     }
   }
 
+  //UserUnlockTime Section
 
-  const { data: UserUnlocktime } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "checkRemainingTime",
-    chainId: 1,
+  /*{
+  const { data: LinQerParloursData }: { data: any } = useContractRead({
+    address: StakingAddress,
+    abi: MilqFarmABI,
+    functionName: "LinQerParlours",
     args: [address],
     onSuccess(data) {
-      const firstLockTime = UserUnlocktime as any;
-      setLockTime(firstLockTime[0]);
-      console.log(error);
+      console.log("LinQerParlours Success", data);
+      const parsedData = data.map((item: any) => item.toString()); 
+      const rentedDaisysSince = parsedData[1];
+      const rentedDaisysTill = parsedData[2]; 
+      const timeDifference = rentedDaisysTill - blockNumber;
+      setRealTimeUnlock(timeDifference);
+      console.log("Rented Daisys Till:", rentedDaisysTill);
+      console.log("Rented Daisys Since:", rentedDaisysSince);
+      console.log("timeDifference is all yall:", timeDifference);
     },
   });
+
+  const [RealTimeUnlock, setRealTimeUnlock] = useState({ days: 0, hours: 0 });
+  const [userUnlockTime, setUserUnlockTime] = useState({ days: 0, hours: 0 });
+console.log(userUnlockTime, "this is user unlock time")
   function secondsToDhms(seconds: number) {
     const days = Math.floor(seconds / (3600 * 24));
     seconds -= days * 3600 * 24;
     const hours = Math.floor(seconds / 3600);
     return { days, hours };
   }
-  function FetchUserUnlockTime() {
-    if (!address) {
-      return;
-    }
-    try {
-      setLoading(true);
-      const bigIntValue = lockTime;
-      const regularNumber = Number(bigIntValue);
-      const NumberTime = Number(regularNumber); // Convert UserUnlockTime to a number
-      const { days, hours } = secondsToDhms(NumberTime); // Use the secondsToDhms function
-      setUserUnlockTime({ days, hours }); // Update state with an object containing days and hours
-      /////
-    } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  }
+
+ function FetchUserUnlockTime() {
+   if (!address) {
+     return;
+   }
+   try {
+     setLoading(true);
+     const regularNumber = Number(RealTimeUnlock);
+     const NumberTime = Number(regularNumber); 
+     const { days, hours } = secondsToDhms(NumberTime); 
+     setUserUnlockTime({ days, hours }); 
+     /////
+   } catch (error) {
+     console.log(error, "ERROR 1111");
+     setLoading(false);
+   } finally {
+     setLoading(false);
+   }
+ }
+}*/
+//UserUnlockTime Section --^
+
+  const [totalLinqStaked, settotalLinqStaked] = useState(0);
+
+  const { data: daisys } = useContractRead({
+    address: StakingAddress,
+    abi: MilqFarmABI,
+    functionName: "daisys",
+    chainId: current_chain,
+    onSuccess(data: any) {
+      console.log(Number(data.toString()) / 10 ** 18, "lp staked");
+      settotalLinqStaked(Number(data.toString()) / 10 ** 18);
+    },
+  });
 
   const { data: UserPoolPercentage } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "UserPoolPercentage??",
     args: [address],
     chainId: 1,
@@ -213,15 +304,12 @@ export default function LinqStakeTabMenu({
   useEffect(() => {
     FetchRewards();
     Fetchcurrentstaked();
+   // FetchUserUnlockTime();
   }, [address]);
-
-  //End all functions for Regular Linq Staqing
-
-  //Begin all functions for Perpetual Linq Staqing
 
   const { data: UserBalanceInPerpStaking } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "getLpDepositsForUser",
     chainId: 1,
     args: [address],
@@ -264,7 +352,6 @@ export default function LinqStakeTabMenu({
   };
 
   useEffect(() => {
-    // Set Regular tab as active initially when the component mounts
     handleTabClick("Regular");
   }, []);
 
@@ -356,6 +443,7 @@ export default function LinqStakeTabMenu({
                       style={{ fontFamily: "GroupeMedium" }}
                       className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                       type="button"
+                      onClick={() => Approval()}
                     >
                       Approve
                     </button>
@@ -365,15 +453,9 @@ export default function LinqStakeTabMenu({
                       style={{ fontFamily: "GroupeMedium" }}
                       className="font-sans  cursor-pointer text-md mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                       type="button"
+                      onClick={() => Claim()}
                     >
                       Claim
-                    </button>
-                    <button
-                      style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                      type="button"
-                    >
-                      UnStake
                     </button>
                   </div>
                   <button
@@ -384,27 +466,59 @@ export default function LinqStakeTabMenu({
                     Switch to Perpetual
                   </button>
                 </div>
+                <h2 className="text-lg text-white">
+                  Please enter the amount of unstaQe tokens
+                </h2>
+                <input
+                  type="number"
+                  id="stakeInput"
+                  className="w-full border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
+                  value={_amtLinQ} 
+                  style={{ fontFamily: "ethnocentricRg" }}
+                  onChange={(e) => {
+                    const value = e.target.valueAsNumber; 
+                    if (!isNaN(value) && value >= 1) {
+                      set_amtLinQ(value); 
+                    }
+                  }}
+                />
+                <button
+                  style={{ fontFamily: "GroupeMedium" }}
+                  className="font-sans w-fit cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                  type="button"
+                  onClick={() => unStaqe()}
+                >
+                  UnStake
+                </button>
+
                 <div
                   style={{ fontFamily: "BebasNeue" }}
-                  className=" mt-5 opacity-90 transition-all duration-300 py-3"
+                  className=" opacity-90 transition-all duration-300 py-3"
                 >
+                  <button
+                    style={{ fontFamily: "GroupeMedium" }}
+                    className="font-sans w-fit mb-5 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-green-600 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+                    type="button"
+                    onClick={() => getCurrentBlockTimestamp()}
+                  >
+                    Qompound {blockNumber}
+                  </button>
                   <div
                     className={
                       "text-md ml-5 md:ml-16 grid grid-cols-2 col-span-1 gap-2"
                     }
                   >
                     <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Your StaQed Linq Balance:
+                      Your StaQed Linq Balance: <br /> {currentStaked}
                     </h2>
                     <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Your rewards pending: {stakeRewards}
+                      Your rewards pending: <br /> {stakeRewards}
                     </h2>
                     <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Time remaining in pool: <br /> {userUnlockTime.days} days{" "}
-                      {userUnlockTime.hours} hours
+                      pool percentage
                     </h2>
                     <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Your pool percentage: 5%{" "}
+                     User Unlock time: <br />
                     </h2>
                   </div>
                 </div>

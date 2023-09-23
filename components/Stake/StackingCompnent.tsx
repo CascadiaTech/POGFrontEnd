@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
-import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi.json";
+import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi.mjs"
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import HeaderComponent from "../Header/HeaderComponent";
 import FooterComponent from "../Footer/FooterComponent";
 import { Carousel, CarouselProps } from "flowbite-react";
-import fourteenDayStackAbi from "../../contracts/abi/14DayStackabi.json";
+import { MilqFarmABI } from "../../contracts/abi/MilqFarmAbi.mjs";
 import { useContext } from "react";
 import { Tooltip } from "react-tooltip";
 import linqabi from "../../contracts/abi/abi.json";
@@ -24,8 +24,7 @@ export default function LpStakeTabMenu({
   setToken,
 }: LpStakeTabMenuProps) {
   const { address } = useAccount();
-  const fourteenDayContractAddress =
-    "0x91603Fa0a2b854F059C66d276b5782C263D31582";
+  const StakingAddress = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   const LPtokenContract = "0xbD08FcFd3b2a7bB90196F056dea448841FC5A580";
   const linqContract = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
   const [loading, setLoading] = useState(false);
@@ -53,7 +52,7 @@ export default function LpStakeTabMenu({
   //Begin all functions for Regular Linq Staqing
   const { write: unstake } = useContractWrite({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "unstake",
     account: address,
   });
@@ -61,7 +60,7 @@ export default function LpStakeTabMenu({
     address: linqContract,
     abi: linqabi,
     functionName: "approve",
-    args: [fourteenDayContractAddress, "1000000000000000000"],
+    args: [StakingAddress, "1000000000000000000"],
     account: address,
   });
   console.log(address, "this is my address");
@@ -83,7 +82,7 @@ export default function LpStakeTabMenu({
 
   const { write: StaQe } = useContractWrite({
     address: "0x91603Fa0a2b854F059C66d276b5782C263D31582",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "staQe",
     args: [0, _amountMilQ * 10 ** 18, 1],
     account: address,
@@ -104,14 +103,14 @@ export default function LpStakeTabMenu({
 
   const { write: WithdrawRewards } = useContractWrite({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "withdrawReward",
     account: address,
   });
 
   const { data: TotalDividends } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "getTotalDividendsDistributed",
     chainId: 1,
     onSuccess(data) {
@@ -122,7 +121,7 @@ export default function LpStakeTabMenu({
 
   const { data: getStakeRewards } = useContractRead({
     address: "0x91603Fa0a2b854F059C66d276b5782C263D31582",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "calculateRewardSinceLastClaim",
     account: address,
     args: [user],
@@ -155,7 +154,7 @@ export default function LpStakeTabMenu({
 
   const { data: UserBalanceInStaking } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "getLpDepositsForUser",
     chainId: 1,
     args: [address],
@@ -185,7 +184,7 @@ export default function LpStakeTabMenu({
 
   const { data: UserUnlocktime } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "checkRemainingTime",
     chainId: 1,
     args: [address],
@@ -229,7 +228,7 @@ export default function LpStakeTabMenu({
   }
   const { data: UserPoolPercentage } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "UserPoolPercentage??",
     args: [address],
     chainId: 1,
@@ -250,7 +249,7 @@ export default function LpStakeTabMenu({
 
   const { data: UserBalanceInPerpStaking } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
+    abi: MilqFarmABI,
     functionName: "getLpDepositsForUser",
     chainId: 1,
     args: [address],
