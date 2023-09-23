@@ -25,9 +25,10 @@ export default function LinqStakeTabMenu({
   setToken,
 }: LpStakeTabMenuProps) {
   const { address } = useAccount();
-  const StakingAddress = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
   const linqAddress = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
+  const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
+  let current_chain = 5;
   const [loading, setLoading] = useState(false);
   const [unstakeStatus, setUnstakeStatus] = useState(false);
   const [rewards, setRewards] = useState(0);
@@ -41,7 +42,7 @@ export default function LinqStakeTabMenu({
 
   const notify = () => toast("Wow so easy !");
 
-  let chainId = 5;
+
   const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 3000));
   toast.promise(resolveAfter3Sec, {
     pending: "Promise is pending",
@@ -89,7 +90,7 @@ export default function LinqStakeTabMenu({
     address: linqAddress,
     abi: linqABI,
     functionName: "approve",
-    args: [StakingAddress, "1000000000000000000000000000"],
+    args: [StaqeFarm, "1000000000000000000000000000"],
     account: address,
   });
   const [Allowance, setAllowance]: any = useState();
@@ -98,8 +99,8 @@ export default function LinqStakeTabMenu({
     address: LPtokenContract,
     abi: LPTokenAbi,
     functionName: "allowance",
-    chainId: 5,
-    args: [address, StakingAddress],
+    chainId: current_chain,
+    args: [address, StaqeFarm],
     onSuccess(data: any) {
       setAllowance(data);
       console.log(Number(data.toString()) / 10 ** 18);
@@ -113,24 +114,24 @@ export default function LinqStakeTabMenu({
   const milqValue = _token === 1 ? _amountMilQ : 0;
 
   const { write: StaQe } = useContractWrite({
-    address: StakingAddress,
+    address: StaqeFarm,
     abi: MilqFarmABI,
     functionName: "staQe",
-    args: [_amountLinQ * 10 ** 18, 0 * 10 ** 18, _token],
+    args: [_amountLinQ * 10 ** 18, 0, 0],
     account: address,
   });
 
   const [_amtLinQ, set_amtLinQ] = useState(0);
   const [_amtMilQ, set_amtMilQ] = useState(0);
 
-  const unstakeLinqValue = _token === 0 ? _amtLinQ : 0;
-  const unstakeMilqValue = _token === 1 ? _amtMilQ : 0;
+
 
   const { write: unStaqe } = useContractWrite({
-    address: StakingAddress,
+    address: StaqeFarm,
     abi: MilqFarmABI,
     functionName: "unstaQe",
-    args: [_amtLinQ * 10 ** 18, 0 * 10 ** 18, _token],
+    chainId: current_chain,
+    args: [_amtLinQ * 10 ** 18, 0, 0],
     account: address,
     onSuccess(data) {
       Swal.fire({
@@ -143,9 +144,9 @@ export default function LinqStakeTabMenu({
   });
 
   const { write: Claim } = useContractWrite({
-    address: StakingAddress,
+    address: StaqeFarm,
     abi: MilqFarmABI,
-    chainId: 5,
+    chainId: current_chain,
     functionName: "shipMilk",
     account: address,
     onSuccess(data) {
@@ -161,8 +162,9 @@ export default function LinqStakeTabMenu({
   });
 
   const { data: getStakeRewards } = useContractRead({
-    address: StakingAddress,
+    address: StaqeFarm,
     abi: MilqFarmABI,
+    chainId: current_chain,
     functionName: "checkEstMilQRewards",
     args: [address],
     onSuccess(data) {},
@@ -188,11 +190,10 @@ export default function LinqStakeTabMenu({
     }
   }
 
-  let current_chain = 5;
 
   const [newUserBalance, setNewUserBalance] = useState(Number);
   const { data: UserBalanceInStaking } = useContractRead({
-    address: StakingAddress,
+    address: StaqeFarm,
     abi: MilqFarmABI,
     functionName: "LinQerParlours",
     chainId: current_chain,
@@ -280,7 +281,7 @@ console.log(userUnlockTime, "this is user unlock time")
   const [totalLinqStaked, settotalLinqStaked] = useState(0);
 
   const { data: daisys } = useContractRead({
-    address: StakingAddress,
+    address: StaqeFarm,
     abi: MilqFarmABI,
     functionName: "daisys",
     chainId: current_chain,
@@ -289,55 +290,18 @@ console.log(userUnlockTime, "this is user unlock time")
       settotalLinqStaked(Number(data.toString()) / 10 ** 18);
     },
   });
-
-  const { data: UserPoolPercentage } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: MilqFarmABI,
-    functionName: "UserPoolPercentage??",
-    args: [address],
-    chainId: 1,
-    onSuccess(data) {
-      console.log("Success", UserPoolPercentage);
-    },
-  });
+function FetchDaisies(){
+  daisys;
+}
 
   useEffect(() => {
     FetchRewards();
     Fetchcurrentstaked();
+    FetchDaisies();
+
    // FetchUserUnlockTime();
   }, [address]);
 
-  const { data: UserBalanceInPerpStaking } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: MilqFarmABI,
-    functionName: "getLpDepositsForUser",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      console.log("Success", UserBalanceInPerpStaking);
-    },
-  });
-  function FetchcurrentPerpstaked() {
-    if (!address) {
-      return;
-    }
-    try {
-      setLoading(true);
-      const divisor = 1e18;
-      const NumberBalance = Number(UserBalanceInPerpStaking);
-      const formattedNumber = NumberBalance / divisor;
-      const finalNumber = formattedNumber.toFixed(1);
-      const realNumber = Number(finalNumber);
-      setCurrentPerpStaked(realNumber);
-      return realNumber;
-      /////
-    } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const [tab_variant, settab_variant] = useState("Regular");
 
@@ -426,7 +390,7 @@ console.log(userUnlockTime, "this is user unlock time")
                     onChange={(e) => {
                       const value = e.target.valueAsNumber; // Get the input value as a number
                       if (!isNaN(value) && value >= 1) {
-                        set_amountLinQ(value); // Update the state variable with the parsed value
+                        set_amtLinQ(value); // Update the state variable with the parsed value
                       }
                     }}
                   />
@@ -459,30 +423,6 @@ console.log(userUnlockTime, "this is user unlock time")
                     </button>
                   </div>
                   <button
-                    style={{ fontFamily: "GroupeMedium" }}
-                    className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                    type="button"
-                  >
-                    Switch to Perpetual
-                  </button>
-                </div>
-                <h2 className="text-lg text-white">
-                  Please enter the amount of unstaQe tokens
-                </h2>
-                <input
-                  type="number"
-                  id="stakeInput"
-                  className="w-full border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-                  value={_amtLinQ} 
-                  style={{ fontFamily: "ethnocentricRg" }}
-                  onChange={(e) => {
-                    const value = e.target.valueAsNumber; 
-                    if (!isNaN(value) && value >= 1) {
-                      set_amtLinQ(value); 
-                    }
-                  }}
-                />
-                <button
                   style={{ fontFamily: "GroupeMedium" }}
                   className="font-sans w-fit cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                   type="button"
@@ -490,6 +430,15 @@ console.log(userUnlockTime, "this is user unlock time")
                 >
                   UnStake
                 </button>
+                  <button
+                    style={{ fontFamily: "GroupeMedium" }}
+                    className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+                    type="button"
+                  >
+                    Switch to Perpetual
+                  </button>
+                </div>
+      
 
                 <div
                   style={{ fontFamily: "BebasNeue" }}
