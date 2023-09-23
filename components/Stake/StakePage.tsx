@@ -8,11 +8,10 @@ function StakePage() {
   // Pass _token and set_token as props to LpStakeTabMenu
   return (
     <div>
-      <LpStakeTabMenu token={_token} setToken={set_token} />
-      <NewStakeComponent token={_token} />
+      <LpStakeTabMenu _token={_token} setToken={set_token} />
+      <NewStakeComponent _token={_token} />
     </div>
   );
 }
 
 export default StakePage;
-../Header/HeaderComponent
