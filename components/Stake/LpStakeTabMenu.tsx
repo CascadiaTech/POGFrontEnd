@@ -110,7 +110,7 @@ export default function LpStakeTabMenu({
         icon: "error",
         title:
           "An error occured with UnStaqing please contact support if issue perists",
-        text: data.cause?.message,
+    
       });
     },
   });
@@ -133,7 +133,7 @@ export default function LpStakeTabMenu({
         icon: "error",
         title:
           "An error occured with Switching please contact support if issue perists",
-        text: data.cause?.message,
+    
       });
     },
   });
@@ -152,7 +152,7 @@ export default function LpStakeTabMenu({
         icon: "error",
         title:
           "An error occured with Claiming please contact support if issue perists",
-        text: data.cause?.message,
+  
       });
     },
   });
@@ -175,7 +175,6 @@ export default function LpStakeTabMenu({
         icon: "error",
         title:
           "An error occured with Requesting Unlock please contact support if issue perists",
-        text: data.cause?.message,
       });
     },
   });
@@ -197,7 +196,7 @@ export default function LpStakeTabMenu({
         icon: "error",
         title:
           "An error occured with Staqing please contact support if issue perists",
-        text: data.cause?.message,
+  
       });
     },
   });
