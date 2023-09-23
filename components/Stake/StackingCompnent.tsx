@@ -6,51 +6,20 @@ import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import error from "next/error";
+import { LPabiObject } from "../../contracts/abi/LPTokenAbi.mjs";
+import { abiObject } from "../../contracts/abi/abi.mjs";
 const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
 const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
 
 const OverviewComponent = () => {
   const { address } = useAccount();
-  const fourteenDayContractAddress =
-    "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
-  const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
-  const [stakeRewards, setStakeRewards] = useState(Number);
-  const user = address;
+  const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
+  let current_chain = 5;
+  const LPtokenContract = "0xbD08FcFd3b2a7bB90196F056dea448841FC5A580";
+  const linqContract = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
 
-  const { write: unstake } = useContractWrite({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "unstake",
-    account: address,
-  });
 
-  const { write: WithdrawRewards } = useContractWrite({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "withdrawReward",
-    account: address,
-  });
-  const { data: getStakeRewards } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "calculateRewardSinceLastClaim",
-    account: address,
-    args: [user],
-    onSuccess(data) {
-      console.log("StakeRewards Success", getStakeRewards);
-    },
-  });
 
-  const { data: UserClaimableBalance } = useContractRead({
-    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
-    abi: fourteenDayStackAbi,
-    functionName: "calculateRewardSinceLastClaim",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      console.log("Success", UserClaimableBalance);
-    },
-  });
   const { data: UserTimeLeft } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
@@ -63,29 +32,33 @@ const OverviewComponent = () => {
     },
   });
 
-  function Fetchbalance() {
-    if (!address) return {};
-    try {
-      setLoading(true);
-      const divisor = 1e18;
-      const NumberBalance = Number(getStakeRewards);
-      const formattedNumber = NumberBalance / divisor;
-      const finalNumber = formattedNumber.toFixed(5);
-      const realNumber = Number(finalNumber);
-      setStakeRewards(realNumber);
-      return realNumber;
-      /////
-    } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  }
-  console.log(stakeRewards, "StakeRewards");
-  useEffect(() => {
-    Fetchbalance();
-  }, [address]);
+  const [MilqBalance, setMilqBalance] = useState(0);
+
+  const { data: BalanceOfMilq } = useContractRead({
+    address: LPtokenContract,
+    abi: LPTokenAbi,
+    functionName: "balanceOf",
+    chainId: current_chain,
+    args: [address],
+    onSuccess(data: any) {
+      setMilqBalance(Number(data.toString()) / 10 ** 18);
+    },
+  });
+
+  const [linqBalance, setlinqBalance] = useState(0);
+
+  const { data: BalanceOfLinq } = useContractRead({
+    address: linqContract,
+    abi: abiObject,
+    functionName: "balanceOf",
+    chainId: current_chain,
+    args: [address],
+    onSuccess(data: any) {
+      setlinqBalance(Number(data.toString()) / 10 ** 18);
+    },
+  });
+
+
   const [loading, setLoading] = useState(false);
   const [unstakeStatus, setUnstakeStatus] = useState(false);
   const [rewards, setRewards] = useState(0);
@@ -106,12 +79,12 @@ const OverviewComponent = () => {
           style={{ fontFamily: "ethnocentricRg" }}
           className="text-xl text-gray-700 font-semibold border-[1px] text-center border-black rounded-md px-2 md:px-4 py-1 w-36"
         >
-          {stakeRewards}
+
         </p>
 
         <button
           type="button"
-          onClick={() => WithdrawRewards()}
+
           className={`rounded-lg ${
             rewards === 0
               ? "bg-gray-400 cursor-not-allowed"
@@ -133,7 +106,7 @@ const OverviewComponent = () => {
       <div className="flex flex-col items-center justify-center border border-gray-300 p-4 md:p-6 rounded-lg">
         <button
           type="button"
-          onClick={() => unstake()}
+
           className={`rounded-lg ${
             !unstakeStatus
               ? "bg-gray-400 cursor-not-allowed"

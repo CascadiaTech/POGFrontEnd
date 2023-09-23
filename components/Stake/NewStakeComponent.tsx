@@ -18,17 +18,44 @@ import "react-toastify/dist/ReactToastify.css";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import LinqStakeModal from "./LinqStakeModal";
 import LpStakeModal from "./LpStakeModal";
-const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
-const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
-
+import { LPabiObject } from "../../contracts/abi/LPTokenAbi.mjs";
+import { abiObject } from "../../contracts/abi/abi.mjs";
 export default function NewStakeComponent(_token: any) {
-  const { address, isConnected } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("0");
-  const [LPbalance, setLPbalance] = useState(Number);
-  const [linqBalance, setLinqBalance] = useState(Number);
+  const { address } = useAccount();
+  const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
+  let current_chain = 5;
+  const LPtokenContract = "0xbD08FcFd3b2a7bB90196F056dea448841FC5A580";
+  const linqContract = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
+
+  const [MilqBalance, setMilqBalance] = useState(0);
+
+  const { data: BalanceOfMilq } = useContractRead({
+    address: LPtokenContract,
+    abi: LPTokenAbi,
+    functionName: "balanceOf",
+    chainId: current_chain,
+    args: [address],
+    onSuccess(data: any) {
+      setMilqBalance(Number(data.toString()) / 10 ** 18);
+    },
+  });
+
+  const [linqBalance, setlinqBalance] = useState(0);
+
+  const { data: BalanceOfLinq } = useContractRead({
+    address: linqContract,
+    abi: abiObject,
+    functionName: "balanceOf",
+    chainId: current_chain,
+    args: [address],
+    onSuccess(data: any) {
+      setlinqBalance(Number(data.toString()) / 10 ** 18);
+    },
+  });
 
   const notify = () => toast("Wow so easy !");
 
@@ -36,111 +63,22 @@ export default function NewStakeComponent(_token: any) {
   const [isLinqStakeOpen, setIsLinqStakeOpen] = useState(false); // Initial state for LINQ Stake
   const [isStaked, setIsStaked] = useState(false); // Initial state is "Unstake"
 
-  const toggleStake = () => {
-    setIsStaked(!isStaked);
-  };
 
   const toggleModals = () => {
     setIsLpStakeOpen(!isLpStakeOpen);
     setIsLinqStakeOpen(!isLinqStakeOpen);
   };
-  const { data: LPbalanceOf } = useContractRead({
-    address: LPtokenContract,
-    abi: LPTokenAbi,
-    functionName: "balanceOf",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      console.log("Success", LPbalanceOf);
-    },
-  });
-  function FetchLPbalance() {
-    if (!address) {
-      return;
-    }
-    try {
-      setLoading(true);
-      const divisor = 1e18;
-      const NumberBalance = Number(LPbalanceOf);
-      const formattedNumber = NumberBalance / divisor;
-      const finalNumber = formattedNumber.toFixed(1);
-      const realNumber = Number(finalNumber);
-      setLPbalance(realNumber);
-      return realNumber;
-      /////
-    } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  }
 
-  
-  const { data: linqBalanceOf } = useContractRead({
-    address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
-    abi: linqabi,
-    functionName: "balanceOf",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      console.log("Success", linqBalanceOf);
-    },
-  });
-  function FetchLinqbalance() {
-    if (!address) {
-      return;
-    }
-    try {
-      setLoading(true);
-      const divisor = 1e18;
-      const NumberBalance = Number(linqBalanceOf);
-      const formattedNumber = NumberBalance / divisor;
-      const finalNumber = formattedNumber.toFixed(1);
-      const realNumber = Number(finalNumber);
-      setLinqBalance(realNumber);
-      return realNumber;
-      /////
-    } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  }
 
-  const { data: LinqAPR } = useContractRead({
-    address: fourteenDayContractAddress,
-    abi: LPTokenAbi,
-    functionName: "LinqAPR??",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      console.log("Success", LinqAPR);
-    },
-  });
-  const { data: LPAPR } = useContractRead({
-    address: fourteenDayContractAddress,
-    abi: linqabi,
-    functionName: "LPAPR??",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-      console.log("Success", LPAPR);
-    },
-  });
+function FetchBalances(){
+  BalanceOfLinq;
+  BalanceOfMilq
 
+}
   useEffect(() => {
-    FetchLinqbalance();
-    FetchLPbalance();
+FetchBalances()
   }, [address]);
 
-  //  <div>
-  //  <button className={"my-5 bg-white "} onClick={notify}>
-  //    Notify !
-  //  </button>
-  //  <ToastContainer />
-  //</div>
   return (
     <>
       <div className={"flex flex-col"}>
@@ -171,7 +109,7 @@ export default function NewStakeComponent(_token: any) {
               >
                 LP Balance
               </p>
-              <p className={"text-white text-2xl py-1 px-1 "}>{LPbalance} LP</p>
+              <p className={"text-white text-2xl py-1 px-1 "}>{MilqBalance ? MilqBalance: "0"} LP</p>
             </div>
             <p className={"mx-10"}></p>
             <div
@@ -185,7 +123,7 @@ export default function NewStakeComponent(_token: any) {
               >
                 LINQ Balance
               </p>
-              <p className={"text-white text-2xl py-1 px-1 "}>{linqBalance} LINQ</p>
+              <p className={"text-white text-2xl py-1 px-1 "}>{linqBalance ? linqBalance : "0"} LINQ</p>
             </div>
           </div>
 
