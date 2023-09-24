@@ -20,6 +20,10 @@ interface LpStakeTabMenuProps {
   setToken: (value: number) => void;
 }
 
+//// use round uptime 
+//need the preset value to hardcode
+//if its less the preset value earse request inlcok
+
 export default function LinqStakeTabMenu({
   _token,
   setToken,
@@ -28,7 +32,7 @@ export default function LinqStakeTabMenu({
   const linqAddress = "0x1A5f0B4a408c3Cb75921AEC0Ea036F9984c0aA5C";
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457"
+  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ] = useState(0);
@@ -54,7 +58,7 @@ export default function LinqStakeTabMenu({
         console.error(error);
       });
   });
-  let allowance_default = _amountLinQ > 1 ? (_amountLinQ).toString() : "100"
+  let allowance_default = _amountLinQ > 1 ? _amountLinQ.toString() : "100";
   const { write: Approve } = useContractWrite({
     address: linqAddress,
     abi: linqABI,
@@ -93,7 +97,7 @@ export default function LinqStakeTabMenu({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "unstaQe",
-    args: [_amountLinQ * 10 ** 18,0, 0],
+    args: [_amountLinQ * 10 ** 18, 0, 0],
     account: address,
     onSuccess(data) {
       Swal.fire({
@@ -104,8 +108,7 @@ export default function LinqStakeTabMenu({
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-          `An error occured with UnStaqing please contact support if issue perists${err.cause}`,
+        title: `An error occured with UnStaqing please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -126,8 +129,7 @@ export default function LinqStakeTabMenu({
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with switching please contact support if issue perists ${err.cause}`,
+        title: `An error occured with switching please contact support if issue perists ${err.cause}`,
       });
     },
   });
@@ -144,10 +146,8 @@ export default function LinqStakeTabMenu({
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with Claiming please contact support if issue perists${err.cause}`,
+        title: `An error occured with Claiming please contact support if issue perists${err.cause}`,
       });
-     
     },
   });
 
@@ -167,29 +167,25 @@ export default function LinqStakeTabMenu({
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with Requesting unlock please contact support if issue perists${err.cause}`
+        title: `An error occured with Requesting unlock please contact support if issue perists${err.cause}`,
       });
     },
   });
 
-  const { write: StaQe } = useContractWrite({
+  const {
+    write: StaQe,
+    isLoading,
+    isSuccess,
+  } = useContractWrite({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "staQe",
     args: [_amountLinQ * 10 ** 18, 0, 0],
     account: address,
-    onSuccess(data) {
-      Swal.fire({
-        icon: "success",
-        title: "you have successfully StaQed your Linq",
-      });
-    },
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with Staqing please contact support if issue perists${err.cause}`
+        title: `An error occured with Staqing please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -200,6 +196,12 @@ export default function LinqStakeTabMenu({
     }
     try {
       StaQe();
+      if (isSuccess) {
+        Swal.fire({
+          icon: "success",
+          title: "you have successfully StaQed your Linq",
+        });
+      }
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -226,7 +228,7 @@ export default function LinqStakeTabMenu({
     onSuccess(data: any) {
       setUserDetails(data);
       setUnlockTime(Number(data[2].toString()));
-      setOwned(data[11]);
+      setOwned(data[10]);
     },
   });
 
@@ -331,7 +333,7 @@ export default function LinqStakeTabMenu({
           </button>
         </div>
         <div className="flex flex-col justify-center items-center my-3">
-          { Number(unlocktime?.toString()) < currentTime  ? (
+          {Number(unlocktime?.toString()) < currentTime ? (
             <button
               onClick={() => PerpSwitch()}
               style={{ fontFamily: "GroupeMedium" }}
@@ -371,7 +373,8 @@ export default function LinqStakeTabMenu({
             className="text-white mb-2 w-40 border border-white  px-2 py-2"
           >
             Your StaQed Linq Balance: <br />{" "}
-            {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
+            {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0}{" "}
+            Linq
           </h2>
           <h2
             style={{
@@ -397,11 +400,10 @@ export default function LinqStakeTabMenu({
           >
             Your pool percentage: <br />{" "}
             {userdetails
-              ? (
-                  Number(userdetails[0].toString()) /
+              ? (Number(userdetails[0].toString()) /
                   10 ** 18 /
-                  totallinqStaked
-                ) * 100
+                  totallinqStaked) *
+                100
               : 0}
             %{" "}
           </h2>

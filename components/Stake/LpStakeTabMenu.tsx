@@ -236,7 +236,7 @@ export default function LpStakeTabMenu({
     onSuccess(data: any) {
       setUserDetails(data);
       setUnlockTime(Number(data[2].toString()));
-      setOwned(data[11]);
+      setOwned(data[10]);
     },
   });
 
