@@ -37,6 +37,8 @@ export default function LpStakeTabMenu({
 
 
   const [_amountMilQ, set_amountMilQ] = useState(0);
+  const [updatevar, setupdatevar] = useState(false)
+
 
   // Connect to an Ethereum node
 
@@ -70,9 +72,9 @@ export default function LpStakeTabMenu({
     functionName: "approve",
     chainId: current_chain,
     account: address,
-    args: [StaqeFarm, allowance_default],
+    args: [StaqeFarm, Number(allowance_default) * 10 **18],
   });
-  const [Allowance, setAllowance]: any = useState();
+  const [Allowance, setAllowance]: any = useState(0);
 
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
@@ -90,11 +92,11 @@ export default function LpStakeTabMenu({
   const { data: PendingRewards } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
-    functionName: "howMuchMilk",
+    functionName: "viewHowMuchMilk",
     chainId: current_chain,
     args: [address],
     onSuccess(data: any) {
-      setPendingRewards(Number(data[1].toString()) / 10 ** 18);
+      setPendingRewards(Number(data.toString()) / 10 ** 18);
     },
   });
   //Begin all functions for Regular Linq Staqing
@@ -203,6 +205,15 @@ export default function LpStakeTabMenu({
       });
     },
   });
+  /* (201)
+       customClass: {
+          container: "swal2-container",
+          title: "swal2-title",
+          icon: "swal2-error-fix"
+          
+
+        },
+  */
 
   function HandleStaQe() {
     if (!address) {
@@ -210,6 +221,7 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
+      setupdatevar(true)
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -220,6 +232,7 @@ export default function LpStakeTabMenu({
     }
     try {
       unStaQe();
+      setupdatevar(true)
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -227,6 +240,7 @@ export default function LpStakeTabMenu({
 
   const [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
+  const [ownedTill, setOwnedTill]:any = useState(32503680000)
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -237,6 +251,7 @@ export default function LpStakeTabMenu({
       setUserDetails(data);
       setUnlockTime(Number(data[2].toString()));
       setOwned(data[10]);
+      setOwnedTill(data[8]);
     },
   });
 
@@ -256,6 +271,7 @@ export default function LpStakeTabMenu({
     PendingRewards;
     bessies;
     allowance;
+    setupdatevar(false)
   }
 
   const [showPerp, SetShowPerpOptions] = useState(false);
@@ -266,7 +282,7 @@ export default function LpStakeTabMenu({
     if (userdetails != undefined && userdetails[10] == true) {
       SetShowPerpOptions(true);
     }
-  }, [address, allowance, UserDetails]);
+  }, [address, allowance, userdetails, updatevar]);
 
   return (
     <div
@@ -341,7 +357,7 @@ export default function LpStakeTabMenu({
           </button>
         </div>
         <div className="flex flex-col justify-center items-center my-3">
-          { Number(unlocktime?.toString()) < currentTime  ? (
+          { Number(unlocktime?.toString()) < currentTime && owned == false  ? (
             <button
               onClick={() => PerpSwitch()}
               style={{ fontFamily: "GroupeMedium" }}
@@ -353,7 +369,7 @@ export default function LpStakeTabMenu({
           ) : (
             <></>
           )}
-          {owned ? (
+          {owned && ownedTill == 32503680000 ? (
             <button
               onClick={() => RequestUnlock()}
               style={{ fontFamily: "GroupeMedium" }}
@@ -397,7 +413,7 @@ export default function LpStakeTabMenu({
             }}
             className="text-white mb-2 w-40 border border-white  px-2 py-2"
           >
-            Time remaining in pool:
+            Time Till Unlock: {unlocktime ? Number(unlocktime.toString())  - Number(currentTime.toString()) > 0 ? Number(unlocktime.toString())   -  Number(currentTime.toString()): "0" : "0" }
           </h2>
           <h2
             style={{

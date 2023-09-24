@@ -390,7 +390,7 @@ export default function LinqStakeTabMenu({
             }}
             className="text-white mb-2 w-40 border border-white  px-2 py-2"
           >
-            Time remaining in pool:
+           Time Till Unlock: {"0" }
           </h2>
           <h2
             style={{
