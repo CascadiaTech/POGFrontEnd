@@ -196,7 +196,7 @@ export default function LpStakeTabMenu({
       Swal.fire({
         icon: "error",
         title:
-        `An error occured with UnStaqing please contact support if issue perists${err.cause?.message}`,
+        `An error occured with UnStaqing please contact support if issue perists${err.cause}`,
       });
     },
   });
