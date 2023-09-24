@@ -407,11 +407,11 @@ export default function LpStakeTabMenu({
           >
             Your pool percentage: <br />{" "}
             {userdetails
-              ? (
-                  Number(userdetails[0].toString()) /
+              ? 
+                  (Number(userdetails[0].toString()) /
                   10 ** 18 /
                   totalLPStaked
-                ).toFixed(4)
+                )*100
               : 0}
             %{" "}
           </h2>

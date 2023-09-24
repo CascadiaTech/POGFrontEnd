@@ -401,7 +401,7 @@ export default function LinqStakeTabMenu({
                   Number(userdetails[0].toString()) /
                   10 ** 18 /
                   totallinqStaked
-                ).toFixed(4)
+                ) * 100
               : 0}
             %{" "}
           </h2>
