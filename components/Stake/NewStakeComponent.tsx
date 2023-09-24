@@ -27,8 +27,9 @@ export default function NewStakeComponent(_token: any) {
   const { address } = useAccount();
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
   const linqAddress = "0x1A5f0B4a408c3Cb75921AEC0Ea036F9984c0aA5C";
-  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457"
-
+  //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
+  //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
+  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ] = useState(0);
@@ -188,27 +189,9 @@ FetchBalances()
           }}
           className="text-white mb-2 w-40 border border-white  px-2 py-2"
         >
-          LP Staqed <br />{" "}
-          {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
-        </h2>
-        <h2
-          style={{
-            boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-          }}
-          className="text-white mb-2 w-40 border border-white  px-2 py-2"
-        >
           LinQ in wallet <br /> {linqBalance} {" "}
           {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
         </h2>
-          <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
-          >
-            LinQ StaQed <br /> {totallinqStaked} {" "}
-            {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
-          </h2>
           <h2
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
