@@ -151,7 +151,7 @@ FetchBalances()
 
   return (
     <>
-      <div className={"flex flex-col"}>
+      <div className={"flex flex-col mt-60"}>
         <div
           style={{
             background:
@@ -162,7 +162,7 @@ FetchBalances()
           }
         >
           <h1
-            className="text-lg mb-5 md:text-xl lg:text-2xl font-semibold text-white"
+            className="text-lg mb-2 md:text-xl lg:text-2xl font-semibold text-white"
             style={{ fontFamily: "Azonix" }}
           >
             User Statistics
@@ -172,13 +172,13 @@ FetchBalances()
         className=" mt-5 opacity-90 transition-all duration-300 py-3"
       >
         <div
-          className={"text-md grid grid-cols-3 col-span-1 gap-2 px-3 py-3 mx-auto"}
+          className={"text-md grid grid-cols-3 col-span-1 gap-2 px-3 mx-auto"}
         >
         <h2
           style={{
             boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
           }}
-          className="text-white mb-2 w-40 border border-white  px-2 py-2"
+          className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
         >
           LP In wallet <br /> {MilqBalance} {" "}
           {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
@@ -187,7 +187,7 @@ FetchBalances()
           style={{
             boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
           }}
-          className="text-white mb-2 w-40 border border-white  px-2 py-2"
+          className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
         >
           LinQ in wallet <br /> {linqBalance} {" "}
           {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
@@ -196,7 +196,7 @@ FetchBalances()
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
           >
            Claimable ETH <br /> {pendingRewards ? pendingRewards : "0"}
           </h2>
@@ -204,7 +204,7 @@ FetchBalances()
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
           >
            Claimable LP <br /> {pendingRewards ? pendingRewards : "0"}
           </h2>
@@ -212,7 +212,7 @@ FetchBalances()
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
           >
             Send me ETH: shipMilk
           </h2>
@@ -220,19 +220,19 @@ FetchBalances()
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
           >
             Qompound: QompoundLinQ
           </h2>
+        </div>
           <h2
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white mx-auto mb-2 w-28 md:w-40 border border-white  px-2 py-2"
           >
             Send me LP: shipFarmMilQ
           </h2>
-        </div>
       </div>
         </div>
 
