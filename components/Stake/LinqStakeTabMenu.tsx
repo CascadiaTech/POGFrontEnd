@@ -361,8 +361,35 @@ export default function LinqStakeTabMenu({
         className=" mt-5 opacity-90 transition-all duration-300 py-3"
       >
         <div
-          className={"text-md ml-5 md:ml-16 grid grid-cols-2 col-span-1 gap-2"}
+          className={"text-md grid grid-cols-3 col-span-1 gap-2 px-3 py-3 mx-auto"}
         >
+        <h2
+          style={{
+            boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+          }}
+          className="text-white mb-2 w-40 border border-white  px-2 py-2"
+        >
+          LP In wallet <br />{" "}
+          {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
+        </h2>
+        <h2
+          style={{
+            boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+          }}
+          className="text-white mb-2 w-40 border border-white  px-2 py-2"
+        >
+          LP Staqed <br />{" "}
+          {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
+        </h2>
+        <h2
+          style={{
+            boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+          }}
+          className="text-white mb-2 w-40 border border-white  px-2 py-2"
+        >
+          LinQ in wallet <br />{" "}
+          {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
+        </h2>
           <h2
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
@@ -379,7 +406,23 @@ export default function LinqStakeTabMenu({
             }}
             className="text-white mb-2 w-40 border border-white  px-2 py-2"
           >
-            Your rewards pending: <br /> {pendingRewards ? pendingRewards : "0"}
+           Claimable ETH <br /> {pendingRewards ? pendingRewards : "0"}
+          </h2>
+          <h2
+            style={{
+              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+            }}
+            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+          >
+           Claimable LP <br /> {pendingRewards ? pendingRewards : "0"}
+          </h2>
+          <h2
+            style={{
+              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+            }}
+            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+          >
+            Send me ETH
           </h2>
           <h2
             style={{
