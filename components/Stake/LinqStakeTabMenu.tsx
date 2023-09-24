@@ -101,11 +101,11 @@ export default function LinqStakeTabMenu({
         title: "you have successfully UnStaQed your LP",
       });
     },
-    onError(data) {
+    onError(err) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with UnStaqing please contact support if issue perists",
+          `An error occured with UnStaqing please contact support if issue perists${err.cause?.message}`,
       });
     },
   });
@@ -147,6 +147,7 @@ export default function LinqStakeTabMenu({
         title:
           "An error occured with Claiming please contact support if issue perists",
       });
+     
     },
   });
 
