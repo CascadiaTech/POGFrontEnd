@@ -28,7 +28,8 @@ export default function LinqStakeTabMenu({
   const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
   const linqAddress = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
-  const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
+  //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
+  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457"
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ] = useState(0);
