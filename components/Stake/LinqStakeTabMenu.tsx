@@ -25,8 +25,7 @@ export default function LinqStakeTabMenu({
   setToken,
 }: LpStakeTabMenuProps) {
   const { address } = useAccount();
-  const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
-  const linqAddress = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
+  const linqAddress = "0x1A5f0B4a408c3Cb75921AEC0Ea036F9984c0aA5C";
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457"
@@ -99,7 +98,7 @@ export default function LinqStakeTabMenu({
     onSuccess(data) {
       Swal.fire({
         icon: "success",
-        title: "you have successfully UnStaQed your LP",
+        title: "you have successfully UnStaQed your Linq",
       });
     },
     onError(err) {
@@ -124,11 +123,11 @@ export default function LinqStakeTabMenu({
         title: "you have successfully Switched to Perpetual",
       });
     },
-    onError(data) {
+    onError(err) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with Switching please contact support if issue perists",
+        `An error occured with switching please contact support if issue perists ${err.cause}`,
       });
     },
   });
@@ -142,11 +141,11 @@ export default function LinqStakeTabMenu({
     onSuccess(data) {
       Swal.fire({ icon: "success", title: "you have successfully Claimed" });
     },
-    onError(data) {
+    onError(err) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with Claiming please contact support if issue perists",
+        `An error occured with Claiming please contact support if issue perists${err.cause}`,
       });
      
     },
@@ -165,11 +164,11 @@ export default function LinqStakeTabMenu({
         title: "you have successfully Requested Unlock",
       });
     },
-    onError(data) {
+    onError(err) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with Requesting Unlock please contact support if issue perists",
+        `An error occured with Requesting unlock please contact support if issue perists${err.cause}`
       });
     },
   });
@@ -183,14 +182,14 @@ export default function LinqStakeTabMenu({
     onSuccess(data) {
       Swal.fire({
         icon: "success",
-        title: "you have successfully StaQed your LP",
+        title: "you have successfully StaQed your Linq",
       });
     },
-    onError(data) {
+    onError(err) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with Staqing please contact support if issue perists",
+        `An error occured with Staqing please contact support if issue perists${err.cause}`
       });
     },
   });

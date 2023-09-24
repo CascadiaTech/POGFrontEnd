@@ -33,8 +33,8 @@ export default function LpStakeTabMenu({
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457"
   let current_chain = 5;
-  const LPtokenContract = "0xbD08FcFd3b2a7bB90196F056dea448841FC5A580";
-  const linqContract = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
+  const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
+
 
   const [_amountMilQ, set_amountMilQ] = useState(0);
 
@@ -110,11 +110,11 @@ export default function LpStakeTabMenu({
         title: "you have successfully UnStaQed your LP",
       });
     },
-    onError(data) {
+    onError(err) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with UnStaqing please contact support if issue perists",
+        `An error occured with UnStaQing please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -132,11 +132,11 @@ export default function LpStakeTabMenu({
         title: "you have successfully Switched to Perpetual",
       });
     },
-    onError(data) {
+    onError(err) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with Switching please contact support if issue perists",
+        `An error occured with switching please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -150,11 +150,12 @@ export default function LpStakeTabMenu({
     onSuccess(data) {
       Swal.fire({ icon: "success", title: "you have successfully Claimed" });
     },
-    onError(data) {
+    onError(err) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with Claiming please contact support if issue perists",
+        `An error occured with Claiming please contact support if issue perists${err.cause}`,
+
       });
     },
   });
@@ -172,11 +173,12 @@ export default function LpStakeTabMenu({
         title: "you have successfully Requested Unlock",
       });
     },
-    onError(data) {
+    onError(err) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with Requesting Unlock please contact support if issue perists",
+        `An error occured with Requesting Unlock please contact support if issue perists${err.cause}`,
+
       });
     },
   });
