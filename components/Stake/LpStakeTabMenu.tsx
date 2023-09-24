@@ -64,7 +64,7 @@ export default function LpStakeTabMenu({
       .catch((error: any) => {
         console.error(error);
       });
-  });
+  },[address]);
   let allowance_default = _amountMilQ > 1 ? (_amountMilQ).toString() : "100"
   const { write: LPApprove } = useContractWrite({
     address: LPtokenContract,
@@ -241,6 +241,7 @@ export default function LpStakeTabMenu({
   const [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [ownedTill, setOwnedTill]:any = useState(32503680000)
+  const [pendingrewardsaddon,  setPendingRewardsAddon] = useState(0)
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -252,6 +253,7 @@ export default function LpStakeTabMenu({
       setUnlockTime(Number(data[2].toString()));
       setOwned(data[10]);
       setOwnedTill(data[8]);
+      setPendingRewardsAddon(Number(data[6].toString()) / 10 ** 18);
     },
   });
 
@@ -271,18 +273,17 @@ export default function LpStakeTabMenu({
     PendingRewards;
     bessies;
     allowance;
+
     setupdatevar(false)
+    console.log("test")
   }
 
-  const [showPerp, SetShowPerpOptions] = useState(false);
   const [unlocktime, setUnlockTime]: any = useState();
 
   useEffect(() => {
     FetchDetails();
-    if (userdetails != undefined && userdetails[10] == true) {
-      SetShowPerpOptions(true);
-    }
-  }, [address, allowance, userdetails, updatevar]);
+    
+  }, [address, allowance, userdetails, updatevar, _amountMilQ]);
 
   return (
     <div
@@ -306,9 +307,8 @@ export default function LpStakeTabMenu({
           className="w-full border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
           value={_amountMilQ} // Display the current value
           style={{ fontFamily: "ethnocentricRg" }}
-          onChange={(e) => {
-            const value = e.target.valueAsNumber; // Get the input value as a number
-            set_amountMilQ(value);
+          onChange={(e) => { // Get the input value as a number
+            set_amountMilQ(Number(e.target.value));
           }}
         />
         {Allowance >= _amountMilQ ? (
@@ -357,7 +357,7 @@ export default function LpStakeTabMenu({
           </button>
         </div>
         <div className="flex flex-col justify-center items-center my-3">
-          { Number(unlocktime?.toString()) < currentTime && owned == false  ? (
+          { Number(unlocktime?.toString()) > Number(currentTime.toString()) && owned == false  ? (
             <button
               onClick={() => PerpSwitch()}
               style={{ fontFamily: "GroupeMedium" }}
@@ -405,7 +405,7 @@ export default function LpStakeTabMenu({
             }}
             className="text-white mb-2 w-40 border border-white  px-2 py-2"
           >
-            Your rewards pending: <br /> {pendingRewards ? pendingRewards : "0"}
+            Your rewards pending: <br /> {pendingRewards ? pendingRewards + pendingrewardsaddon : "0"}
           </h2>
           <h2
             style={{
@@ -424,10 +424,10 @@ export default function LpStakeTabMenu({
             Your pool percentage: <br />{" "}
             {userdetails
               ? 
-                  (Number(userdetails[0].toString()) /
+                  ((Number(userdetails[0].toString()) /
                   10 ** 18 /
                   totalLPStaked
-                )*100
+                )*100).toFixed(3)
               : 0}
             %{" "}
           </h2>

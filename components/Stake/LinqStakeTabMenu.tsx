@@ -400,10 +400,10 @@ export default function LinqStakeTabMenu({
           >
             Your pool percentage: <br />{" "}
             {userdetails
-              ? (Number(userdetails[0].toString()) /
+              ? ((Number(userdetails[0].toString()) /
                   10 ** 18 /
                   totallinqStaked) *
-                100
+                100).toFixed(3)
               : 0}
             %{" "}
           </h2>
