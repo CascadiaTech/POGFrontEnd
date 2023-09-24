@@ -223,6 +223,7 @@ export default function LpStakeTabMenu({
   }
 
   const [userdetails, setUserDetails]: any = useState();
+  const [owned, setOwned] = useState(false);
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -232,7 +233,7 @@ export default function LpStakeTabMenu({
     onSuccess(data: any) {
       setUserDetails(data);
       setUnlockTime(Number(data[2].toString()));
-
+      setOwned(data[11]);
     },
   });
 
@@ -255,17 +256,13 @@ export default function LpStakeTabMenu({
   }
 
   const [showPerp, SetShowPerpOptions] = useState(false);
-  const [unlocktime, setUnlockTime]: any = useState(0);
+  const [unlocktime, setUnlockTime]: any = useState();
 
   useEffect(() => {
     FetchDetails();
-    console.log(userdetails);
     if (userdetails != undefined && userdetails[10] == true) {
       SetShowPerpOptions(true);
     }
-
-    console.log(unlocktime)
-
   }, [address]);
 
   return (
@@ -300,7 +297,7 @@ export default function LpStakeTabMenu({
             {" "}
             <button
               style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+              className="font-sans w-32 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
               type="button"
               onClick={() => HandleStaQe()}
             >
@@ -325,7 +322,7 @@ export default function LpStakeTabMenu({
           <button
             onClick={() => Claim()}
             style={{ fontFamily: "GroupeMedium" }}
-            className="font-sans  cursor-pointer text-md mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+            className="font-sans  cursor-pointer text-md w-32 mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
             type="button"
           >
             Claim
@@ -340,22 +337,32 @@ export default function LpStakeTabMenu({
             UnStake
           </button>
         </div>
-        <button
-          onClick={() => PerpSwitch()}
-          style={{ fontFamily: "GroupeMedium" }}
-          className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-          type="button"
-        >
-          Switch to Perpetual
-        </button>
-        <button
-          onClick={() => RequestUnlock()}
-          style={{ fontFamily: "GroupeMedium" }}
-          className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-          type="button"
-        >
-          Request Unlock
-        </button>
+        <div className="flex flex-col justify-center items-center my-3">
+          { Number(unlocktime?.toString()) < currentTime  ? (
+            <button
+              onClick={() => PerpSwitch()}
+              style={{ fontFamily: "GroupeMedium" }}
+              className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+              type="button"
+            >
+              Switch to Perpetual
+            </button>
+          ) : (
+            <></>
+          )}
+          {owned ? (
+            <button
+              onClick={() => RequestUnlock()}
+              style={{ fontFamily: "GroupeMedium" }}
+              className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+              type="button"
+            >
+              Request Unlock
+            </button>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
       <div
         style={{ fontFamily: "BebasNeue" }}

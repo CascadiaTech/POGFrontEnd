@@ -12,9 +12,9 @@ import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import linqABI from "../../contracts/abi/abi.json";
 import Image from "next/image";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
-import error from "next/error";
+import Web3 from "web3";
 import Swal from "sweetalert2";
-
+import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 interface LpStakeTabMenuProps {
   _token: number;
   setToken: (value: number) => void;
@@ -27,71 +27,41 @@ export default function LinqStakeTabMenu({
   const { address } = useAccount();
   const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
   const linqAddress = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
+  //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   let current_chain = 5;
-  const [loading, setLoading] = useState(false);
-  const [unstakeStatus, setUnstakeStatus] = useState(false);
-  const [rewards, setRewards] = useState(0);
-  const [newrewards, setnewRewards] = useState(Number);
-  const [currentStaked, setCurrentStaked] = useState(Number);
-  const [currentPerpStaked, setCurrentPerpStaked] = useState(Number);
-  const [balance, setbalance] = useState(Number);
-  const router = useRouter();
-  const [stakeRewards, setStakeRewards] = useState(Number);
-  const user = address;
+  const [currentTime, setCurrentTime]: any = useState(0);
+  const [_amountLinQ, set_amountLinQ] = useState(0);
 
   const notify = () => toast("Wow so easy !");
-
-  const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 3000));
-  toast.promise(resolveAfter3Sec, {
-    pending: "Promise is pending",
-    success: "Promise resolved 👌",
-    error: "Promise rejected 🤯",
+  useEffect(() => {
+    const web3 =
+      current_chain == 1
+        ? new Web3(
+            "https://mainnet.infura.io/v3/a7b52e948423488e8da7de62e23f3a92"
+          )
+        : new Web3(
+            "https://goerli.infura.io/v3/a7b52e948423488e8da7de62e23f3a92"
+          );
+    web3.eth
+      .getBlock("latest")
+      .then((block: { timestamp: any }) => {
+        const timestamp = block.timestamp; // This is the block timestamp
+        console.log(`Current block timestamp: ${timestamp}`);
+        setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
   });
 
-  //Beginning of determining Block.Timestamp
-
-  const EthereumRPC =
-    "https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"; // Replace with your Infura project ID
-
-  const getCurrentBlockTimestamp = async () => {
-    try {
-      const response = await fetch(
-        "https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            jsonrpc: "2.0",
-            method: "eth_getBlockByNumber",
-            params: ["latest", false],
-            id: 5,
-          }),
-        }
-      );
-      const data = await response.json();
-      console.log(data, "Here is the data");
-      if (data.result) {
-        const blockNumberHex = data.result.timestamp;
-        const blockNumber = parseInt(blockNumberHex, 16);
-        console.log("Block Number:", blockNumber);
-        setBlockNumber(blockNumber);
-      }
-    } catch (error) {
-      console.error("Error fetching block timestamp:", error);
-    }
-  };
-  const [blockNumber, setBlockNumber] = useState(Number);
-  console.log(blockNumber, "Here is the block number");
-
-  const { write: Approval } = useContractWrite({
+  const { write: Approve } = useContractWrite({
     address: linqAddress,
     abi: linqABI,
     functionName: "approve",
-    args: [StaqeFarm, "1000000000000000000000000000"],
+    chainId: current_chain,
     account: address,
+    args: [StaqeFarm, "100000000000000000000000"],
   });
   const [Allowance, setAllowance]: any = useState();
 
@@ -106,21 +76,24 @@ export default function LinqStakeTabMenu({
     },
   });
 
-  const [_amtLinQ, set_amtLinQ] = useState(0);
-  const { write: StaQe } = useContractWrite({
-    address: StaqeFarm,
-    abi: MilqFarmABI,
-    functionName: "staQe",
-    args: [_amtLinQ * 10 ** 18, 0, 0],
-    account: address,
-  });
+  const [pendingRewards, setPendingRewards] = useState(0);
 
-  const { write: unStaqe } = useContractWrite({
+  const { data: PendingRewards } = useContractRead({
     address: StaqeFarm,
-    abi: MilqFarmABI,
-    functionName: "unstaQe",
+    abi: LPStakingabiObject,
+    functionName: "howMuchMilk",
     chainId: current_chain,
-    args: [_amtLinQ * 10 ** 18, 0, 0],
+    args: [address],
+    onSuccess(data: any) {
+      setPendingRewards(Number(data[0].toString()) / 10 ** 18);
+    },
+  });
+  //Begin all functions for Regular Linq Staqing
+  const { write: unStaQe } = useContractWrite({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    functionName: "unstaQe",
+    args: [_amountLinQ * 10 ** 18,0, 0],
     account: address,
     onSuccess(data) {
       Swal.fire({
@@ -128,12 +101,58 @@ export default function LinqStakeTabMenu({
         title: "you have successfully UnStaQed your LP",
       });
     },
-    onError(data) {},
+    onError(data) {
+      Swal.fire({
+        icon: "error",
+        title:
+          "An error occured with UnStaqing please contact support if issue perists",
+      });
+    },
+  });
+  /// rented till 2
+  const { write: PerpSwitch } = useContractWrite({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    chainId: current_chain,
+    functionName: "ownCows",
+    account: address,
+    args: [0],
+    onSuccess(data) {
+      Swal.fire({
+        icon: "success",
+        title: "you have successfully Switched to Perpetual",
+      });
+    },
+    onError(data) {
+      Swal.fire({
+        icon: "error",
+        title:
+          "An error occured with Switching please contact support if issue perists",
+      });
+    },
+  });
+
+  const { write: Claim } = useContractWrite({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    chainId: current_chain,
+    functionName: "shipMilk",
+    account: address,
+    onSuccess(data) {
+      Swal.fire({ icon: "success", title: "you have successfully Claimed" });
+    },
+    onError(data) {
+      Swal.fire({
+        icon: "error",
+        title:
+          "An error occured with Claiming please contact support if issue perists",
+      });
+    },
   });
 
   const { write: RequestUnlock } = useContractWrite({
     address: StaqeFarm,
-    abi: MilqFarmABI,
+    abi: LPStakingabiObject,
     chainId: current_chain,
     functionName: "roundUpCows",
     args: [0],
@@ -153,199 +172,71 @@ export default function LinqStakeTabMenu({
     },
   });
 
-  const { write: Claim } = useContractWrite({
+  const { write: StaQe } = useContractWrite({
     address: StaqeFarm,
-    abi: MilqFarmABI,
-    chainId: current_chain,
-    functionName: "shipMilk",
+    abi: LPStakingabiObject,
+    functionName: "staQe",
+    args: [_amountLinQ * 10 ** 18, 0, 0],
     account: address,
     onSuccess(data) {
-      Swal.fire({ icon: "success", title: "you have successfully Claimed" });
+      Swal.fire({
+        icon: "success",
+        title: "you have successfully StaQed your LP",
+      });
     },
     onError(data) {
       Swal.fire({
         icon: "error",
         title:
-          "An error occured with Claiming please contact support if issue perists",
+          "An error occured with Staqing please contact support if issue perists",
       });
     },
   });
 
-  const { data: getStakeRewards } = useContractRead({
-    address: StaqeFarm,
-    abi: MilqFarmABI,
-    chainId: current_chain,
-    functionName: "checkEstMilQRewards",
-    args: [address],
-    onSuccess(data) {},
-    onError(error) {
-      console.error("Error fetching rewards:", error);
-    },
-  });
-
-  function FetchRewards() {
-    try {
-      setLoading(true);
-      const divisor = 1e18;
-      const NumberBalance = Number(getStakeRewards) / divisor;
-      const formattedNumber = NumberBalance.toFixed(2);
-      const realNumber = Number(formattedNumber);
-      setStakeRewards(realNumber);
-      return realNumber;
-    } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const [newUserBalance, setNewUserBalance] = useState(Number);
-  const { data: UserBalanceInStaking } = useContractRead({
-    address: StaqeFarm,
-    abi: MilqFarmABI,
-    functionName: "LinQerParlours",
-    chainId: current_chain,
-    args: [address],
-    onSuccess(data: any) {
-      const firstValueString = data[0].toString(); // Convert the first value to a string
-      const firstValue = parseFloat(firstValueString); // Parse the string as a JavaScript number
-      setNewUserBalance(firstValue);
-    },
-  });
-  function Fetchcurrentstaked() {
+  function HandleStaQe() {
     if (!address) {
       return;
     }
     try {
-      setLoading(true);
-      const divisor = 1e18;
-      const NumberBalance = Number(newUserBalance);
-      const formattedNumber = NumberBalance / divisor;
-      const finalNumber = formattedNumber.toFixed(1);
-      const realNumber = Number(finalNumber);
-      setCurrentStaked(realNumber);
-      return realNumber;
-      /////
+      StaQe();
     } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
+      console.error("Staking failed:", error);
+    }
+  }
+  function HandleUnStaQe() {
+    if (!address) {
+      return;
+    }
+    try {
+      unStaQe();
+    } catch (error) {
+      console.error("Staking failed:", error);
     }
   }
 
-  //UserUnlockTime Section
-
-  /*{
-  const { data: LinQerParloursData }: { data: any } = useContractRead({
-    address: StakingAddress,
-    abi: MilqFarmABI,
-    functionName: "LinQerParlours",
-    args: [address],
-    onSuccess(data) {
-      console.log("LinQerParlours Success", data);
-      const parsedData = data.map((item: any) => item.toString()); 
-      const rentedDaisysSince = parsedData[1];
-      const rentedDaisysTill = parsedData[2]; 
-      const timeDifference = rentedDaisysTill - blockNumber;
-      setRealTimeUnlock(timeDifference);
-      console.log("Rented Daisys Till:", rentedDaisysTill);
-      console.log("Rented Daisys Since:", rentedDaisysSince);
-      console.log("timeDifference is all yall:", timeDifference);
-    },
-  });
-
-  const [RealTimeUnlock, setRealTimeUnlock] = useState({ days: 0, hours: 0 });
-  const [userUnlockTime, setUserUnlockTime] = useState({ days: 0, hours: 0 });
-console.log(userUnlockTime, "this is user unlock time")
-  function secondsToDhms(seconds: number) {
-    const days = Math.floor(seconds / (3600 * 24));
-    seconds -= days * 3600 * 24;
-    const hours = Math.floor(seconds / 3600);
-    return { days, hours };
-  }
-
- function FetchUserUnlockTime() {
-   if (!address) {
-     return;
-   }
-   try {
-     setLoading(true);
-     const regularNumber = Number(RealTimeUnlock);
-     const NumberTime = Number(regularNumber); 
-     const { days, hours } = secondsToDhms(NumberTime); 
-     setUserUnlockTime({ days, hours }); 
-     /////
-   } catch (error) {
-     console.log(error, "ERROR 1111");
-     setLoading(false);
-   } finally {
-     setLoading(false);
-   }
- }
-}*/
-  //UserUnlockTime Section --^
-
   const [userdetails, setUserDetails]: any = useState();
-  const [stakedBalance,setStakedBalance ]:any = useState(0)
+  const [owned, setOwned] = useState(false);
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
-    abi: MilqFarmABI,
-    functionName: "LilQerParlours",
+    abi: LPStakingabiObject,
+    functionName: "LinQerParlours",
     chainId: current_chain,
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
-      setStakedBalance(Number(data[0].toString()) / 10 ** 18)
-    },
-  });
-  const [pendingRewards, setPendingRewards] = useState(0);
-
-  const { data: PendingRewards } = useContractRead({
-    address: StaqeFarm,
-    abi: MilqFarmABI,
-    functionName: "howMuchMilk",
-    chainId: current_chain,
-    args: [address],
-    onSuccess(data: any) {
-      setPendingRewards(Number(data[1].toString()) / 10 ** 18);
+      setUnlockTime(Number(data[2].toString()));
+      setOwned(data[11]);
     },
   });
 
-  const [totalLinqStaked, settotalLinqStaked] = useState(0);
-
+  const [totallinqStaked, settotalLinqStaked] = useState(0);
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
-    abi: MilqFarmABI,
+    abi: LPStakingabiObject,
     functionName: "daisys",
     chainId: current_chain,
     onSuccess(data: any) {
-      console.log(Number(data.toString()) / 10 ** 18, "lp staked");
       settotalLinqStaked(Number(data.toString()) / 10 ** 18);
-    },
-  });
-
-  const { write: PerpSwitch } = useContractWrite({
-    address: StaqeFarm,
-    abi: MilqFarmABI,
-    chainId: current_chain,
-    functionName: "ownCows",
-    account: address,
-    args: [0],
-    onSuccess(data) {
-      Swal.fire({
-        icon: "success",
-        title: "you have successfully Switched to Perpetual",
-      });
-    },
-    onError(data) {
-      Swal.fire({
-        icon: "error",
-        title:
-          "An error occured with Switching please contact support if issue perists",
-    
-      });
     },
   });
 
@@ -355,30 +246,16 @@ console.log(userUnlockTime, "this is user unlock time")
     daisys;
     allowance;
   }
+
+  const [showPerp, SetShowPerpOptions] = useState(false);
+  const [unlocktime, setUnlockTime]: any = useState();
+
   useEffect(() => {
     FetchDetails();
-  }, [address]);
-
-  useEffect(() => {
-    FetchRewards();
-    Fetchcurrentstaked();
-  }, [address]);
-
-  const [tab_variant, settab_variant] = useState("Regular");
-
-  const handleTabClick = (tabId: any) => {
-    settab_variant(tabId);
-    if (tabId === "Regular") {
-      settab_variant("Regular");
+    if (userdetails != undefined && userdetails[10] == true) {
+      SetShowPerpOptions(true);
     }
-    if (tabId === "Perpetual") {
-      settab_variant("Perpetual");
-    }
-  };
-
-  useEffect(() => {
-    handleTabClick("Regular");
-  }, []);
+  }, [address]);
 
   return (
     <div
@@ -386,260 +263,147 @@ console.log(userUnlockTime, "this is user unlock time")
         background:
           "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
       }}
-      className="rounded-2xl opacity-90 transition-all duration-300 px-3 py-3"
+      className="rounded-2xl px-3 w-fit py-3 opacity-90"
     >
-      {/* Begin Tabs*/}
-      <div className="marketTabs flex flex-row mx-auto text-white justify-center h-15">
-        {/* Begin Regular Tab*/}
-        <div
-          className={`marketTab ${tab_variant === "Regular" ? "active" : ""}`}
-        >
+      <div>
+        <h1 className="text-xl md:text-2xl mb-12 text-white">
+          Linq token StaQing
+        </h1>
+        <h2 className="text-lg text-white">
+          Please enter the amount of tokens
+        </h2>
+
+        <input
+          type="number"
+          id="stakeInput"
+          className="w-full border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
+          value={_amountLinQ} // Display the current value
+          style={{ fontFamily: "ethnocentricRg" }}
+          onChange={(e) => {
+            const value = e.target.valueAsNumber; // Get the input value as a number
+            set_amountLinQ(value);
+          }}
+        />
+        {Allowance >= _amountLinQ ? (
+          <>
+            {" "}
+            <button
+              style={{ fontFamily: "GroupeMedium" }}
+              className="font-sans w-32 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
+              type="button"
+              onClick={() => HandleStaQe()}
+            >
+              Stake
+            </button>
+          </>
+        ) : (
+          <>
+            {" "}
+            <button
+              style={{ fontFamily: "GroupeMedium" }}
+              className="font-sans  cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+              type="button"
+              onClick={() => Approve()}
+            >
+              Approve
+            </button>
+          </>
+        )}
+        <div className="flex-row justify-center my-3 items-center"></div>
+        <div className="flex-row justify-center my-3 items-center">
           <button
-            className={
-              " rounded-xl border-2 border-white hover:bg-gray-600 active:bg-white active:text-black px-4 py-2"
-            }
-            disabled={tab_variant === "Regular"}
-            onClick={() => {
-              handleTabClick("Regular");
-              settab_variant("Regular");
-            }}
+            onClick={() => Claim()}
+            style={{ fontFamily: "GroupeMedium" }}
+            className="font-sans  cursor-pointer text-md w-32 mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+            type="button"
           >
-            Regular
+            Claim
+          </button>
+          <button
+            disabled={userdetails ? userdetails[0] < _amountLinQ : true}
+            onClick={() => HandleUnStaQe()}
+            style={{ fontFamily: "GroupeMedium" }}
+            className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+            type="button"
+          >
+            UnStake
           </button>
         </div>
-        {/* End Regular Tab*/}
-        <p className={"mx-5"}></p>
-        {/* Begin Perpetual Tab*/}
-        <div
-          className={`marketTab ${tab_variant === "Perpetual" ? "active" : ""}`}
-        >
-          <button
-            className={
-              " rounded-xl w-full border-2 border-white hover:bg-gray-600 active:bg-white active:text-black px-4 py-2"
-            }
-            disabled={tab_variant === "Perpetual"}
-            onClick={() => {
-              handleTabClick("Perpetual");
-              settab_variant("Perpetual");
-            }}
-          >
-            Perpetual
-          </button>
+        <div className="flex flex-col justify-center items-center my-3">
+          { Number(unlocktime?.toString()) < currentTime  ? (
+            <button
+              onClick={() => PerpSwitch()}
+              style={{ fontFamily: "GroupeMedium" }}
+              className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+              type="button"
+            >
+              Switch to Perpetual
+            </button>
+          ) : (
+            <></>
+          )}
+          {owned ? (
+            <button
+              onClick={() => RequestUnlock()}
+              style={{ fontFamily: "GroupeMedium" }}
+              className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+              type="button"
+            >
+              Request Unlock
+            </button>
+          ) : (
+            <></>
+          )}
         </div>
-        {/* End Perpetual Tab*/}
       </div>
-      {/* End Tabs*/}
-      {/* Begin Regular Staqing Modal*/}
-      <div className="flex flex-col md:flex-row items-right w-full">
-        <div className="w-full p-1 sm:w-full">
-          <div className="w-full text-center elevation-10 rounded-lg">
-            {tab_variant == "Regular" ? (
-              <>
-                <div>
-                  <h1 className="text-xl md:text-2xl mb-12 text-white">
-                    Linq token Regular StaQing
-                  </h1>
-                  <h2 className="text-lg text-white">
-                    Please enter the amount of tokens
-                  </h2>
-                  <input
-                    type="number"
-                    id="stakeInput"
-                    className="w-full border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-                    value={_amtLinQ} // Display the current value
-                    style={{ fontFamily: "ethnocentricRg" }}
-                    onChange={(e) => {
-                      const value = e.target.valueAsNumber; // Get the input value as a number
-                      if (!isNaN(value) && value >= 1) {
-                        set_amtLinQ(value); // Update the state variable with the parsed value
-                      }
-                    }}
-                  />
-                  <div className="flex-row justify-center my-3 items-center">
-                    {Allowance >= _amtLinQ ? (
-                      <>
-                        <button
-                          style={{ fontFamily: "GroupeMedium" }}
-                          className="font-sans cursor-pointer text-md mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                          type="button"
-                          onClick={() => StaQe()}
-                        >
-                          Stake
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          style={{ fontFamily: "GroupeMedium" }}
-                          className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                          type="button"
-                          onClick={() => Approval()}
-                        >
-                          Approve
-                        </button>
-                      </>
-                    )}
-                  </div>
-                  <div className="flex-row justify-center my-3 items-center">
-                    <button
-                      style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans cursor-pointer text-md w-32 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                      type="button"
-                      onClick={() => unStaqe()}
-                    >
-                      UnStake
-                    </button>
-                    <button
-                      style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans  cursor-pointer text-md mx-4 w-32 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                      type="button"
-                      onClick={() => Claim()}
-                    >
-                      Claim
-                    </button>
-                  </div>
-
-                  <button
-                  onClick={() => PerpSwitch()}
-                    style={{ fontFamily: "GroupeMedium" }}
-                    className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                    type="button"
-                  >
-                    Switch to Perpetual
-                  </button>
-                </div>
-
-                <div
-                  style={{ fontFamily: "BebasNeue" }}
-                  className=" opacity-90 transition-all duration-300 py-3"
-                >
-                  <button
-                    style={{ fontFamily: "GroupeMedium" }}
-                    className="font-sans w-fit mb-5 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-green-600 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                    type="button"
-                    onClick={() => getCurrentBlockTimestamp()}
-                  >
-                    Qompound {blockNumber}
-                  </button>
-                  <div
-                    className={
-                      "text-md ml-5 md:ml-16 grid grid-cols-2 col-span-1 gap-2"
-                    }
-                  >
-                    <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Your StaQed Linq Balance: <br /> {currentStaked}
-                    </h2>
-                    <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Your rewards pending: <br /> {stakeRewards}
-                    </h2>
-                    <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      pool percentage
-                    </h2>
-                    <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      User Unlock time: <br />
-                    </h2>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-            {/* End Regular Staqing Modal*/}
-            {/* Begin Perpetual Staqing Modal*/}
-            {tab_variant == "Perpetual" ? (
-              <>
-                <div>
-                  <h1 className="text-xl md:text-2xl mb-12 text-white">
-                    Linq token Perpetual StaQing
-                  </h1>
-                  <h2 className="text-lg text-white">
-                    Please enter the amount of tokens
-                  </h2>
-                  <input
-                    type="text"
-                    id="stakeInput"
-                    className="w-fit border my-2 border-gray-300 outline-none m-2 text-black"
-                    value={""}
-                    style={{ fontFamily: "ethnocentricRg" }}
-                    onChange={(e) => {
-                      ("");
-                    }}
-                  />
-
-                  <div className="flex-row justify-center my-3 items-center">
-                    {Allowance >= _amtLinQ ? (
-                      <>
-                        <button
-                        onClick={() => StaQe()}
-                          style={{ fontFamily: "GroupeMedium" }}
-                          className="font-sans cursor-pointer text-md mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                          type="button"
-                        >
-                          Stake
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        {" "}
-                        <button
-                        onClick={() => Approval()}
-                          style={{ fontFamily: "GroupeMedium" }}
-                          className="font-sans  cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                          type="button"
-                        >
-                          Approve
-                        </button>
-                      </>
-                    )}
-                  </div>
-                  <div className="flex-row justify-center my-3 items-center">
-                    <button
-                      onClick={() => Claim()}
-                      style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans  cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                      type="button"
-                    >
-                      Claim
-                    </button>
-                  </div>
-                  <button
-                    onClick={() => RequestUnlock()}
-                    style={{ fontFamily: "GroupeMedium" }}
-                    className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                    type="button"
-                  >
-                    Request Unlock
-                  </button>
-                </div>
-                <div
-                  style={{ fontFamily: "BebasNeue" }}
-                  className=" mt-5 opacity-90 transition-all duration-300 py-3"
-                >
-                  <div
-                    className={
-                      "text-md ml-5 md:ml-16 grid grid-cols-2 col-span-1 gap-2"
-                    }
-                  >
-                    <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Your StaQed Linq Balance: 234234234{" "}
-                    </h2>
-                    <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Your rewards pending: {pendingRewards}
-                    </h2>
-                    <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Time remaining in pool: 3 days 23 hours{" "}
-                    </h2>
-                    <h2 className="text-white mb-2 w-40 border border-white  px-2 py-2">
-                      Your pool percentage: 5%{" "}
-                    </h2>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-            {/* End Perpetual Staqing Modal*/}
-          </div>
+      <div
+        style={{ fontFamily: "BebasNeue" }}
+        className=" mt-5 opacity-90 transition-all duration-300 py-3"
+      >
+        <div
+          className={"text-md ml-5 md:ml-16 grid grid-cols-2 col-span-1 gap-2"}
+        >
+          <h2
+            style={{
+              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+            }}
+            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+          >
+            Your StaQed Linq Balance: <br />{" "}
+            {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
+          </h2>
+          <h2
+            style={{
+              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+            }}
+            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+          >
+            Your rewards pending: <br /> {pendingRewards ? pendingRewards : "0"}
+          </h2>
+          <h2
+            style={{
+              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+            }}
+            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+          >
+            Time remaining in pool:
+          </h2>
+          <h2
+            style={{
+              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+            }}
+            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+          >
+            Your pool percentage: <br />{" "}
+            {userdetails
+              ? (
+                  Number(userdetails[0].toString()) /
+                  10 ** 18 /
+                  totallinqStaked
+                ).toFixed(4)
+              : 0}
+            %{" "}
+          </h2>
         </div>
       </div>
     </div>
