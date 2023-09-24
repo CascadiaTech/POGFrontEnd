@@ -65,9 +65,9 @@ export default function LinqStakeTabMenu({
     functionName: "approve",
     chainId: current_chain,
     account: address,
-    args: [StaqeFarm, allowance_default],
+    args: [StaqeFarm, Number(allowance_default) * 10 ** 18],
   });
-  const [Allowance, setAllowance]: any = useState();
+  const [Allowance, setAllowance]: any = useState(0);
 
   const { data: allowance } = useContractRead({
     address: linqAddress,
@@ -255,10 +255,7 @@ export default function LinqStakeTabMenu({
 
   useEffect(() => {
     FetchDetails();
-    if (userdetails != undefined && userdetails[10] == true) {
-      SetShowPerpOptions(true);
-    }
-  }, [address, allowance, UserDetails]);
+  }, [address, allowance, userdetails, _amountLinQ]);
 
   return (
     <div
