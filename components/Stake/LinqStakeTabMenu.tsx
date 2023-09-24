@@ -54,14 +54,14 @@ export default function LinqStakeTabMenu({
         console.error(error);
       });
   });
-
+  let allowance_default = _amountLinQ > 1 ? (_amountLinQ).toString() : "100"
   const { write: Approve } = useContractWrite({
     address: linqAddress,
     abi: linqABI,
     functionName: "approve",
     chainId: current_chain,
     account: address,
-    args: [StaqeFarm, "100000000000000000000000"],
+    args: [StaqeFarm, allowance_default],
   });
   const [Allowance, setAllowance]: any = useState();
 
@@ -105,7 +105,7 @@ export default function LinqStakeTabMenu({
       Swal.fire({
         icon: "error",
         title:
-          `An error occured with UnStaqing please contact support if issue perists${err.cause?.message}`,
+          `An error occured with UnStaqing please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -256,7 +256,7 @@ export default function LinqStakeTabMenu({
     if (userdetails != undefined && userdetails[10] == true) {
       SetShowPerpOptions(true);
     }
-  }, [address]);
+  }, [address, allowance, UserDetails]);
 
   return (
     <div

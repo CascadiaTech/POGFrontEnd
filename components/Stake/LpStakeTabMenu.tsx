@@ -62,14 +62,14 @@ export default function LpStakeTabMenu({
         console.error(error);
       });
   });
-
+  let allowance_default = _amountMilQ > 1 ? (_amountMilQ).toString() : "100"
   const { write: LPApprove } = useContractWrite({
     address: LPtokenContract,
     abi: LPTokenAbi,
     functionName: "approve",
     chainId: current_chain,
     account: address,
-    args: [StaqeFarm, "100000000000000000000000"],
+    args: [StaqeFarm, allowance_default],
   });
   const [Allowance, setAllowance]: any = useState();
 
@@ -263,7 +263,7 @@ export default function LpStakeTabMenu({
     if (userdetails != undefined && userdetails[10] == true) {
       SetShowPerpOptions(true);
     }
-  }, [address]);
+  }, [address, allowance, UserDetails]);
 
   return (
     <div
