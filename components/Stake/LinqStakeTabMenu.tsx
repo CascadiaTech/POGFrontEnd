@@ -57,7 +57,6 @@ export default function LinqStakeTabMenu({
       .getBlock("latest")
       .then((block: { timestamp: any }) => {
         const timestamp = block.timestamp; // This is the block timestamp
-        console.log(`Current block timestamp: ${timestamp}`);
         setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
       })
       .catch((error: any) => {
@@ -88,7 +87,7 @@ export default function LinqStakeTabMenu({
     functionName: "approve",
     chainId: current_chain,
     account: address,
-    args: [StaqeFarm, Number(linqstaked.toString()) * 18 ** 18],
+    args: [StaqeFarm, Number(linqstaked.toString()) * 10 ** 18],
     onSuccess(data: any) {
       setupdate("updateallowance");
     },
@@ -124,8 +123,11 @@ export default function LinqStakeTabMenu({
     chainId: current_chain,
     account: address,
     args: [StaqeFarm, Number(allowance_default) * 10 ** 18],
-    onSuccess(data: any) {
-      setupdate("updateallowance");
+    onSuccess(data) {
+      Swal.fire({
+        icon: "success",
+        title: "you have successfully Approved",
+      });
     },
   });
   let [Allowance, setAllowance]: any = useState(0);
@@ -284,18 +286,9 @@ export default function LinqStakeTabMenu({
 
   useEffect(() => {
     FetchDetails();
+    console.log("updates")
   }, [userdetails]);
-  /*
-    Allowance,
-    userdetails,
-    _amountLinQ,
-    userdetails,
-    update,
-    totallinqStaked,
-    currentTime,
-    owned,
-    GAllowance,
-    */
+
   return (
     <div
       style={{
@@ -311,83 +304,30 @@ export default function LinqStakeTabMenu({
         <h2 className="text-lg text-white">
           Please enter the amount of tokens
         </h2>
-
-        <input
-          type="number"
-          id="stakeInput"
-          className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-          style={{ fontFamily: "ethnocentricRg" }}
-          value={_amountLinQ}
-          onChange={(e) => {
-            //   let value = e.target.valueAsNumber; // Get the input value as a number
-            let inputValue = Number(e.target.value); // Parse the input value as a number
-            if (inputValue < 0) {
-              // If the input is negative, reset it to a positive value or display an error message
-              set_amountLinQ(0); // You can choose to set it to 0 or any other default value
-              // Alternatively, you can display an error message to the user
-              // console.error('Please enter a positive number');
-            } else {
-              set_amountLinQ(inputValue);
-            }
-          }}
-        />
-        {Allowance >= _amountLinQ ? (
-          <>
-            {" "}
-            {staqeLoad ? (
-              <Spin size="large" indicator={antIcon} className="add-spinner" />
-            ) : (
-              <button
-                style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans w-64 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
-                type="button"
-                onClick={() => HandleStaQe()}
-              >
-                Stake
-              </button>
-            )}
-          </>
-        ) : (
-          <>
-            {" "}
-            {approveLoad ? (
-              <Spin size="large" indicator={antIcon} className="add-spinner" />
-            ) : (
-              <button
-                style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                type="button"
-                onClick={() => Approve()}
-              >
-                Approve
-              </button>
-            )}
-          </>
-        )}
-
-        <div className="flex-row justify-center my-3 items-center">
-          {unstaqeLoad ? (
-            <Spin size="large" indicator={antIcon} className="add-spinner" />
-          ) : (
-            <button
-              disabled={userdetails ? userdetails[0] < _amountLinQ : true}
-              onClick={() => HandleUnStaQe()}
-              style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-              type="button"
-            >
-              UnStake
-            </button>
-          )}
-        </div>
-        <div className="flex flex-col justify-center items-center my-3">
-          {Number(unlocktime?.toString()) != 0 &&
-          Number(unlocktime?.toString()) < currentTime &&
-          owned == false &&
-          GAllowance >= Number(userdetails[0].toString()) / 10 ** 18 ? (
+        <div className="flex flex-col items-center justify-center">
+          <input
+            type="number"
+            id="stakeInput"
+            className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
+            style={{ fontFamily: "ethnocentricRg" }}
+            value={_amountLinQ}
+            onChange={(e) => {
+              //   let value = e.target.valueAsNumber; // Get the input value as a number
+              let inputValue = Number(e.target.value); // Parse the input value as a number
+              if (inputValue < 0) {
+                // If the input is negative, reset it to a positive value or display an error message
+                set_amountLinQ(0); // You can choose to set it to 0 or any other default value
+                // Alternatively, you can display an error message to the user
+                // console.error('Please enter a positive number');
+              } else {
+                set_amountLinQ(inputValue);
+              }
+            }}
+          />
+          {Allowance >= _amountLinQ ? (
             <>
               {" "}
-              {perpLoad ? (
+              {staqeLoad ? (
                 <Spin
                   size="large"
                   indicator={antIcon}
@@ -395,54 +335,118 @@ export default function LinqStakeTabMenu({
                 />
               ) : (
                 <button
-                  onClick={() => PerpSwitch()}
                   style={{ fontFamily: "GroupeMedium" }}
-                  className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+                  className="font-sans w-64 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
                   type="button"
+                  onClick={() => HandleStaQe()}
                 >
-                  Switch to Perpetual
+                  Stake
                 </button>
               )}
             </>
           ) : (
             <>
               {" "}
-              {glinqLoad ? (
+              {approveLoad ? (
                 <Spin
                   size="large"
                   indicator={antIcon}
                   className="add-spinner"
                 />
               ) : (
-                <>
-                  {linqstaked ? (
-                    <button
-                      style={{ fontFamily: "GroupeMedium" }}
-                      className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                      type="button"
-                      onClick={() => ApproveGlinq()}
-                    >
-                      Approve Glinq
-                    </button>
-                  ) : (
-                    <></>
-                  )}
-                </>
+                <button
+                  style={{ fontFamily: "GroupeMedium" }}
+                  className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                  type="button"
+                  onClick={() => Approve()}
+                >
+                  Approve
+                </button>
               )}
             </>
           )}
-          {owned ? (
-            <button
-              onClick={() => RequestUnlock()}
-              style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-              type="button"
-            >
-              Request Unlock
-            </button>
-          ) : (
-            <></>
-          )}
+
+          <div className="flex-row justify-center my-3 items-center">
+            {unstaqeLoad ? (
+              <Spin size="large" indicator={antIcon} className="add-spinner" />
+            ) : (
+              <button
+                disabled={userdetails ? userdetails[0] < _amountLinQ : true}
+                onClick={() => HandleUnStaQe()}
+                style={{ fontFamily: "GroupeMedium" }}
+                className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                type="button"
+              >
+                UnStake
+              </button>
+            )}
+          </div>
+          <div className="flex flex-col justify-center items-center my-3">
+            {Number(unlocktime?.toString()) != 0 &&
+            Number(unlocktime?.toString()) < currentTime &&
+            owned == false &&
+            GAllowance >= Number(userdetails[0].toString()) / 10 ** 18 ? (
+              <>
+                {" "}
+                {perpLoad ? (
+                  <Spin
+                    size="large"
+                    indicator={antIcon}
+                    className="add-spinner"
+                  />
+                ) : (
+                  <button
+                    onClick={() => PerpSwitch()}
+                    style={{ fontFamily: "GroupeMedium" }}
+                    className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+                    type="button"
+                  >
+                    Switch to Perpetual
+                  </button>
+                )}
+              </>
+            ) : (
+              <>
+                {" "}
+                {glinqLoad ? (
+                  <Spin
+                    size="large"
+                    indicator={antIcon}
+                    className="add-spinner"
+                  />
+                ) : (
+                  <>
+                    {linqstaked &&
+                    Number(unlocktime?.toString()) != 0 &&
+                    Number(unlocktime?.toString()) < currentTime ? (
+                      <button
+                        style={{ fontFamily: "GroupeMedium" }}
+                        className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                        type="button"
+                        onClick={() => ApproveGlinq()}
+                      >
+                        Approve Glinq
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+            {owned ? (
+              <button
+                onClick={() => RequestUnlock()}
+                style={{ fontFamily: "GroupeMedium" }}
+                className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                type="button"
+              >
+                Request Unlock
+              </button>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
       </div>
       <div
