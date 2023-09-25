@@ -31,7 +31,8 @@ export default function NewStakeComponent(_token: any) {
   const linqAddress = "0x1A5f0B4a408c3Cb75921AEC0Ea036F9984c0aA5C";
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  const StaqeFarm = "0x41BEEBfAAE60bbc620e0667971Be1372537E6521";
+  //const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De"
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   let current_chain = 5;
   const [_amountLinQ, set_amountLinQ] = useState(0);
@@ -123,7 +124,7 @@ export default function NewStakeComponent(_token: any) {
       setPendingRewards(Number(data.toString()) / 10 ** 18);
     },
   });
-  const [userdetails, setUserDetails]: any = useState();
+  let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [pendingrewardsaddon,  setPendingRewardsAddon] = useState(0)
   const [Linqpendingrewardsaddon,  setLinqPendingRewardsAddon] = useState(0)
@@ -203,7 +204,6 @@ export default function NewStakeComponent(_token: any) {
     UserDetailsLP
   }
 
-  const [showPerp, SetShowPerpOptions] = useState(false);
   const [unlocktime, setUnlockTime]: any = useState();
 
   function FetchBalances() {
@@ -212,11 +212,8 @@ export default function NewStakeComponent(_token: any) {
   }
   useEffect(() => {
     FetchDetails();
-    if (userdetails != undefined && userdetails[10] == true) {
-      SetShowPerpOptions(true);
-    }
     FetchBalances();
-  }, [address,timer]);
+  }, [userdetails]);
 
 
 
