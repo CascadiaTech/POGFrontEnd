@@ -218,7 +218,7 @@ export default function LpStakeTabMenu({
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
           >
             Your rewards pending: <br /> {pendingRewards ? pendingRewards + pendingrewardsaddon : "0"}
           </h2>
@@ -403,7 +403,7 @@ export default function LpStakeTabMenu({
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white mb-2 md:w-40 border border-white px-2 py-2"
           >
             Your StaQed LP Balance: <br />{" "}
             {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} LP
@@ -413,7 +413,7 @@ export default function LpStakeTabMenu({
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
           >
             Time Till Unlock: {unlocktime ? Number(unlocktime.toString())  - Number(currentTime.toString()) > 0 ? Number(unlocktime.toString())   -  Number(currentTime.toString()): "0" : "0" }
           </h2>
@@ -421,7 +421,7 @@ export default function LpStakeTabMenu({
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
           >
             Your pool percentage: <br />{" "}
             {userdetails

@@ -66,12 +66,11 @@ export default function NewStakeComponent(_token: any) {
   const [isLinqStakeOpen, setIsLinqStakeOpen] = useState(false); // Initial state for LINQ Stake
   const [isStaked, setIsStaked] = useState(false); // Initial state is "Unstake"
 
-
   const toggleModals = () => {
     setIsLpStakeOpen(!isLpStakeOpen);
     setIsLinqStakeOpen(!isLinqStakeOpen);
   };
-  
+
   const [Allowance, setAllowance]: any = useState();
 
   const { data: allowance } = useContractRead({
@@ -84,23 +83,22 @@ export default function NewStakeComponent(_token: any) {
       setAllowance(Number(data.toString()) / 10 ** 18);
     },
   });
-
   const [pendingRewards, setPendingRewards] = useState(0);
 
-  const { data: PendingRewardsLP } = useContractRead({
+  const { data: PendingRewards } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
-    functionName: "howMuchMilk",
+    functionName: "viewHowMuchMilk",
     chainId: current_chain,
     args: [address],
     onSuccess(data: any) {
-      setPendingRewards(Number(data[0].toString()) / 10 ** 18);
+      setPendingRewards(Number(data.toString()) / 10 ** 18);
     },
   });
-
-  
   const [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
+  const [pendingrewardsaddon,  setPendingRewardsAddon] = useState(0)
+  const [Linqpendingrewardsaddon,  setLinqPendingRewardsAddon] = useState(0)
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -111,9 +109,22 @@ export default function NewStakeComponent(_token: any) {
       setUserDetails(data);
       setUnlockTime(Number(data[2].toString()));
       setOwned(data[11]);
+      setLinqPendingRewardsAddon(Number(data[6].toString()) / 10 ** 18);
     },
   });
-
+  const [userLPDetails, setUserLPDetails]:any = useState()
+  const { data: UserDetailsLP } = useContractRead({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    functionName: "MilQerParlours",
+    chainId: current_chain,
+    args: [address],
+    onSuccess(data: any) {
+      setUserLPDetails(data);
+      setPendingRewardsAddon(Number(data[6].toString()) / 10 ** 18)
+    },
+  });
+  
   const [totallinqStaked, settotalLinqStaked] = useState(0);
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
@@ -127,26 +138,25 @@ export default function NewStakeComponent(_token: any) {
 
   function FetchDetails() {
     UserDetails;
-    PendingRewardsLP;
+    PendingRewards;
     daisys;
     allowance;
+    UserDetailsLP
   }
 
   const [showPerp, SetShowPerpOptions] = useState(false);
   const [unlocktime, setUnlockTime]: any = useState();
 
-
-function FetchBalances(){
-  BalanceOfLinq;
-  BalanceOfMilq
-
-}
+  function FetchBalances() {
+    BalanceOfLinq;
+    BalanceOfMilq;
+  }
   useEffect(() => {
     FetchDetails();
     if (userdetails != undefined && userdetails[10] == true) {
       SetShowPerpOptions(true);
     }
-FetchBalances()
+    FetchBalances();
   }, [address]);
 
   return (
@@ -158,7 +168,7 @@ FetchBalances()
               "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
           }}
           className={
-            "flex flex-col self-center rounded-xl w-fit h-fit px-2 md:px-10 py-3 mx-auto opacity-90"
+            "flex flex-col self-center rounded-xl w-fit h-fit px-2 mx-5 md:px-10 py-3 mx-auto opacity-90"
           }
         >
           <h1
@@ -167,73 +177,92 @@ FetchBalances()
           >
             User Statistics
           </h1>
-      <div
-        style={{ fontFamily: "BebasNeue" }}
-        className=" mt-5 opacity-90 transition-all duration-300 py-3"
-      >
-        <div
-          className={"text-md grid grid-cols-3 col-span-1 gap-2 px-3 mx-auto"}
-        >
-        <h2
-          style={{
-            boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-          }}
-          className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
-        >
-          LP In wallet <br /> {MilqBalance} {" "}
-          {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
-        </h2>
-        <h2
-          style={{
-            boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-          }}
-          className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
-        >
-          LinQ in wallet <br /> {linqBalance} {" "}
-          {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} Linq
-        </h2>
-          <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
+          <div
+            style={{ fontFamily: "BebasNeue" }}
+            className=" mt-5 opacity-90 transition-all duration-300 py-3"
           >
-           Claimable ETH <br /> {pendingRewards ? pendingRewards : "0"}
-          </h2>
-          <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
-          >
-           Claimable LP <br /> {pendingRewards ? pendingRewards : "0"}
-          </h2>
-          <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
-          >
-            Send me ETH: shipMilk
-          </h2>
-          <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 w-28 md:w-40 border border-white  px-2 py-2"
-          >
-            Qompound: QompoundLinQ
-          </h2>
-        </div>
-          <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mx-auto mb-2 w-28 md:w-40 border border-white  px-2 py-2"
-          >
-            Send me LP: shipFarmMilQ
-          </h2>
-      </div>
+            <div
+              className={
+                "text-md grid grid-cols-3 col-span-2 gap-2 px-3 py-3 mx-auto"
+              }
+            >
+              <h2
+                style={{
+                  boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+                }}
+                className="text-white mb-2 md:w-40 border border-white px-2 py-2"
+              >
+                LP In wallet <br /> {MilqBalance? (MilqBalance).toFixed(2) : "0" }{" "}
+      
+                Linq
+              </h2>
+              <h2
+                style={{
+                  boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+                }}
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
+              >
+                LinQ in wallet <br /> {linqBalance?  (linqBalance).toFixed(2) : "0"}{" "}
+              
+                Linq
+              </h2>
+              <h2
+                style={{
+                  boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+                }}
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
+              >
+                Claimable ETH <br /> {pendingRewards ? pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon : "0"}
+              </h2>
+              <h2
+                style={{
+                  boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+                }}
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
+              >
+                Claimable LP <br /> {pendingRewards ? pendingRewards : "0"}
+              </h2>
+              <h2
+                style={{
+                  boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+                }}
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
+              >
+                ETH Per Day
+                <br /> {pendingRewards ? pendingRewards : "0"}
+              </h2>
+              <h2
+                style={{
+                  boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+                }}
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
+              >
+                Some Other Stat
+                <br /> {pendingRewards ? pendingRewards : "0"}
+              </h2>
+              <button
+                style={{ fontFamily: "GroupeMedium" }}
+                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                type="button"
+              >
+                Send me ETH
+              </button>
+              <button
+                style={{ fontFamily: "GroupeMedium" }}
+                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                type="button"
+              >
+                Qompound
+              </button>
+              <button
+                style={{ fontFamily: "GroupeMedium" }}
+                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                type="button"
+              >
+                Send me LP
+              </button>
+            </div>
+          </div>
         </div>
 
         <p className={"my-5"}></p>
@@ -246,7 +275,7 @@ FetchBalances()
               background:
                 "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
             }}
-            className={`flex absolute ml-96 -translate-x-72 md:-translate-x-52 -translate-y-80 z-20 h-12 w-52 mb-10 rounded-full bg-gray-200 ${
+            className={`flex absolute ml-96 -translate-x-72 md:-translate-x-52 -translate-y-56 z-20 h-12 w-52 mb-10 rounded-full bg-gray-200 ${
               isLpStakeOpen ? "bg-gray-200" : ""
             }`}
           >
@@ -258,7 +287,7 @@ FetchBalances()
               }`}
             ></div>
             <button
-                      style={{ fontFamily: "BebasNeue" }}
+              style={{ fontFamily: "BebasNeue" }}
               className={`z-10 absolute text-md top-0 right-0 w-1/2 h-full rounded-full text-black transition-transform ${
                 isLinqStakeOpen ? "" : "text-gray-400"
               }`}
@@ -270,7 +299,7 @@ FetchBalances()
               LINQ Stake
             </button>
             <button
-                      style={{ fontFamily: "BebasNeue" }}
+              style={{ fontFamily: "BebasNeue" }}
               className={`z-10 absolute text-md top-0 w-1/2 h-full rounded-full text-black transition-transform ${
                 isLinqStakeOpen ? "text-gray-400" : ""
               }`}
