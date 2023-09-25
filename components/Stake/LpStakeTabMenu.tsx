@@ -254,7 +254,7 @@ export default function LpStakeTabMenu({
 
   useEffect(() => {
     FetchDetails();
-  }, [address, allowance, userdetails, updatevar, _amountMilQ]);
+  }, [address, Allowance, userdetails, updatevar, _amountMilQ]);
   /*
           <button
             onClick={() => Claim()}
@@ -329,7 +329,7 @@ export default function LpStakeTabMenu({
           </button>
         </div>
         <div className="flex flex-col justify-center items-center my-3">
-          {Number(unlocktime?.toString()) > Number(currentTime.toString()) &&
+          {Number(unlocktime?.toString()) !=0 && Number(unlocktime?.toString()) < Number(currentTime.toString()) &&
           owned == false ? (
             <button
               onClick={() => PerpSwitch()}

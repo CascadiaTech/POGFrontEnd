@@ -67,6 +67,9 @@ export default function LinqStakeTabMenu({
     chainId: current_chain,
     account: address,
     args: [StaqeFarm, Number(allowance_default) * 10 ** 18],
+    onSuccess(data: any) {
+      setupdate("updateallowance")
+    },
   });
   const [Allowance, setAllowance]: any = useState(0);
 
@@ -77,6 +80,7 @@ export default function LinqStakeTabMenu({
     chainId: current_chain,
     args: [address, StaqeFarm],
     onSuccess(data: any) {
+      setupdate("updateapprove")
       setAllowance(Number(data.toString()) / 10 ** 18);
     },
   });
@@ -163,13 +167,14 @@ export default function LinqStakeTabMenu({
       });
     },
   });
-
+const [update, setupdate] = useState("")
   function HandleStaQe() {
     if (!address) {
       return;
     }
     try {
       StaQe();
+      setupdate("updatestage")
       if (isSuccess) {
         Swal.fire({
           icon: "success",
@@ -185,6 +190,7 @@ export default function LinqStakeTabMenu({
       return;
     }
     try {
+      setupdate("updatesunstake")
       unStaQe();
     } catch (error) {
       console.error("Staking failed:", error);
@@ -228,7 +234,7 @@ export default function LinqStakeTabMenu({
 
   useEffect(() => {
     FetchDetails();
-  }, [address, allowance, userdetails, _amountLinQ]);
+  }, [address, Allowance, userdetails, _amountLinQ, userdetails, update]);
 
   return (
     <div
