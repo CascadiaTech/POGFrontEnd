@@ -55,7 +55,7 @@ export default function ClaimPage() {
             loop
             muted
           >
-            <source src="/LinqMobileNew.mp4" type="video/mp4" />
+            <source src="/LINQDappMobile.mp4" type="video/mp4" />
             Your browser does not support the video tag, update your browser
           </video>
         ) : (
@@ -68,7 +68,7 @@ export default function ClaimPage() {
             loop
             muted
           >
-            <source src="/LinqDesktopNew.mp4" type="video/mp4" />
+            <source src="/LINQDappDesktop.mp4" type="video/mp4" />
             Your browser does not support the video tag, update your browser
           </video>
         )}
