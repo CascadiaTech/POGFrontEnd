@@ -1,3 +1,4 @@
+import { Spin } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import {
@@ -12,7 +13,6 @@ import {
   useContractRead,
 } from "wagmi";
 import linqabi from "../../contracts/abi/abi.json";
-import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,13 +31,26 @@ export default function NewStakeComponent(_token: any) {
   const linqAddress = "0x1A5f0B4a408c3Cb75921AEC0Ea036F9984c0aA5C";
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  const StaqeFarm = "0x41BEEBfAAE60bbc620e0667971Be1372537E6521";
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   let current_chain = 5;
-  const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ] = useState(0);
 
   const [MilqBalance, setMilqBalance] = useState(0);
+  const [timer, setTimer] = useState(0);
+
+  // Create a useEffect hook to update the timer every 10 seconds
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // Update the timer state variable every 10 seconds
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 10000); // 10,000 milliseconds = 10 seconds
+
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const { data: BalanceOfMilq } = useContractRead({
     address: LPtokenContract,
@@ -182,6 +195,7 @@ export default function NewStakeComponent(_token: any) {
   function FetchDetails() {
     UserDetails;
     PendingRewards;
+    PendingLPRewards;
     daisys;
     VitaliksMilkShipments;
     totalVitaliksMilkShipments;
@@ -202,7 +216,7 @@ export default function NewStakeComponent(_token: any) {
       SetShowPerpOptions(true);
     }
     FetchBalances();
-  }, [address]);
+  }, [address,timer]);
 
 
 
@@ -227,7 +241,7 @@ export default function NewStakeComponent(_token: any) {
     },
   });
 
-  const { write: ClaimLP } = useContractWrite({
+  const { write: ClaimLP, isLoading } = useContractWrite({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     chainId: current_chain,
@@ -235,6 +249,7 @@ export default function NewStakeComponent(_token: any) {
     account: address,
     onSuccess(data) {
       Swal.fire({ icon: "success", title: "you have successfully ClaimedLP" });
+      setLoading(true);
     },
     onError(err) {
       Swal.fire({
@@ -245,6 +260,14 @@ export default function NewStakeComponent(_token: any) {
       });
     },
   });
+
+  const RealClaimLP = () => {
+    setLoading(true);
+    ClaimLP(); 
+    setTimeout(() => {
+      setLoading(false); // Simulating the completion of the operation after a timeout
+    }, 2000); // Adjust the timeout as needed
+  };
   const { write: Claim } = useContractWrite({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -334,7 +357,7 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 ETH Per Day LinQ StaQing
-                <br /> {Linqapr ? (Linqapr * linqBalance * 43200).toFixed(3) : "0"}
+                <br /> {Linqapr && userdetails ? (Linqapr  * (Number(userdetails[0].toString()) / 10**18) * 86400).toFixed(3) : "0"}
               </h2>
               <h2
                 style={{
@@ -343,7 +366,7 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 Eth Per Day LP StaQing
-                <br /> {LPapr ? (LPapr * MilqBalance * 43200).toFixed(3) : "0"}
+                <br /> {LPapr && userLPDetails ? (LPapr * (Number(userLPDetails[0].toString() ) / 10**18) * 86400).toFixed(3) : "0"}
               </h2>
               <button
                 onClick={() => Claim()}
@@ -363,20 +386,20 @@ export default function NewStakeComponent(_token: any) {
                 Qompound
               </button>
               
-        {loading ? (
-          <Spin indicator={antIcon} className="add-spinner" />
-        ) : (
-          <>
+              {isLoading ? (
+        <Spin size="large" indicator={antIcon} className="add-spinner" />
+      ) : (
+        <>
           <button
-          onClick={()=> ClaimLP()}
+            onClick={() => ClaimLP()}
             style={{ fontFamily: "GroupeMedium" }}
             className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
             type="button"
           >
             Send me LP
           </button>
-          </>
-        )}
+        </>
+      )}
             </div>
           </div>
         </div>

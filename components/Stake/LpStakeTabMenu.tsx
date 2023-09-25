@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
-import HeaderComponent from "../Header/HeaderComponent";
-import FooterComponent from "../Footer/FooterComponent";
-import { Carousel, CarouselProps } from "flowbite-react";
 import { MilqFarmABI } from "../../contracts/abi/MilqFarmAbi.mjs";
-import { useContext } from "react";
-import { Tooltip } from "react-tooltip";
-import linqabi from "../../contracts/abi/abi.json";
-import info from "../../public/info.png";
-import { useRouter } from "next/router";
-import { ToastContainer, toast } from "react-toastify";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import Image from "next/image";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import error from "next/error";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
@@ -29,14 +22,17 @@ export default function LpStakeTabMenu({
   setToken,
 }: LpStakeTabMenuProps) {
   const { address } = useAccount();
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const [loading, setLoading] = useState(false);
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  // const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  const StaqeFarm = "0x41BEEBfAAE60bbc620e0667971Be1372537E6521";
   let current_chain = 5;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
   const [_amountMilQ, set_amountMilQ] = useState(0);
-  const [updatevar, setupdatevar] = useState(false);
+  const [updatevar, setupdatevar] = useState("");
 
   // Connect to an Ethereum node
 
@@ -168,24 +164,6 @@ export default function LpStakeTabMenu({
       });
     },
   });
-  /* (201)
-       customClass: {
-          container: "swal2-container",
-          title: "swal2-title",
-          icon: "swal2-error-fix"
-          
-
-        },
-
-                 <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
-          >
-            Your rewards pending: <br /> {pendingRewards ? pendingRewards + pendingrewardsaddon : "0"}
-          </h2>
-  */
 
   function HandleStaQe() {
     if (!address) {
@@ -193,7 +171,7 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
-      setupdatevar(true);
+      setupdatevar("updatestaqe");
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -204,7 +182,7 @@ export default function LpStakeTabMenu({
     }
     try {
       unStaQe();
-      setupdatevar(true);
+      setupdatevar("updateunstq");
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -235,6 +213,7 @@ export default function LpStakeTabMenu({
     abi: LPStakingabiObject,
     functionName: "bessies",
     chainId: current_chain,
+
     onSuccess(data: any) {
       settotalLPStaked(Number(data.toString()) / 10 ** 18);
     },
@@ -244,16 +223,21 @@ export default function LpStakeTabMenu({
     UserDetails;
     bessies;
     allowance;
-
-    setupdatevar(false);
-    console.log("test");
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
 
   useEffect(() => {
     FetchDetails();
-  }, [address, allowance, userdetails, updatevar, _amountMilQ]);
+  }, [
+    address,
+    Allowance,
+    userdetails,
+    updatevar,
+    _amountMilQ,
+    currentTime,
+    owned,
+  ]);
   /*
           <button
             onClick={() => Claim()}
@@ -284,7 +268,6 @@ export default function LpStakeTabMenu({
           type="number"
           id="stakeInput"
           className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-          value={_amountMilQ} // Display the current value
           style={{ fontFamily: "ethnocentricRg" }}
           onChange={(e) => {
             // Get the input value as a number
@@ -294,26 +277,37 @@ export default function LpStakeTabMenu({
         {Allowance >= _amountMilQ ? (
           <>
             {" "}
-            <button
-              style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans w-64 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
-              type="button"
-              onClick={() => HandleStaQe()}
-            >
-              Stake
-            </button>
+            {loading ? (
+              <Spin indicator={antIcon} className="add-spinner" />
+            ) : (
+              <>
+                <button
+                  style={{ fontFamily: "GroupeMedium" }}
+                  className="font-sans w-64 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
+                  type="button"
+                  onClick={() => HandleStaQe()}
+                >
+                  Stake
+                </button>
+              </>
+            )}
           </>
         ) : (
           <>
-            {" "}
-            <button
-              style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans  cursor-pointer w-64 text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-              type="button"
-              onClick={() => LPApprove()}
-            >
-              Approve
-            </button>
+            {loading ? (
+              <Spin indicator={antIcon} className="add-spinner" />
+            ) : (
+              <>
+                <button
+                  style={{ fontFamily: "GroupeMedium" }}
+                  className="font-sans  cursor-pointer w-64 text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                  type="button"
+                  onClick={() => LPApprove()}
+                >
+                  Approve
+                </button>
+              </>
+            )}
           </>
         )}
         <div className="flex-row justify-center my-3 items-center"></div>
@@ -329,7 +323,8 @@ export default function LpStakeTabMenu({
           </button>
         </div>
         <div className="flex flex-col justify-center items-center my-3">
-          {Number(unlocktime?.toString()) > Number(currentTime.toString()) &&
+          {Number(unlocktime?.toString()) != 0 &&
+          Number(unlocktime?.toString()) < Number(currentTime.toString()) &&
           owned == false ? (
             <button
               onClick={() => PerpSwitch()}
