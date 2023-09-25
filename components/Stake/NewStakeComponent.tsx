@@ -85,6 +85,18 @@ export default function NewStakeComponent(_token: any) {
     },
   });
   const [pendingRewards, setPendingRewards] = useState(0);
+  const [pendingLP, setPendingLP]:any = useState(0)
+
+  const { data: PendingLPRewards } = useContractRead({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    functionName: "checkEstMilQRewards",
+    chainId: current_chain,
+    args: [address],
+    onSuccess(data: any) {
+      setPendingLP(Number(data.toString()) / 10 ** 18);
+    },
+  });
 
   const { data: PendingRewards } = useContractRead({
     address: StaqeFarm,
@@ -311,7 +323,7 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable LP <br /> {pendingRewards ? pendingRewards : "0"}
+                Claimable LP <br /> {pendingLP ? pendingLP : "0"}
               </h2>
               <h2
                 style={{
