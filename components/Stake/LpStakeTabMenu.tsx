@@ -37,7 +37,7 @@ export default function LpStakeTabMenu({
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
   const [_amountMilQ, set_amountMilQ] = useState(0);
-  const [updatevar, setupdatevar] = useState(false);
+  const [updatevar, setupdatevar] = useState("");
 
   // Connect to an Ethereum node
 
@@ -169,24 +169,6 @@ export default function LpStakeTabMenu({
       });
     },
   });
-  /* (201)
-       customClass: {
-          container: "swal2-container",
-          title: "swal2-title",
-          icon: "swal2-error-fix"
-          
-
-        },
-
-                 <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
-          >
-            Your rewards pending: <br /> {pendingRewards ? pendingRewards + pendingrewardsaddon : "0"}
-          </h2>
-  */
 
   function HandleStaQe() {
     if (!address) {
@@ -194,7 +176,7 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
-      setupdatevar(true);
+      setupdatevar("updatestaqe");
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -205,7 +187,7 @@ export default function LpStakeTabMenu({
     }
     try {
       unStaQe();
-      setupdatevar(true);
+      setupdatevar("updateunstq");
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -245,16 +227,13 @@ export default function LpStakeTabMenu({
     UserDetails;
     bessies;
     allowance;
-
-    setupdatevar(false);
-    console.log("test");
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
 
   useEffect(() => {
     FetchDetails();
-  }, [address, Allowance, userdetails, updatevar, _amountMilQ]);
+  }, [address, Allowance, userdetails, updatevar, _amountMilQ, currentTime]);
   /*
           <button
             onClick={() => Claim()}
