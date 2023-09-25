@@ -250,18 +250,18 @@ export default function NewStakeComponent(_token: any) {
 
   return (
     <>
-      <div className={"flex flex-col"}>
+      <div className={"flex flex-col mt-60"}>
         <div
           style={{
             background:
               "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
           }}
           className={
-            "flex flex-col self-center rounded-xl w-fit h-fit px-2 md:px-10 py-3 mx-auto opacity-90"
+            "flex flex-col self-center rounded-xl w-fit h-fit px-2 mx-5 md:px-10 py-3 mx-auto opacity-90"
           }
         >
           <h1
-            className="text-lg mb-5 md:text-xl lg:text-2xl font-semibold text-white"
+            className="text-lg mb-2 md:text-xl lg:text-2xl font-semibold text-white"
             style={{ fontFamily: "Azonix" }}
           >
             User Statistics
@@ -279,7 +279,7 @@ export default function NewStakeComponent(_token: any) {
                 style={{
                   boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
                 }}
-                className="text-white mb-2 w-40 border border-white  px-2 py-2"
+                className="text-white mb-2 md:w-40 border border-white px-2 py-2"
               >
                 LP In wallet <br /> {MilqBalance? (MilqBalance).toFixed(2) : "0" }{" "}
       
@@ -289,7 +289,7 @@ export default function NewStakeComponent(_token: any) {
                 style={{
                   boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
                 }}
-                className="text-white mb-2 w-40 border border-white  px-2 py-2"
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 LinQ in wallet <br /> {linqBalance?  (linqBalance).toFixed(2) : "0"}{" "}
               
@@ -299,7 +299,7 @@ export default function NewStakeComponent(_token: any) {
                 style={{
                   boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
                 }}
-                className="text-white mb-2 w-40 border border-white  px-2 py-2"
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 Claimable ETH <br /> {pendingRewards ? pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon : "0"}
               </h2>
@@ -307,7 +307,7 @@ export default function NewStakeComponent(_token: any) {
                 style={{
                   boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
                 }}
-                className="text-white mb-2 w-40 border border-white  px-2 py-2"
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 Claimable LP <br /> {pendingRewards ? pendingRewards : "0"}
               </h2>
@@ -315,7 +315,7 @@ export default function NewStakeComponent(_token: any) {
                 style={{
                   boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
                 }}
-                className="text-white mb-2 w-40 border border-white  px-2 py-2"
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 ETH Per Day LinQ StaQing
                 <br /> {Linqapr ? Linqapr * linqBalance * 43200 : "0"}
@@ -324,7 +324,7 @@ export default function NewStakeComponent(_token: any) {
                 style={{
                   boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
                 }}
-                className="text-white mb-2 w-40 border border-white  px-2 py-2"
+                className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 Eth Per Day LP StaQing
                 <br /> {LPapr ? LPapr * MilqBalance * 43200 : "0"}
@@ -332,7 +332,7 @@ export default function NewStakeComponent(_token: any) {
               <button
                 onClick={() => Claim()}
                 style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
               >
                 Send me ETH
@@ -341,7 +341,7 @@ export default function NewStakeComponent(_token: any) {
               disabled={pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon == 0}
               onClick ={() => Qompound()}
                 style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
               >
                 Qompound
@@ -349,7 +349,7 @@ export default function NewStakeComponent(_token: any) {
               <button
               onClick={()=> ClaimLP()}
                 style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
               >
                 Send me LP
@@ -368,7 +368,7 @@ export default function NewStakeComponent(_token: any) {
               background:
                 "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
             }}
-            className={`flex absolute ml-96 -translate-x-72 md:-translate-x-52 -translate-y-80 z-20 h-12 w-52 mb-10 rounded-full bg-gray-200 ${
+            className={`flex absolute ml-96 -translate-x-72 md:-translate-x-52 -translate-y-64 z-20 h-12 w-52 mb-10 rounded-full bg-gray-200 ${
               isLpStakeOpen ? "bg-gray-200" : ""
             }`}
           >
