@@ -284,10 +284,8 @@ export default function LinqStakeTabMenu({
 
   useEffect(() => {
     FetchDetails();
-  }, [
-    userdetails
-  ]);
-/*
+  }, [userdetails]);
+  /*
     Allowance,
     userdetails,
     _amountLinQ,
@@ -416,14 +414,20 @@ export default function LinqStakeTabMenu({
                   className="add-spinner"
                 />
               ) : (
-                <button
-                  style={{ fontFamily: "GroupeMedium" }}
-                  className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                  type="button"
-                  onClick={() => ApproveGlinq()}
-                >
-                  Approve Glinq
-                </button>
+                <>
+                  {linqstaked ? (
+                    <button
+                      style={{ fontFamily: "GroupeMedium" }}
+                      className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                      type="button"
+                      onClick={() => ApproveGlinq()}
+                    >
+                      Approve Glinq
+                    </button>
+                  ) : (
+                    <></>
+                  )}
+                </>
               )}
             </>
           )}
