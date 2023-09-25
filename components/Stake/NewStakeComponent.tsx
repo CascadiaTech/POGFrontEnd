@@ -181,6 +181,7 @@ export default function NewStakeComponent(_token: any) {
   function FetchDetails() {
     UserDetails;
     PendingRewards;
+    PendingLPRewards;
     daisys;
     VitaliksMilkShipments;
     totalVitaliksMilkShipments;
@@ -333,7 +334,7 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 ETH Per Day LinQ StaQing
-                <br /> {Linqapr ? (Linqapr * linqBalance * 43200).toFixed(3) : "0"}
+                <br /> {Linqapr && userdetails ? (Linqapr * (Number(userdetails[0].toString()) /10**10) * 86400).toFixed(3) : "0"}
               </h2>
               <h2
                 style={{
@@ -342,7 +343,7 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 Eth Per Day LP StaQing
-                <br /> {LPapr ? (LPapr * MilqBalance * 43200).toFixed(3) : "0"}
+                <br /> {LPapr && userLPDetails ? (LPapr * (Number(userLPDetails[0].toString() )/ 10**18) * 86400).toFixed(3) : "0"}
               </h2>
               <button
                 onClick={() => Claim()}
