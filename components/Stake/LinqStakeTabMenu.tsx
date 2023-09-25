@@ -41,7 +41,7 @@ export default function LinqStakeTabMenu({
   const glinq = "0xfDD301D6D353F1DfC5E9d319C245B46E4C4f2CA6";
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
-  const [_amountLinQ, set_amountLinQ]:any = useState();
+  const [_amountLinQ, set_amountLinQ]: any = useState();
 
   const notify = () => toast("Wow so easy !");
   useEffect(() => {
@@ -293,7 +293,7 @@ export default function LinqStakeTabMenu({
 
   useEffect(() => {
     FetchDetails();
-    console.log("updates")
+    console.log("updates");
   }, [userdetails]);
 
   return (
@@ -377,22 +377,45 @@ export default function LinqStakeTabMenu({
             {unstaqeLoad ? (
               <Spin size="large" indicator={antIcon} className="add-spinner" />
             ) : (
-              <button
-                disabled={userdetails ? userdetails[0] < _amountLinQ : true}
-                onClick={() => HandleUnStaQe()}
-                style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                type="button"
-              >
-                UnStake
-              </button>
+              <>
+                {owned == true &&
+                GAllowance <= Number(userdetails[0].toString()) / 10 ** 18 ? (
+                  <>
+                    {glinqLoad ? (
+                      <Spin
+                        size="large"
+                        indicator={antIcon}
+                        className="add-spinner"
+                      />
+                    ) : (
+                      <button
+                        style={{ fontFamily: "GroupeMedium" }}
+                        className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                        type="button"
+                        onClick={() => ApproveGlinq()}
+                      >
+                        Approve Glinq
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <button
+                    disabled={userdetails ? userdetails[0] < _amountLinQ : true}
+                    onClick={() => HandleUnStaQe()}
+                    style={{ fontFamily: "GroupeMedium" }}
+                    className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                    type="button"
+                  >
+                    UnStake
+                  </button>
+                )}
+              </>
             )}
           </div>
           <div className="flex flex-col justify-center items-center my-3">
             {Number(unlocktime?.toString()) != 0 &&
             Number(unlocktime?.toString()) < currentTime &&
-            owned == false &&
-            GAllowance >= Number(userdetails[0].toString()) / 10 ** 18 ? (
+            owned == false ? (
               <>
                 {" "}
                 {perpLoad ? (
@@ -413,33 +436,7 @@ export default function LinqStakeTabMenu({
                 )}
               </>
             ) : (
-              <>
-                {" "}
-                {glinqLoad ? (
-                  <Spin
-                    size="large"
-                    indicator={antIcon}
-                    className="add-spinner"
-                  />
-                ) : (
-                  <>
-                    {linqstaked &&
-                    Number(unlocktime?.toString()) != 0 &&
-                    Number(unlocktime?.toString()) < currentTime ? (
-                      <button
-                        style={{ fontFamily: "GroupeMedium" }}
-                        className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                        type="button"
-                        onClick={() => ApproveGlinq()}
-                      >
-                        Approve Glinq
-                      </button>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                )}
-              </>
+              <></>
             )}
             {owned ? (
               <button
