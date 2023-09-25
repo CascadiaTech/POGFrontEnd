@@ -21,6 +21,7 @@ import LpStakeModal from "./LpStakeModal";
 import { LPabiObject } from "../../contracts/abi/LPTokenAbi.mjs";
 import { abiObject } from "../../contracts/abi/abi.mjs";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
+import Swal from "sweetalert2";
 export default function NewStakeComponent(_token: any) {
   const publicClient = usePublicClient();
   const [loading, setLoading] = useState(false);
@@ -99,6 +100,7 @@ export default function NewStakeComponent(_token: any) {
   const [owned, setOwned] = useState(false);
   const [pendingrewardsaddon,  setPendingRewardsAddon] = useState(0)
   const [Linqpendingrewardsaddon,  setLinqPendingRewardsAddon] = useState(0)
+
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -136,10 +138,39 @@ export default function NewStakeComponent(_token: any) {
     },
   });
 
+  const [index, setTheIndex] = useState(0);
+
+  const { data: totalVitaliksMilkShipments } = useContractRead({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    functionName: "totalVitaliksMilkShipments",
+    chainId: current_chain,
+    onSuccess(data: any) {
+      setTheIndex(Number(data.toString()));
+    },
+  });
+
+  const [Linqapr, setLinqapr] = useState(0);
+  const [LPapr, setLPapr] = useState(0)
+
+  const { data: VitaliksMilkShipments } = useContractRead({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    functionName: "VitaliksMilkShipments",
+    chainId: current_chain,
+    args:[index],
+    onSuccess(data: any) {
+      setLinqapr(Number(data.toString()) / 10 ** 18);
+      setLPapr(Number(data.toString()) / 10 ** 18);
+    },
+  });
+
   function FetchDetails() {
     UserDetails;
     PendingRewards;
     daisys;
+    VitaliksMilkShipments;
+    totalVitaliksMilkShipments;
     allowance;
     UserDetailsLP
   }
@@ -158,6 +189,64 @@ export default function NewStakeComponent(_token: any) {
     }
     FetchBalances();
   }, [address]);
+
+  const { write: Qompound } = useContractWrite({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    chainId: current_chain,
+    functionName: "QompoundLinQ",
+    args: [100],
+    account: address,
+    onSuccess(data) {
+      Swal.fire({
+        icon: "success",
+        title: "you have successfully Qompounded",
+      });
+    },
+    onError(err) {
+      Swal.fire({
+        icon: "error",
+        title: `An error occured with Qompounding unlock please contact support if issue perists${err.cause}`,
+      });
+    },
+  });
+
+  const { write: ClaimLP } = useContractWrite({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    chainId: current_chain,
+    functionName: "shipLinQersMilQ",
+    account: address,
+    onSuccess(data) {
+      Swal.fire({ icon: "success", title: "you have successfully ClaimedLP" });
+    },
+    onError(err) {
+      Swal.fire({
+        icon: "error",
+        title:
+        `An error occured with Claiming please contact support if issue perists${err.cause}`,
+
+      });
+    },
+  });
+  const { write: Claim } = useContractWrite({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    chainId: current_chain,
+    functionName: "shipMilk",
+    account: address,
+    onSuccess(data) {
+      Swal.fire({ icon: "success", title: "you have successfully Claimed" });
+    },
+    onError(err) {
+      Swal.fire({
+        icon: "error",
+        title:
+        `An error occured with Claiming please contact support if issue perists${err.cause}`,
+
+      });
+    },
+  });
 
   return (
     <>
@@ -229,7 +318,7 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 w-40 border border-white  px-2 py-2"
               >
                 ETH Per Day
-                <br /> {pendingRewards ? pendingRewards : "0"}
+                <br /> {Linqapr ? Linqapr * linqBalance * 43200 : "0"}
               </h2>
               <h2
                 style={{
@@ -241,6 +330,7 @@ export default function NewStakeComponent(_token: any) {
                 <br /> {pendingRewards ? pendingRewards : "0"}
               </h2>
               <button
+                onClick={() => Claim()}
                 style={{ fontFamily: "GroupeMedium" }}
                 className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
@@ -248,6 +338,7 @@ export default function NewStakeComponent(_token: any) {
                 Send me ETH
               </button>
               <button
+              onClick ={() => Qompound()}
                 style={{ fontFamily: "GroupeMedium" }}
                 className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
@@ -255,6 +346,7 @@ export default function NewStakeComponent(_token: any) {
                 Qompound
               </button>
               <button
+              onClick={()=> ClaimLP()}
                 style={{ fontFamily: "GroupeMedium" }}
                 className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
