@@ -317,7 +317,7 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                ETH Per Day
+                ETH Per Day LinQ StaQing
                 <br /> {Linqapr ? Linqapr * linqBalance * 43200 : "0"}
               </h2>
               <h2
@@ -326,8 +326,8 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Some Other Stat
-                <br /> {pendingRewards ? pendingRewards : "0"}
+                Eth Per Day LP StaQing
+                <br /> {LPapr ? LPapr * MilqBalance * 43200 : "0"}
               </h2>
               <button
                 onClick={() => Claim()}
@@ -338,6 +338,7 @@ export default function NewStakeComponent(_token: any) {
                 Send me ETH
               </button>
               <button
+              disabled={pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon == 0}
               onClick ={() => Qompound()}
                 style={{ fontFamily: "GroupeMedium" }}
                 className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
