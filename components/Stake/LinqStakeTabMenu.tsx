@@ -234,7 +234,7 @@ const [update, setupdate] = useState("")
 
   useEffect(() => {
     FetchDetails();
-  }, [address, Allowance, userdetails, _amountLinQ, userdetails, update,totallinqStaked, currentTime]);
+  }, [address, Allowance, userdetails, _amountLinQ, userdetails, update,totallinqStaked, currentTime, owned]);
 
   return (
     <div

@@ -186,7 +186,7 @@ export default function LpStakeTabMenu({
       return;
     }
     try {
-      
+
       unStaQe();
       setupdatevar("updateunstq");
     } catch (error) {
@@ -235,7 +235,7 @@ export default function LpStakeTabMenu({
 
   useEffect(() => {
     FetchDetails();
-  }, [address, Allowance, userdetails, updatevar, _amountMilQ, currentTime]);
+  }, [address, Allowance, userdetails, updatevar, _amountMilQ, currentTime, owned]);
   /*
           <button
             onClick={() => Claim()}
