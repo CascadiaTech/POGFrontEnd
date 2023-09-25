@@ -31,7 +31,8 @@ export default function LpStakeTabMenu({
   const { address } = useAccount();
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+ // const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+ const StaqeFarm = "0x41BEEBfAAE60bbc620e0667971Be1372537E6521"
   let current_chain = 5;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 

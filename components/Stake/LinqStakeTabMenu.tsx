@@ -32,10 +32,11 @@ export default function LinqStakeTabMenu({
   const linqAddress = "0x1A5f0B4a408c3Cb75921AEC0Ea036F9984c0aA5C";
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  //const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  const StaqeFarm = "0x41BEEBfAAE60bbc620e0667971Be1372537E6521"
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
-  const [_amountLinQ, set_amountLinQ] = useState(0);
+  const [_amountLinQ, set_amountLinQ]:any = useState();
 
   const notify = () => toast("Wow so easy !");
   useEffect(() => {
@@ -80,18 +81,6 @@ export default function LinqStakeTabMenu({
     },
   });
 
-  const [pendingRewards, setPendingRewards] = useState(0);
-
-  const { data: PendingRewards } = useContractRead({
-    address: StaqeFarm,
-    abi: LPStakingabiObject,
-    functionName: "howMuchMilk",
-    chainId: current_chain,
-    args: [address],
-    onSuccess(data: any) {
-      setPendingRewards(Number(data[0].toString()) / 10 ** 18);
-    },
-  });
   //Begin all functions for Regular Linq Staqing
   const { write: unStaQe } = useContractWrite({
     address: StaqeFarm,
@@ -230,7 +219,6 @@ export default function LinqStakeTabMenu({
 
   function FetchDetails() {
     UserDetails;
-    PendingRewards;
     daisys;
     allowance;
   }
@@ -263,9 +251,18 @@ export default function LinqStakeTabMenu({
           id="stakeInput"
           className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
           style={{ fontFamily: "ethnocentricRg" }}
+          value ={_amountLinQ}
           onChange={(e) => {
          //   let value = e.target.valueAsNumber; // Get the input value as a number
-            set_amountLinQ(Number(e.target.value));
+         let inputValue = Number(e.target.value); // Parse the input value as a number
+         if (inputValue < 0) {
+           // If the input is negative, reset it to a positive value or display an error message
+           set_amountLinQ(0); // You can choose to set it to 0 or any other default value
+           // Alternatively, you can display an error message to the user
+           // console.error('Please enter a positive number');
+         } else {
+           set_amountLinQ(inputValue);
+         }
           }}
         />
         {Allowance >= _amountLinQ ? (
