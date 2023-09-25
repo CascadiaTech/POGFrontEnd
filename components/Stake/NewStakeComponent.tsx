@@ -150,18 +150,18 @@ export default function NewStakeComponent(_token: any) {
     },
   });
 
-  const [Linqapr, setLinqapr] = useState(0);
-  const [LPapr, setLPapr] = useState(0)
+  const [Linqapr, setLinqapr]:any = useState(0);
+  const [LPapr, setLPapr]:any = useState(0)
 
   const { data: VitaliksMilkShipments } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "VitaliksMilkShipments",
     chainId: current_chain,
-    args:[index],
+    args:[1],
     onSuccess(data: any) {
-      setLinqapr(Number(data.toString()) / 10 ** 18);
-      setLPapr(Number(data.toString()) / 10 ** 18);
+      setLinqapr(Number(data[1].toString()) / 10**18);
+      setLPapr(Number(data[2].toString()) / 10**18);
     },
   });
 
@@ -189,6 +189,8 @@ export default function NewStakeComponent(_token: any) {
     }
     FetchBalances();
   }, [address]);
+
+
 
   const { write: Qompound } = useContractWrite({
     address: StaqeFarm,
@@ -318,7 +320,7 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 ETH Per Day LinQ StaQing
-                <br /> {Linqapr ? Linqapr * linqBalance * 43200 : "0"}
+                <br /> {Linqapr ? (Linqapr * linqBalance * 43200).toFixed(3) : "0"}
               </h2>
               <h2
                 style={{
@@ -327,7 +329,7 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 Eth Per Day LP StaQing
-                <br /> {LPapr ? LPapr * MilqBalance * 43200 : "0"}
+                <br /> {LPapr ? (LPapr * MilqBalance * 43200).toFixed(3) : "0"}
               </h2>
               <button
                 onClick={() => Claim()}

@@ -2,288 +2,6 @@ const abi = JSON.stringify([
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "_bessiesRentalTime",
-        type: "uint256",
-      },
-    ],
-    name: "changeBessiesRentalTime",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_daisysRentalTime",
-        type: "uint256",
-      },
-    ],
-    name: "changeDaisysRentalTime",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_minLinQ",
-        type: "uint256",
-      },
-    ],
-    name: "changeMinLinQ",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_minMilQ",
-        type: "uint256",
-      },
-    ],
-    name: "changeMinMilQ",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_roundUpBessiesTime",
-        type: "uint256",
-      },
-    ],
-    name: "changeRoundUpBessiesTime",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_roundUpDaisysTime",
-        type: "uint256",
-      },
-    ],
-    name: "changeRoundUpDaisysTime",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_cow",
-        type: "uint256",
-      },
-    ],
-    name: "ownCows",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bool",
-        name: "_state",
-        type: "bool",
-      },
-    ],
-    name: "pauseStaQing",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_daisysOutput",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_bessiesOutput",
-        type: "uint256",
-      },
-    ],
-    name: "prepShipment",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "removeVitaliksMilk",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_cow",
-        type: "uint256",
-      },
-    ],
-    name: "roundUpCows",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_daisysToOddysParlour",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_bessiesToOddysParlour",
-        type: "uint256",
-      },
-    ],
-    name: "rushOddyFee",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "contract IERC20",
-        name: "_glinQ",
-        type: "address",
-      },
-    ],
-    name: "setGlinQAddress",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "weiAmount",
-        type: "uint256",
-      },
-    ],
-    name: "sethighClaimThreshold",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "weiAmount",
-        type: "uint256",
-      },
-    ],
-    name: "setLowBalanceThreshold",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_oddysParlour",
-        type: "address",
-      },
-    ],
-    name: "setOddysParlour",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "shipFarmMilQ",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "shipLinQersMilQ",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "shipMilk",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_amountLinQ",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_amountMilQ",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_token",
-        type: "uint256",
-      },
-    ],
-    name: "staQe",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
         name: "_linqAddress",
         type: "address",
@@ -420,19 +138,6 @@ const abi = JSON.stringify([
     type: "event",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "slippage",
-        type: "uint256",
-      },
-    ],
-    name: "QompoundLinQ",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -458,56 +163,291 @@ const abi = JSON.stringify([
     type: "event",
   },
   {
-    inputs: [
+    inputs: [],
+    name: "ILINQ",
+    outputs: [
       {
-        internalType: "uint256",
-        name: "_amtLinQ",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_amtMilQ",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_token",
-        type: "uint256",
+        internalType: "contract iLinq",
+        name: "",
+        type: "address",
       },
     ],
-    name: "unstaQe",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
       {
         internalType: "address",
-        name: "_ERC20",
+        name: "",
         type: "address",
+      },
+    ],
+    name: "LinQerParlours",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "daisys",
+        type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "_Amt",
+        name: "rentedDaisysSince",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "rentedDaisysTill",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "vitaliksMilkShipped",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "lastShippedVitaliksMilk",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "vitaliksMilkClaimable",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "QompoundedMilk",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "daisysOwnedSince",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "daisysOwnedTill",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "hasDaisys",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "ownsDaisys",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "shipmentsRecieved",
         type: "uint256",
       },
     ],
-    name: "withdrawERC20",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "zeroFees",
+    name: "LinQtotalSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "LpClaims",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "lastClaimed",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "totalClaimed",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "MilQShipments",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "blockTimestamp",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "MilQShipped",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "totallinQStaked",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "rewardPerlinQ",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "MilQerParlours",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "bessies",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "rentedBessiesSince",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "rentedBessiesTill",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "milQClaimed",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "vitaliksMilkShipped",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "lastShippedVitaliksMilk",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "vitaliksMilkClaimable",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "bessiesOwnedSince",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "bessiesOwnedTill",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "hasBessies",
+        type: "bool",
+      },
+      {
+        internalType: "bool",
+        name: "ownsBessies",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "shipmentsRecieved",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "MilqShipments",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "slippage",
+        type: "uint256",
+      },
+    ],
+    name: "QompoundLinQ",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    stateMutability: "payable",
-    type: "receive",
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "VitaliksMilkShipments",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "daisysOutput",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "bessiesOutput",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [],
@@ -572,6 +512,84 @@ const abi = JSON.stringify([
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_bessiesRentalTime",
+        type: "uint256",
+      },
+    ],
+    name: "changeBessiesRentalTime",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_daisysRentalTime",
+        type: "uint256",
+      },
+    ],
+    name: "changeDaisysRentalTime",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_minLinQ",
+        type: "uint256",
+      },
+    ],
+    name: "changeMinLinQ",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_minMilQ",
+        type: "uint256",
+      },
+    ],
+    name: "changeMinMilQ",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_roundUpBessiesTime",
+        type: "uint256",
+      },
+    ],
+    name: "changeRoundUpBessiesTime",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_roundUpDaisysTime",
+        type: "uint256",
+      },
+    ],
+    name: "changeRoundUpDaisysTime",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -723,99 +741,12 @@ const abi = JSON.stringify([
   },
   {
     inputs: [],
-    name: "ILINQ",
-    outputs: [
-      {
-        internalType: "contract iLinq",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "linQ",
     outputs: [
       {
         internalType: "contract IERC20",
         name: "",
         type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "LinQerParlours",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "daisys",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "rentedDaisysSince",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "rentedDaisysTill",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "vitaliksMilkShipped",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "lastShippedVitaliksMilk",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "vitaliksMilkClaimable",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "QompoundedMilk",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "daisysOwnedSince",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "daisysOwnedTill",
-        type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "hasDaisys",
-        type: "bool",
-      },
-      {
-        internalType: "bool",
-        name: "ownsDaisys",
-        type: "bool",
-      },
-      {
-        internalType: "uint256",
-        name: "shipmentsRecieved",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -836,43 +767,6 @@ const abi = JSON.stringify([
   },
   {
     inputs: [],
-    name: "LinQtotalSupply",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "LpClaims",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "lastClaimed",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "totalClaimed",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "milQ",
     outputs: [
       {
@@ -885,133 +779,12 @@ const abi = JSON.stringify([
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "MilQerParlours",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "bessies",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "rentedBessiesSince",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "rentedBessiesTill",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "milQClaimed",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "vitaliksMilkShipped",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "lastShippedVitaliksMilk",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "vitaliksMilkClaimable",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "bessiesOwnedSince",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "bessiesOwnedTill",
-        type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "hasBessies",
-        type: "bool",
-      },
-      {
-        internalType: "bool",
-        name: "ownsBessies",
-        type: "bool",
-      },
-      {
-        internalType: "uint256",
-        name: "shipmentsRecieved",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "milQers",
     outputs: [
       {
         internalType: "uint256",
         name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "MilqShipments",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "MilQShipments",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "blockTimestamp",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "MilQShipped",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "totallinQStaked",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "rewardPerlinQ",
         type: "uint256",
       },
     ],
@@ -1058,6 +831,19 @@ const abi = JSON.stringify([
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_cow",
+        type: "uint256",
+      },
+    ],
+    name: "ownCows",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "owner",
     outputs: [
@@ -1068,6 +854,57 @@ const abi = JSON.stringify([
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "_state",
+        type: "bool",
+      },
+    ],
+    name: "pauseStaQing",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_daisysOutput",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_bessiesOutput",
+        type: "uint256",
+      },
+    ],
+    name: "prepShipment",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "removeVitaliksMilk",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1084,6 +921,19 @@ const abi = JSON.stringify([
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_cow",
+        type: "uint256",
+      },
+    ],
+    name: "roundUpCows",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "roundUpDaisysTime",
     outputs: [
@@ -1094,6 +944,120 @@ const abi = JSON.stringify([
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_daisysToOddysParlour",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_bessiesToOddysParlour",
+        type: "uint256",
+      },
+    ],
+    name: "rushOddyFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract IERC20",
+        name: "_glinQ",
+        type: "address",
+      },
+    ],
+    name: "setGlinQAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "weiAmount",
+        type: "uint256",
+      },
+    ],
+    name: "setLowBalanceThreshold",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_oddysParlour",
+        type: "address",
+      },
+    ],
+    name: "setOddysParlour",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "weiAmount",
+        type: "uint256",
+      },
+    ],
+    name: "sethighClaimThreshold",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "shipFarmMilQ",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "shipLinQersMilQ",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "shipMilk",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_amountLinQ",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_amountMilQ",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_token",
+        type: "uint256",
+      },
+    ],
+    name: "staQe",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1152,6 +1116,42 @@ const abi = JSON.stringify([
     inputs: [
       {
         internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_amtLinQ",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_amtMilQ",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_token",
+        type: "uint256",
+      },
+    ],
+    name: "unstaQe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "user",
         type: "address",
       },
@@ -1181,35 +1181,6 @@ const abi = JSON.stringify([
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "VitaliksMilkShipments",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "daisysOutput",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "bessiesOutput",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "vitaliksMilkShipped",
     outputs: [
@@ -1221,6 +1192,35 @@ const abi = JSON.stringify([
     ],
     stateMutability: "view",
     type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_ERC20",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_Amt",
+        type: "uint256",
+      },
+    ],
+    name: "withdrawERC20",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "zeroFees",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    stateMutability: "payable",
+    type: "receive",
   },
 ]);
 
