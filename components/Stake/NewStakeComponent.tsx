@@ -286,7 +286,7 @@ export default function NewStakeComponent(_token: any) {
 
   return (
     <>
-      <div className={"flex flex-col -mt-60"}>
+      <div className={"flex flex-col -mt-20 sm:-translate-y-40 mt-16 "}>
         <div
           style={{
             background:
@@ -411,7 +411,7 @@ export default function NewStakeComponent(_token: any) {
               background:
                 "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
             }}
-            className={`flex absolute ml-96 -translate-x-72 -translate-y-56 md:-translate-y-48 md:-translate-x-52 z-20 h-12 w-52 mb-10 rounded-full bg-gray-200 ${
+            className={`flex absolute ml-96 -translate-x-72 -translate-y-72 md:-translate-y-64 md:-translate-x-52 z-20 h-12 w-52 mb-10 rounded-full bg-gray-200 ${
               isLpStakeOpen ? "bg-gray-200" : ""
             }`}
           >
