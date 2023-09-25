@@ -264,7 +264,7 @@ export default function LpStakeTabMenu({
         <h2 className="text-lg text-white">
           Please enter the amount of tokens
         </h2>
-
+        <div className="flex flex-col items-center justify-center">
         <input
           type="number"
           id="stakeInput"
@@ -350,6 +350,7 @@ export default function LpStakeTabMenu({
           ) : (
             <></>
           )}
+          </div>
         </div>
       </div>
       <div
