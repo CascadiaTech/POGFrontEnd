@@ -284,7 +284,6 @@ export default function LpStakeTabMenu({
           type="number"
           id="stakeInput"
           className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-          value={_amountMilQ} // Display the current value
           style={{ fontFamily: "ethnocentricRg" }}
           onChange={(e) => {
             // Get the input value as a number

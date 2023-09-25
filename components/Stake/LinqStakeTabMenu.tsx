@@ -262,11 +262,10 @@ export default function LinqStakeTabMenu({
           type="number"
           id="stakeInput"
           className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-          value={_amountLinQ} // Display the current value
           style={{ fontFamily: "ethnocentricRg" }}
           onChange={(e) => {
-            const value = e.target.valueAsNumber; // Get the input value as a number
-            set_amountLinQ(value);
+         //   let value = e.target.valueAsNumber; // Get the input value as a number
+            set_amountLinQ(Number(e.target.value));
           }}
         />
         {Allowance >= _amountLinQ ? (
@@ -294,7 +293,7 @@ export default function LinqStakeTabMenu({
             </button>
           </>
         )}
-        <div className="flex-row justify-center my-3 items-center"></div>
+    
         <div className="flex-row justify-center my-3 items-center">
 
           <button
