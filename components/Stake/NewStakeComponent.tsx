@@ -30,7 +30,8 @@ export default function NewStakeComponent(_token: any) {
   const linqAddress = "0x1A5f0B4a408c3Cb75921AEC0Ea036F9984c0aA5C";
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  //const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  const StaqeFarm = "0x41BEEBfAAE60bbc620e0667971Be1372537E6521"
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ] = useState(0);
