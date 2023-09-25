@@ -65,6 +65,7 @@ export default function LpStakeTabMenu({
         console.error(error);
       });
   },[address]);
+
   let allowance_default = _amountMilQ > 1 ? (_amountMilQ).toString() : "100"
   const { write: LPApprove } = useContractWrite({
     address: LPtokenContract,
@@ -87,18 +88,7 @@ export default function LpStakeTabMenu({
     },
   });
 
-  const [pendingRewards, setPendingRewards] = useState(0);
 
-  const { data: PendingRewards } = useContractRead({
-    address: StaqeFarm,
-    abi: LPStakingabiObject,
-    functionName: "viewHowMuchMilk",
-    chainId: current_chain,
-    args: [address],
-    onSuccess(data: any) {
-      setPendingRewards(Number(data.toString()) / 10 ** 18);
-    },
-  });
   //Begin all functions for Regular Linq Staqing
   const { write: unStaQe } = useContractWrite({
     address: StaqeFarm,
@@ -139,25 +129,6 @@ export default function LpStakeTabMenu({
         icon: "error",
         title:
         `An error occured with switching please contact support if issue perists${err.cause}`,
-      });
-    },
-  });
-
-  const { write: Claim } = useContractWrite({
-    address: StaqeFarm,
-    abi: LPStakingabiObject,
-    chainId: current_chain,
-    functionName: "shipMilk",
-    account: address,
-    onSuccess(data) {
-      Swal.fire({ icon: "success", title: "you have successfully Claimed" });
-    },
-    onError(err) {
-      Swal.fire({
-        icon: "error",
-        title:
-        `An error occured with Claiming please contact support if issue perists${err.cause}`,
-
       });
     },
   });
@@ -279,7 +250,6 @@ export default function LpStakeTabMenu({
 
   function FetchDetails() {
     UserDetails;
-    PendingRewards;
     bessies;
     allowance;
 
@@ -293,7 +263,16 @@ export default function LpStakeTabMenu({
     FetchDetails();
     
   }, [address, allowance, userdetails, updatevar, _amountMilQ]);
-
+/*
+          <button
+            onClick={() => Claim()}
+            style={{ fontFamily: "GroupeMedium" }}
+            className="font-sans  cursor-pointer text-md w-32 mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+            type="button"
+          >
+            Claim
+          </button>
+*/
   return (
     <div
       style={{
@@ -313,7 +292,7 @@ export default function LpStakeTabMenu({
         <input
           type="number"
           id="stakeInput"
-          className="w-full border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
+          className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
           value={_amountMilQ} // Display the current value
           style={{ fontFamily: "ethnocentricRg" }}
           onChange={(e) => { // Get the input value as a number
@@ -325,7 +304,7 @@ export default function LpStakeTabMenu({
             {" "}
             <button
               style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans w-32 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
+              className="font-sans w-64 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
               type="button"
               onClick={() => HandleStaQe()}
             >
@@ -337,7 +316,7 @@ export default function LpStakeTabMenu({
             {" "}
             <button
               style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans  cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+              className="font-sans  cursor-pointer w-64 text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
               type="button"
               onClick={() => LPApprove()}
             >
@@ -347,19 +326,12 @@ export default function LpStakeTabMenu({
         )}
         <div className="flex-row justify-center my-3 items-center"></div>
         <div className="flex-row justify-center my-3 items-center">
-          <button
-            onClick={() => Claim()}
-            style={{ fontFamily: "GroupeMedium" }}
-            className="font-sans  cursor-pointer text-md w-32 mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-            type="button"
-          >
-            Claim
-          </button>
+
           <button
             disabled={userdetails ? userdetails[0] < _amountMilQ : true}
             onClick={() => HandleUnStaQe()}
             style={{ fontFamily: "GroupeMedium" }}
-            className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+            className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
             type="button"
           >
             UnStake

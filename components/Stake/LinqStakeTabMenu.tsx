@@ -134,22 +134,7 @@ export default function LinqStakeTabMenu({
     },
   });
 
-  const { write: Claim } = useContractWrite({
-    address: StaqeFarm,
-    abi: LPStakingabiObject,
-    chainId: current_chain,
-    functionName: "shipMilk",
-    account: address,
-    onSuccess(data) {
-      Swal.fire({ icon: "success", title: "you have successfully Claimed" });
-    },
-    onError(err) {
-      Swal.fire({
-        icon: "error",
-        title: `An error occured with Claiming please contact support if issue perists${err.cause}`,
-      });
-    },
-  });
+
 
   const { write: RequestUnlock } = useContractWrite({
     address: StaqeFarm,
@@ -276,7 +261,7 @@ export default function LinqStakeTabMenu({
         <input
           type="number"
           id="stakeInput"
-          className="w-full border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
+          className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
           value={_amountLinQ} // Display the current value
           style={{ fontFamily: "ethnocentricRg" }}
           onChange={(e) => {
@@ -289,7 +274,7 @@ export default function LinqStakeTabMenu({
             {" "}
             <button
               style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans w-32 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
+              className="font-sans w-64 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
               type="button"
               onClick={() => HandleStaQe()}
             >
@@ -301,7 +286,7 @@ export default function LinqStakeTabMenu({
             {" "}
             <button
               style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans  cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+              className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
               type="button"
               onClick={() => Approve()}
             >
@@ -311,26 +296,19 @@ export default function LinqStakeTabMenu({
         )}
         <div className="flex-row justify-center my-3 items-center"></div>
         <div className="flex-row justify-center my-3 items-center">
-          <button
-            onClick={() => Claim()}
-            style={{ fontFamily: "GroupeMedium" }}
-            className="font-sans  cursor-pointer text-md w-32 mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-            type="button"
-          >
-            Claim
-          </button>
+
           <button
             disabled={userdetails ? userdetails[0] < _amountLinQ : true}
             onClick={() => HandleUnStaQe()}
             style={{ fontFamily: "GroupeMedium" }}
-            className="font-sans cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+            className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
             type="button"
           >
             UnStake
           </button>
         </div>
         <div className="flex flex-col justify-center items-center my-3">
-          {Number(unlocktime?.toString()) < currentTime ? (
+          { Number(unlocktime?.toString()) !=0 && Number(unlocktime?.toString()) < currentTime ? (
             <button
               onClick={() => PerpSwitch()}
               style={{ fontFamily: "GroupeMedium" }}
