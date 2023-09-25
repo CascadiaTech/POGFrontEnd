@@ -13,6 +13,7 @@ import {
 } from "wagmi";
 import linqabi from "../../contracts/abi/abi.json";
 import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
@@ -31,6 +32,7 @@ export default function NewStakeComponent(_token: any) {
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ] = useState(0);
@@ -264,18 +266,18 @@ export default function NewStakeComponent(_token: any) {
 
   return (
     <>
-      <div className={"flex flex-col mt-60"}>
+      <div className={"flex flex-col -mt-60"}>
         <div
           style={{
             background:
               "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
           }}
           className={
-            "flex flex-col self-center rounded-xl w-fit h-fit px-2 mx-5 md:px-10 py-3 mx-auto opacity-90"
+            "flex flex-col self-center rounded-xl w-fit h-fit px-2 mx-2 md:px-10 py-3 opacity-90"
           }
         >
           <h1
-            className="text-lg mb-2 md:text-xl lg:text-2xl font-semibold text-white"
+            className="text-xl mb-2 md:text-xl lg:text-2xl font-semibold text-white"
             style={{ fontFamily: "Azonix" }}
           >
             User Statistics
@@ -297,7 +299,7 @@ export default function NewStakeComponent(_token: any) {
               >
                 LP In wallet <br /> {MilqBalance? (MilqBalance).toFixed(2) : "0" }{" "}
       
-                Linq
+                LP Tokens
               </h2>
               <h2
                 style={{
@@ -360,14 +362,21 @@ export default function NewStakeComponent(_token: any) {
               >
                 Qompound
               </button>
-              <button
-              onClick={()=> ClaimLP()}
-                style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                type="button"
-              >
-                Send me LP
-              </button>
+              
+        {loading ? (
+          <Spin indicator={antIcon} className="add-spinner" />
+        ) : (
+          <>
+          <button
+          onClick={()=> ClaimLP()}
+            style={{ fontFamily: "GroupeMedium" }}
+            className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+            type="button"
+          >
+            Send me LP
+          </button>
+          </>
+        )}
             </div>
           </div>
         </div>
@@ -382,7 +391,7 @@ export default function NewStakeComponent(_token: any) {
               background:
                 "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
             }}
-            className={`flex absolute ml-96 -translate-x-72 md:-translate-x-52 -translate-y-64 z-20 h-12 w-52 mb-10 rounded-full bg-gray-200 ${
+            className={`flex absolute ml-96 -translate-x-72 -translate-y-56 md:-translate-y-48 md:-translate-x-52 z-20 h-12 w-52 mb-10 rounded-full bg-gray-200 ${
               isLpStakeOpen ? "bg-gray-200" : ""
             }`}
           >

@@ -265,7 +265,10 @@ export default function LinqStakeTabMenu({
           value={_amountLinQ} // Display the current value
           style={{ fontFamily: "ethnocentricRg" }}
           onChange={(e) => {
-            const value = e.target.valueAsNumber; // Get the input value as a number
+            const value = e.target.valueAsNumber;
+            if (!isNaN(value) && value >= 0) {
+              set_amountLinQ(value); // Update the input value only if it's a valid positive number
+            }
             set_amountLinQ(value);
           }}
         />
