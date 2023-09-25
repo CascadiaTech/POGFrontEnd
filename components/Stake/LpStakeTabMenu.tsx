@@ -32,17 +32,17 @@ export default function LpStakeTabMenu({
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
  // const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
- const StaqeFarm = "0x41BEEBfAAE60bbc620e0667971Be1372537E6521"
+ const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De"
   let current_chain = 5;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
   const [_amountMilQ, set_amountMilQ] = useState(0);
-  const [updatevar, setupdatevar] = useState("");
+
 
   // Connect to an Ethereum node
 
   // Fetch the current block number
-  const [currentTime, setCurrentTime]: any = useState(0);
+  let [currentTime, setCurrentTime]: any = useState(0);
 
   useEffect(() => {
     const web3 =
@@ -74,7 +74,7 @@ export default function LpStakeTabMenu({
     account: address,
     args: [StaqeFarm, Number(allowance_default) * 10 ** 18],
   });
-  const [Allowance, setAllowance]: any = useState(0);
+  let [Allowance, setAllowance]: any = useState(0);
 
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
@@ -176,7 +176,6 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
-      setupdatevar("updatestaqe");
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -188,16 +187,14 @@ export default function LpStakeTabMenu({
     try {
 
       unStaQe();
-      setupdatevar("updateunstq");
     } catch (error) {
       console.error("Staking failed:", error);
     }
   }
 
-  const [userdetails, setUserDetails]: any = useState();
+  let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [ownedTill, setOwnedTill]: any = useState(32503680000);
-  const [pendingrewardsaddon, setPendingRewardsAddon] = useState(0);
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -209,7 +206,6 @@ export default function LpStakeTabMenu({
       setUnlockTime(Number(data[2].toString()));
       setOwned(data[10]);
       setOwnedTill(data[8]);
-      setPendingRewardsAddon(Number(data[6].toString()) / 10 ** 18);
     },
   });
 
@@ -232,10 +228,23 @@ export default function LpStakeTabMenu({
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
+  const [timer, setTimer] = useState(0);
 
+  // Create a useEffect hook to update the timer every 10 seconds
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // Update the timer state variable every 10 seconds
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 4000); // 10,000 milliseconds = 10 seconds
+
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [timer]);
   useEffect(() => {
     FetchDetails();
-  }, [address, Allowance, userdetails, updatevar, _amountMilQ, currentTime, owned]);
+  }, [userdetails]);
   /*
           <button
             onClick={() => Claim()}

@@ -37,7 +37,7 @@ export default function LinqStakeTabMenu({
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   //const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
-  const StaqeFarm = "0x41BEEBfAAE60bbc620e0667971Be1372537E6521";
+  const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
   const glinq = "0xfDD301D6D353F1DfC5E9d319C245B46E4C4f2CA6";
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
@@ -64,7 +64,7 @@ export default function LinqStakeTabMenu({
         console.error(error);
       });
   });
-  const [userdetails, setUserDetails]: any = useState();
+  let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
   const { data: UserDetails } = useContractRead({
@@ -128,7 +128,7 @@ export default function LinqStakeTabMenu({
       setupdate("updateallowance");
     },
   });
-  const [Allowance, setAllowance]: any = useState(0);
+  let [Allowance, setAllowance]: any = useState(0);
 
   const { data: allowance } = useContractRead({
     address: linqAddress,
@@ -162,6 +162,21 @@ export default function LinqStakeTabMenu({
       });
     },
   });
+  const [timer, setTimer] = useState(0);
+
+  // Create a useEffect hook to update the timer every 10 seconds
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // Update the timer state variable every 10 seconds
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 10000); // 10,000 milliseconds = 10 seconds
+
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [timer]);
+
   /// rented till 2
   const { write: PerpSwitch, isLoading: perpLoad } = useContractWrite({
     address: StaqeFarm,
@@ -270,7 +285,9 @@ export default function LinqStakeTabMenu({
   useEffect(() => {
     FetchDetails();
   }, [
-    address,
+    userdetails
+  ]);
+/*
     Allowance,
     userdetails,
     _amountLinQ,
@@ -280,8 +297,7 @@ export default function LinqStakeTabMenu({
     currentTime,
     owned,
     GAllowance,
-  ]);
-
+    */
   return (
     <div
       style={{
