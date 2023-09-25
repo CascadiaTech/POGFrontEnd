@@ -33,10 +33,23 @@ export default function NewStakeComponent(_token: any) {
   //const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
   const StaqeFarm = "0x41BEEBfAAE60bbc620e0667971Be1372537E6521"
   let current_chain = 5;
-  const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ] = useState(0);
 
   const [MilqBalance, setMilqBalance] = useState(0);
+  const [timer, setTimer] = useState(0);
+
+  // Create a useEffect hook to update the timer every 10 seconds
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // Update the timer state variable every 10 seconds
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 10000); // 10,000 milliseconds = 10 seconds
+
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const { data: BalanceOfMilq } = useContractRead({
     address: LPtokenContract,
@@ -202,7 +215,7 @@ export default function NewStakeComponent(_token: any) {
       SetShowPerpOptions(true);
     }
     FetchBalances();
-  }, [address]);
+  }, [address,timer]);
 
 
 
@@ -334,7 +347,7 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 ETH Per Day LinQ StaQing
-                <br /> {Linqapr && userdetails ? (Linqapr * (Number(userdetails[0].toString()) /10**10) * 86400).toFixed(3) : "0"}
+                <br /> {Linqapr && userdetails ? (Linqapr  * (Number(userdetails[0].toString()) / 10**18) * 86400).toFixed(3) : "0"}
               </h2>
               <h2
                 style={{
@@ -343,7 +356,7 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 Eth Per Day LP StaQing
-                <br /> {LPapr && userLPDetails ? (LPapr * (Number(userLPDetails[0].toString() )/ 10**18) * 86400).toFixed(3) : "0"}
+                <br /> {LPapr && userLPDetails ? (LPapr * (Number(userLPDetails[0].toString() ) / 10**18) * 86400).toFixed(3) : "0"}
               </h2>
               <button
                 onClick={() => Claim()}

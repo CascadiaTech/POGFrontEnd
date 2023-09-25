@@ -186,6 +186,7 @@ export default function LpStakeTabMenu({
       return;
     }
     try {
+      
       unStaQe();
       setupdatevar("updateunstq");
     } catch (error) {
@@ -218,6 +219,7 @@ export default function LpStakeTabMenu({
     abi: LPStakingabiObject,
     functionName: "bessies",
     chainId: current_chain,
+   
     onSuccess(data: any) {
       settotalLPStaked(Number(data.toString()) / 10 ** 18);
     },

@@ -310,7 +310,7 @@ const [update, setupdate] = useState("")
           </button>
         </div>
         <div className="flex flex-col justify-center items-center my-3">
-          { Number(unlocktime?.toString()) !=0 && Number(unlocktime?.toString()) < currentTime ? (
+          { Number(unlocktime?.toString()) !=0 && Number(unlocktime?.toString()) < currentTime && owned ==false ? (
             <button
               onClick={() => PerpSwitch()}
               style={{ fontFamily: "GroupeMedium" }}
