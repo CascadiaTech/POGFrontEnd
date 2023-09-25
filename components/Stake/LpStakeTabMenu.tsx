@@ -31,14 +31,12 @@ export default function LpStakeTabMenu({
   const { address } = useAccount();
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457"
+  const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
   let current_chain = 5;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
-
   const [_amountMilQ, set_amountMilQ] = useState(0);
-  const [updatevar, setupdatevar] = useState(false)
-
+  const [updatevar, setupdatevar] = useState(false);
 
   // Connect to an Ethereum node
 
@@ -64,16 +62,16 @@ export default function LpStakeTabMenu({
       .catch((error: any) => {
         console.error(error);
       });
-  },[address]);
+  }, [address]);
 
-  let allowance_default = _amountMilQ > 1 ? (_amountMilQ).toString() : "100"
+  let allowance_default = _amountMilQ > 1 ? _amountMilQ.toString() : "100";
   const { write: LPApprove } = useContractWrite({
     address: LPtokenContract,
     abi: LPTokenAbi,
     functionName: "approve",
     chainId: current_chain,
     account: address,
-    args: [StaqeFarm, Number(allowance_default) * 10 **18],
+    args: [StaqeFarm, Number(allowance_default) * 10 ** 18],
   });
   const [Allowance, setAllowance]: any = useState(0);
 
@@ -87,7 +85,6 @@ export default function LpStakeTabMenu({
       setAllowance(Number(data.toString()) / 10 ** 18);
     },
   });
-
 
   //Begin all functions for Regular Linq Staqing
   const { write: unStaQe } = useContractWrite({
@@ -105,8 +102,7 @@ export default function LpStakeTabMenu({
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with UnStaQing please contact support if issue perists${err.cause}`,
+        title: `An error occured with UnStaQing please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -127,8 +123,7 @@ export default function LpStakeTabMenu({
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with switching please contact support if issue perists${err.cause}`,
+        title: `An error occured with switching please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -149,9 +144,7 @@ export default function LpStakeTabMenu({
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with Requesting Unlock please contact support if issue perists${err.cause}`,
-
+        title: `An error occured with Requesting Unlock please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -171,8 +164,7 @@ export default function LpStakeTabMenu({
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with UnStaqing please contact support if issue perists${err.cause}`,
+        title: `An error occured with UnStaqing please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -201,7 +193,7 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
-      setupdatevar(true)
+      setupdatevar(true);
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -212,7 +204,7 @@ export default function LpStakeTabMenu({
     }
     try {
       unStaQe();
-      setupdatevar(true)
+      setupdatevar(true);
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -220,8 +212,8 @@ export default function LpStakeTabMenu({
 
   const [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
-  const [ownedTill, setOwnedTill]:any = useState(32503680000)
-  const [pendingrewardsaddon,  setPendingRewardsAddon] = useState(0)
+  const [ownedTill, setOwnedTill]: any = useState(32503680000);
+  const [pendingrewardsaddon, setPendingRewardsAddon] = useState(0);
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -253,17 +245,16 @@ export default function LpStakeTabMenu({
     bessies;
     allowance;
 
-    setupdatevar(false)
-    console.log("test")
+    setupdatevar(false);
+    console.log("test");
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
 
   useEffect(() => {
     FetchDetails();
-    
   }, [address, allowance, userdetails, updatevar, _amountMilQ]);
-/*
+  /*
           <button
             onClick={() => Claim()}
             style={{ fontFamily: "GroupeMedium" }}
@@ -295,7 +286,8 @@ export default function LpStakeTabMenu({
           className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
           value={_amountMilQ} // Display the current value
           style={{ fontFamily: "ethnocentricRg" }}
-          onChange={(e) => { // Get the input value as a number
+          onChange={(e) => {
+            // Get the input value as a number
             set_amountMilQ(Number(e.target.value));
           }}
         />
@@ -326,7 +318,6 @@ export default function LpStakeTabMenu({
         )}
         <div className="flex-row justify-center my-3 items-center"></div>
         <div className="flex-row justify-center my-3 items-center">
-
           <button
             disabled={userdetails ? userdetails[0] < _amountMilQ : true}
             onClick={() => HandleUnStaQe()}
@@ -338,7 +329,8 @@ export default function LpStakeTabMenu({
           </button>
         </div>
         <div className="flex flex-col justify-center items-center my-3">
-          { Number(unlocktime?.toString()) > Number(currentTime.toString()) && owned == false  ? (
+          {Number(unlocktime?.toString()) > Number(currentTime.toString()) &&
+          owned == false ? (
             <button
               onClick={() => PerpSwitch()}
               style={{ fontFamily: "GroupeMedium" }}
@@ -369,39 +361,42 @@ export default function LpStakeTabMenu({
         className=" mt-5 opacity-90 flex flex-row transition-all duration-300 py-3"
       >
         <div
-           className={"text-md grid grid-cols-3 col-span-1 gap-2 px-3 py-3 mx-auto"}
+          className={
+            "text-md grid grid-cols-3 col-span-1 gap-2 px-3 py-3 mx-auto"
+          }
         >
           <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 md:w-40 border border-white px-2 py-2"
+            style={{ fontFamily: "GroupeMedium" }}
+            className="text-white md:w-40 text-sm px-2 py-2"
           >
             Your StaQed LP Balance: <br />{" "}
             {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} LP
           </h2>
- 
+
           <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
+            style={{ fontFamily: "GroupeMedium" }}
+            className="text-white md:w-40 text-sm px-2 py-2"
           >
-            Time Till Unlock: {unlocktime ? Number(unlocktime.toString())  - Number(currentTime.toString()) > 0 ? Number(unlocktime.toString())   -  Number(currentTime.toString()): "0" : "0" }
+            Time Till Unlock:{" "}
+            {unlocktime
+              ? Number(unlocktime.toString()) - Number(currentTime.toString()) >
+                0
+                ? Number(unlocktime.toString()) - Number(currentTime.toString())
+                : "0"
+              : "0"}
           </h2>
           <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
+            style={{ fontFamily: "GroupeMedium" }}
+            className="text-white md:w-40 text-sm px-2 py-2"
           >
-            Your pool percentage: <br />{" "}
+            Your pool %: <br />{" "}
             {userdetails
-              ? 
-                  ((Number(userdetails[0].toString()) /
-                  10 ** 18 /
-                  totalLPStaked
-                )*100).toFixed(3)
+              ? (
+                  (Number(userdetails[0].toString()) /
+                    10 ** 18 /
+                    totalLPStaked) *
+                  100
+                ).toFixed(3)
               : 0}
             %{" "}
           </h2>

@@ -343,31 +343,33 @@ export default function LinqStakeTabMenu({
         >
 
           <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white md:w-40 border border-white px-2 py-2"
+          style={{ fontFamily: "GroupeMedium" }}
+      
+            className="text-white md:w-40 text-sm px-2 py-2"
           >
-            Your StaQed Linq Balance: <br />{" "}
+            StaQed Linq: <br />{" "}
             {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0}{" "}
             Linq
           </h2>
      
           <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white md:w-40 border border-white px-2 py-2"
+          style={{ fontFamily: "GroupeMedium" }}
+ 
+            className="text-white md:w-40 text-sm  px-2 py-2"
           >
-           Time Till Unlock: {"0" }
+           Time Till Unlock: {unlocktime
+              ? Number(unlocktime.toString()) - Number(currentTime.toString()) >
+                0
+                ? Number(unlocktime.toString()) - Number(currentTime.toString())
+                : "0"
+              : "0"}
           </h2>
           <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
-            }}
-            className="text-white md:w-40 border border-white px-2 py-2"
+          style={{ fontFamily: "GroupeMedium" }}
+  
+            className="text-white md:w-40 text-sm px-2 py-2"
           >
-            Your pool percentage: <br />{" "}
+            Your Pool %: <br />{" "}
             {userdetails
               ? ((Number(userdetails[0].toString()) /
                   10 ** 18 /
