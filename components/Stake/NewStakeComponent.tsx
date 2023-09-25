@@ -222,7 +222,7 @@ export default function NewStakeComponent(_token: any) {
     abi: LPStakingabiObject,
     chainId: current_chain,
     functionName: "QompoundLinQ",
-    args: [100],
+    args: [10],
     account: address,
     onSuccess(data) {
       Swal.fire({

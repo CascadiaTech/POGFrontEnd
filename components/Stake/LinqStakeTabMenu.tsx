@@ -139,7 +139,6 @@ export default function LinqStakeTabMenu({
     chainId: current_chain,
     args: [address, StaqeFarm],
     onSuccess(data: any) {
-      setupdate("updateapprove");
       setAllowance(Number(data.toString()) / 10 ** 18);
     },
   });
