@@ -130,7 +130,7 @@ export default function LinqStakeTabMenu({
       });
     },
   });
-  let [Allowance, setAllowance]: any = useState(0);
+  let [Allowance, setAllowance]: any = useState();
 
   const { data: allowance } = useContractRead({
     address: linqAddress,
@@ -290,7 +290,10 @@ export default function LinqStakeTabMenu({
     Gallowance;
   }
   const [unlocktime, setUnlockTime]: any = useState();
-
+useEffect(() => {
+  allowance;
+  Gallowance
+},[_amountLinQ])
   useEffect(() => {
     FetchDetails();
     console.log("updates");
