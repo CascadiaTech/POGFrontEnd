@@ -160,6 +160,12 @@ export default function LinqStakeTabMenu({
     functionName: "staQe",
     args: [_amountLinQ * 10 ** 18, 0, 0],
     account: address,
+    onSuccess(data) {
+      Swal.fire({
+        icon: "success",
+        title: "you have successfully Staqed",
+      });
+    },
     onError(err) {
       Swal.fire({
         icon: "error",
@@ -168,19 +174,13 @@ export default function LinqStakeTabMenu({
     },
   });
 const [update, setupdate] = useState("")
-  function HandleStaQe() {
+  async function HandleStaQe() {
     if (!address) {
       return;
     }
     try {
-      StaQe();
+      await StaQe();
       setupdate("updatestage")
-      if (isSuccess) {
-        Swal.fire({
-          icon: "success",
-          title: "you have successfully StaQed your Linq",
-        });
-      }
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -234,7 +234,7 @@ const [update, setupdate] = useState("")
 
   useEffect(() => {
     FetchDetails();
-  }, [address, Allowance, userdetails, _amountLinQ, userdetails, update]);
+  }, [address, Allowance, userdetails, _amountLinQ, userdetails, update,totallinqStaked, currentTime]);
 
   return (
     <div
@@ -364,7 +364,7 @@ const [update, setupdate] = useState("")
                 0
                 ? Number(unlocktime.toString()) - Number(currentTime.toString())
                 : "0"
-              : "0"}
+              : "0"} Seconds
           </h2>
           <h2
           style={{ fontFamily: "GroupeMedium" }}
