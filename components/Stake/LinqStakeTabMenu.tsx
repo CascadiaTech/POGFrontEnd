@@ -355,20 +355,20 @@ export default function LinqStakeTabMenu({
             <></>
           )}
         </div>
-      </div>
-      <div
+      </div>   
+       <div
         style={{ fontFamily: "BebasNeue" }}
-        className=" mt-5 opacity-90 transition-all duration-300 py-3"
+        className=" mt-5 opacity-90 flex flex-row transition-all duration-300 py-3"
       >
         <div
-          className={"text-md grid grid-cols-3 col-span-1 gap-2 px-3 py-3 mx-auto"}
+           className={"text-md grid grid-cols-3 col-span-1 gap-2 px-3 py-3 mx-auto"}
         >
 
           <h2
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white md:w-40 border border-white px-2 py-2"
           >
             Your StaQed Linq Balance: <br />{" "}
             {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0}{" "}
@@ -379,7 +379,7 @@ export default function LinqStakeTabMenu({
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white md:w-40 border border-white px-2 py-2"
           >
            Time Till Unlock: {"0" }
           </h2>
@@ -387,7 +387,7 @@ export default function LinqStakeTabMenu({
             style={{
               boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
             }}
-            className="text-white mb-2 w-40 border border-white  px-2 py-2"
+            className="text-white md:w-40 border border-white px-2 py-2"
           >
             Your pool percentage: <br />{" "}
             {userdetails
