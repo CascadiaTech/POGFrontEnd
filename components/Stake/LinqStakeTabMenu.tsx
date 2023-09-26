@@ -11,7 +11,12 @@ import { ToastContainer, toast } from "react-toastify";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import linqABI from "../../contracts/abi/abi.json";
 import Image from "next/image";
-import { useAccount, useContractEvent, useContractRead, useContractWrite } from "wagmi";
+import {
+  useAccount,
+  useContractEvent,
+  useContractRead,
+  useContractWrite,
+} from "wagmi";
 import Web3 from "web3";
 import Swal from "sweetalert2";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
@@ -132,8 +137,7 @@ export default function LinqStakeTabMenu({
         title: "you have successfully Approved",
       });
 
-        setAllowance(Number(allowance_default) * 10 ** 18);
-
+      setAllowance(Number(allowance_default) * 10 ** 18);
     },
   });
   let [Allowance, setAllowance]: any = useState();
@@ -258,8 +262,8 @@ export default function LinqStakeTabMenu({
       return;
     }
     try {
-       StaQe();
-      FetchDetails() 
+      StaQe();
+      FetchDetails();
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -267,37 +271,52 @@ export default function LinqStakeTabMenu({
   useContractEvent({
     address: StaqeFarm,
     abi: LPStakingabiObject,
-    eventName: 'newStaQe',
+    eventName: "newStaQe",
     listener(logs) {
-      // Assuming you are iterating through the logs
       logs.forEach((log) => {
-        // Use type assertions to access the `args` property
         const { args } = log as Log & { args: { linq: Number } };
-        console.log(args, "these are my args")
-        // Extract the `linq` value
         const linqStaked = args.linq;
-  
-        console.log(linqStaked, "this is my linqstaked")
         const linqStakedNumber = Number(linqStaked) / 10 ** 18;
-        console.log(linqStakedNumber, "this is my stakedNumber")
-  
-        // Add the value to your linqBalance
-        //setLinqBalance((prevBalance) => prevBalance + linqStakedNumber);
+        console.log(linqStakedNumber, "this is my stakedNumber");
+        const updatedUserDetails = { ...userdetails };
+        updatedUserDetails[0] = (updatedUserDetails[0] || 0) + linqStakedNumber;
+        setUserDetails(updatedUserDetails);
       });
     },
     chainId: current_chain,
-  })
-
+  });
 
   function HandleUnStaQe() {
     if (!address) {
       return;
     }
+    if (address ) {
+      Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
+        showCancelButton: true, // Show Cancel button
+        confirmButtonText: "Continue", // Change the Confirm button text
+        cancelButtonText: "Cancel", // Add a Cancel button
+      }).then((result) => {
+        if (result.isConfirmed) {
+          try {
+            setupdate("updatesunstake");
+            unStaQe();
+          } catch (error) {
+            console.error("Unstaking failed:", error);
+          }
+        }
+      });
+
+      return; // Exit the function
+    }
+
     try {
       setupdate("updatesunstake");
       unStaQe();
-      FetchDetails() 
     } catch (error) {
+      console.error("Staking failed:", error);
       console.error("Unstaking failed:", error);
     }
   }
@@ -321,10 +340,20 @@ export default function LinqStakeTabMenu({
     Gallowance;
   }
   const [unlocktime, setUnlockTime]: any = useState();
-useEffect(() => {
-  allowance;
-  Gallowance
-},[_amountLinQ])
+  useEffect(() => {
+    allowance;
+    Gallowance;
+    FetchDetails();
+    const intervalId = setInterval(() => {
+      UserDetails;
+      FetchDetails();
+    }, 3000);
+
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [_amountLinQ]);
 
   useEffect(() => {
     FetchDetails();
@@ -357,10 +386,7 @@ useEffect(() => {
               //   let value = e.target.valueAsNumber; // Get the input value as a number
               let inputValue = Number(e.target.value); // Parse the input value as a number
               if (inputValue < 0) {
-                // If the input is negative, reset it to a positive value or display an error message
-                set_amountLinQ(0); // You can choose to set it to 0 or any other default value
-                // Alternatively, you can display an error message to the user
-                // console.error('Please enter a positive number');
+                set_amountLinQ(0);
               } else {
                 set_amountLinQ(inputValue);
               }
@@ -435,21 +461,29 @@ useEffect(() => {
                   </>
                 ) : (
                   <>
-                  {unstaqeLoad? (  <Spin
-                    size="large"
-                    indicator={antIcon}
-                    className="add-spinner"
-                  />) :(<>  <button
-                    disabled={userdetails ? userdetails[0] < _amountLinQ : true}
-                    onClick={() => HandleUnStaQe()}
-                    style={{ fontFamily: "GroupeMedium" }}
-                    className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                    type="button"
-                  >
-                    UnStake
-                  </button></>)}
+                    {unstaqeLoad ? (
+                      <Spin
+                        size="large"
+                        indicator={antIcon}
+                        className="add-spinner"
+                      />
+                    ) : (
+                      <>
+                        {" "}
+                        <button
+                          disabled={
+                            userdetails ? userdetails[0] < _amountLinQ : true
+                          }
+                          onClick={() => HandleUnStaQe()}
+                          style={{ fontFamily: "GroupeMedium" }}
+                          className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                          type="button"
+                        >
+                          UnStake
+                        </button>
+                      </>
+                    )}
                   </>
-                
                 )}
               </>
             )}
@@ -509,7 +543,9 @@ useEffect(() => {
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             StaQed Linq: <br />{" "}
-            {userdetails ? (Number(userdetails[0].toString()) / 10 ** 18).toFixed(3) : 0}{" "}
+            {userdetails
+              ? (Number(userdetails[0].toString()) / 10 ** 18).toFixed(3)
+              : 0}{" "}
             Linq
           </h2>
 
