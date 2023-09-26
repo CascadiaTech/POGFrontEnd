@@ -46,8 +46,10 @@ export default function LinqStakeTabMenu({
   //const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
   //const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
   //const StaqeFarm = "0xA109d1E62569A62aC54b4dC62EC655b1E47DF90A"
-  const StaqeFarm = "0x42B112b737ace792Ba333b527b7852e16a58684C";
+  //const StaqeFarm = "0x42B112b737ace792Ba333b527b7852e16a58684C";
+  const StaqeFarm = "0x1E35A6799dDBBB6a4666986C72D328cAC845f007"
   const glinq = "0xfDD301D6D353F1DfC5E9d319C245B46E4C4f2CA6";
+
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ]: any = useState();
@@ -99,9 +101,6 @@ export default function LinqStakeTabMenu({
     chainId: current_chain,
     account: address,
     args: [StaqeFarm, Number(linqstaked.toString()) * 10 ** 18],
-    onSuccess(data: any) {
-      setupdate("updateallowance");
-    },
     onError(err) {
       Swal.fire({
         icon: "error",
@@ -119,7 +118,6 @@ export default function LinqStakeTabMenu({
     args: [address, StaqeFarm],
     watch: true,
     onSuccess(data: any) {
-      setupdate("updateapprove");
       setGAllowance(Number(data.toString()) / 10 ** 18);
     },
   });
@@ -142,6 +140,7 @@ export default function LinqStakeTabMenu({
       });
 
       setAllowance(Number(allowance_default) * 10 ** 18);
+      setAllowance(Number(allowance_default) * 10 ** 18);
     },
   });
   let [Allowance, setAllowance]: any = useState();
@@ -158,19 +157,6 @@ export default function LinqStakeTabMenu({
     },
   });
 
-  const [pendingRewards, setPendingRewards] = useState(0);
-
-  const { data: PendingRewards } = useContractRead({
-    address: StaqeFarm,
-    abi: LPStakingabiObject,
-    functionName: "howMuchMilk",
-    chainId: current_chain,
-    watch: true,
-    args: [address],
-    onSuccess(data: any) {
-      setPendingRewards(Number(data[0].toString()) / 10 ** 18);
-    },
-  });
   //Begin all functions for Regular Linq Staqing
   const { write: unStaQe, isLoading: unstaqeLoad } = useContractWrite({
     address: StaqeFarm,
@@ -191,20 +177,6 @@ export default function LinqStakeTabMenu({
       });
     },
   });
-  const [timer, setTimer] = useState(0);
-
-  // Create a useEffect hook to update the timer every 10 seconds
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      // Update the timer state variable every 10 seconds
-      setTimer((prevTimer) => prevTimer + 1);
-    }, 10000); // 10,000 milliseconds = 10 seconds
-
-    // Clean up the interval when the component unmounts
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [timer]);
 
   /// rented till 2
   const { write: PerpSwitch, isLoading: perpLoad } = useContractWrite({
@@ -262,7 +234,7 @@ export default function LinqStakeTabMenu({
       });
     },
   });
-  const [update, setupdate] = useState("");
+
   async function HandleStaQe() {
     if (!address) {
       return;
@@ -277,21 +249,29 @@ export default function LinqStakeTabMenu({
   useContractEvent({
     address: StaqeFarm,
     abi: LPStakingabiObject,
-    eventName: "newStaQe",
+    eventName: 'newStaQe',
     listener(logs) {
+      // Assuming you are iterating through the logs
       logs.forEach((log) => {
+        // Use type assertions to access the `args` property
         const { args } = log as Log & { args: { linq: Number } };
+        console.log(args, "these are my args")
+        // Extract the `linq` value
         const linqStaked = args.linq;
+  
+        console.log(linqStaked, "this is my linqstaked")
         const linqStakedNumber = Number(linqStaked) / 10 ** 18;
-        console.log(linqStakedNumber, "this is my stakedNumber");
-        const updatedUserDetails = { ...userdetails };
-        updatedUserDetails[0] = (updatedUserDetails[0] || 0) + linqStakedNumber;
-        setUserDetails(updatedUserDetails);
+        console.log(linqStakedNumber, "this is my stakedNumber")
+  
+        // Add the value to your linqBalance
+        //setLinqBalance((prevBalance) => prevBalance + linqStakedNumber);
       });
     },
     chainId: current_chain,
-  });
+  })
 
+
+  const [update, setupdate] = useState('');
   function HandleUnStaQe() {
     if (!address) {
       return;
@@ -320,6 +300,7 @@ export default function LinqStakeTabMenu({
 
     try {
       unStaQe();
+      FetchDetails();
     } catch (error) {
       console.error("Staking failed:", error);
       console.error("Unstaking failed:", error);
@@ -340,7 +321,6 @@ export default function LinqStakeTabMenu({
 
   function FetchDetails() {
     UserDetails;
-    PendingRewards;
     daisys;
     allowance;
     Gallowance;
@@ -520,14 +500,24 @@ export default function LinqStakeTabMenu({
               <></>
             )}
             {owned ? (
-              <button
-                onClick={() => RequestUnlock()}
-                style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                type="button"
-              >
-                Request Unlock
-              </button>
+              <>
+                {unlockLoad ? (
+                  <Spin
+                    size="large"
+                    indicator={antIcon}
+                    className="add-spinner"
+                  />
+                ) : (
+                  <button
+                    onClick={() => RequestUnlock()}
+                    style={{ fontFamily: "GroupeMedium" }}
+                    className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                    type="button"
+                  >
+                    Request Unlock
+                  </button>
+                )}
+              </>
             ) : (
               <></>
             )}
