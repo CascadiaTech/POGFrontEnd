@@ -60,6 +60,7 @@ export default function NewStakeComponent(_token: any) {
     abi: LPTokenAbi,
     functionName: "balanceOf",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setMilqBalance(Number(data.toString()) / 10 ** 18);
@@ -73,6 +74,7 @@ export default function NewStakeComponent(_token: any) {
     abi: abiObject,
     functionName: "balanceOf",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setlinqBalance(Number(data.toString()) / 10 ** 18);
@@ -99,6 +101,7 @@ export default function NewStakeComponent(_token: any) {
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "checkEstMilQRewards",
+    watch: true,
     chainId: current_chain,
     args: [address],
     onSuccess(data: any) {
@@ -110,6 +113,7 @@ export default function NewStakeComponent(_token: any) {
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "viewHowMuchMilk",
+    watch: true,
     chainId: current_chain,
     args: [address],
     onSuccess(data: any) {
@@ -126,6 +130,7 @@ export default function NewStakeComponent(_token: any) {
     abi: LPStakingabiObject,
     functionName: "LinQerParlours",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
@@ -139,6 +144,7 @@ export default function NewStakeComponent(_token: any) {
     abi: LPStakingabiObject,
     functionName: "MilQerParlours",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setUserLPDetails(data);
@@ -150,6 +156,7 @@ export default function NewStakeComponent(_token: any) {
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
+    watch: true,
     functionName: "daisys",
     chainId: current_chain,
     onSuccess(data: any) {
@@ -162,6 +169,7 @@ export default function NewStakeComponent(_token: any) {
   const { data: totalVitaliksMilkShipments } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
+    watch: true,
     functionName: "totalVitaliksMilkShipments",
     chainId: current_chain,
     onSuccess(data: any) {
@@ -177,6 +185,7 @@ export default function NewStakeComponent(_token: any) {
     abi: LPStakingabiObject,
     functionName: "VitaliksMilkShipments",
     chainId: current_chain,
+    watch: true,
     args:[index? index : 1],
     onSuccess(data: any) {
       setLinqapr(Number(data[1].toString()) / 10**18);

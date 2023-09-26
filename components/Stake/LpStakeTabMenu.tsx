@@ -84,6 +84,7 @@ export default function LpStakeTabMenu({
     abi: LPTokenAbi,
     functionName: "allowance",
     chainId: current_chain,
+    watch: true,
     args: [address, StaqeFarm],
     onSuccess(data: any) {
       setAllowance(Number(data.toString()) / 10 ** 18);
@@ -234,6 +235,7 @@ export default function LpStakeTabMenu({
     abi: LPStakingabiObject,
     functionName: "MilQerParlours",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
@@ -247,6 +249,7 @@ export default function LpStakeTabMenu({
   const { data: bessies } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
+    watch: true,
     functionName: "bessies",
     chainId: current_chain,
 
@@ -281,19 +284,6 @@ export default function LpStakeTabMenu({
     FetchDetails();
   });
 
-  useEffect(() => {
-    allowance;
-  })
-  /*
-          <button
-            onClick={() => Claim()}
-            style={{ fontFamily: "GroupeMedium" }}
-            className="font-sans  cursor-pointer text-md w-32 mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-            type="button"
-          >
-            Claim
-          </button>
-*/
   return (
     <div
       style={{

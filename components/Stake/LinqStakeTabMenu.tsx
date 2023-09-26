@@ -76,6 +76,7 @@ export default function LinqStakeTabMenu({
     abi: LPStakingabiObject,
     functionName: "LinQerParlours",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
@@ -111,6 +112,7 @@ export default function LinqStakeTabMenu({
     functionName: "allowance",
     chainId: current_chain,
     args: [address, StaqeFarm],
+    watch: true,
     onSuccess(data: any) {
       setupdate("updateapprove");
       setGAllowance(Number(data.toString()) / 10 ** 18);
@@ -146,6 +148,7 @@ export default function LinqStakeTabMenu({
     functionName: "allowance",
     chainId: current_chain,
     args: [address, StaqeFarm],
+    watch: true,
     onSuccess(data: any) {
       setAllowance(Number(data.toString()) / 10 ** 18);
     },
@@ -158,6 +161,7 @@ export default function LinqStakeTabMenu({
     abi: LPStakingabiObject,
     functionName: "howMuchMilk",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setPendingRewards(Number(data[0].toString()) / 10 ** 18);
@@ -296,7 +300,6 @@ export default function LinqStakeTabMenu({
       return;
     }
     try {
-      setupdate("updatesunstake");
       unStaQe();
       FetchDetails() 
     } catch (error) {
@@ -309,6 +312,7 @@ export default function LinqStakeTabMenu({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "daisys",
+    watch: true,
     chainId: current_chain,
     onSuccess(data: any) {
       settotalLinqStaked(Number(data.toString()) / 10 ** 18);
@@ -323,15 +327,11 @@ export default function LinqStakeTabMenu({
     Gallowance;
   }
   const [unlocktime, setUnlockTime]: any = useState();
-useEffect(() => {
-  allowance;
-  Gallowance
-},[_amountLinQ])
+
 
   useEffect(() => {
     FetchDetails();
-    console.log("updates");
-  }, [userdetails]);
+  }, []);
 
   return (
     <div
