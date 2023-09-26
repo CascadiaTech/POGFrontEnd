@@ -49,6 +49,9 @@ module.exports = {
         "100vw": "100vw",
         "1000px": "1000px",
       },
+      screens: {
+        mdxl: "800px",
+      },
       clipPath: {
         mypolygon: "polygon(0 0, 100% 0, 0% 100%, 0 calc(100% - 6vw))",
         myoppositepolygon:

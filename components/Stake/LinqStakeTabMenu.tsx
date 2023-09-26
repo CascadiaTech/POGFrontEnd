@@ -11,13 +11,15 @@ import { ToastContainer, toast } from "react-toastify";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import linqABI from "../../contracts/abi/abi.json";
 import Image from "next/image";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { useAccount, useContractEvent, useContractRead, useContractWrite } from "wagmi";
 import Web3 from "web3";
 import Swal from "sweetalert2";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 import { abiObject } from "../../contracts/abi/abi.mjs";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
+import { Provider } from "react-redux";
+import { Log } from "viem";
 interface LpStakeTabMenuProps {
   _token: number;
   setToken: (value: number) => void;
@@ -41,7 +43,7 @@ export default function LinqStakeTabMenu({
   const glinq = "0xfDD301D6D353F1DfC5E9d319C245B46E4C4f2CA6";
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
-  const [_amountLinQ, set_amountLinQ]:any = useState();
+  const [_amountLinQ, set_amountLinQ]: any = useState();
 
   const notify = () => toast("Wow so easy !");
   useEffect(() => {
@@ -66,6 +68,7 @@ export default function LinqStakeTabMenu({
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
+
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -259,15 +262,63 @@ export default function LinqStakeTabMenu({
       console.error("Staking failed:", error);
     }
   }
+  useContractEvent({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    eventName: 'newStaQe',
+    listener(logs) {
+      // Assuming you are iterating through the logs
+      logs.forEach((log) => {
+        // Use type assertions to access the `args` property
+        const { args } = log as Log & { args: { linq: Number } };
+        console.log(args, "these are my args")
+        // Extract the `linq` value
+        const linqStaked = args.linq;
+  
+        console.log(linqStaked, "this is my linqstaked")
+        const linqStakedNumber = Number(linqStaked) / 10 ** 18;
+        console.log(linqStakedNumber, "this is my stakedNumber")
+  
+        // Add the value to your linqBalance
+        //setLinqBalance((prevBalance) => prevBalance + linqStakedNumber);
+      });
+    },
+    chainId: current_chain,
+  })
+
+
   function HandleUnStaQe() {
     if (!address) {
       return;
     }
+    if (unlocktime == 0 ) {
+      Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
+        showCancelButton: true, // Show Cancel button
+        confirmButtonText: "Continue", // Change the Confirm button text
+        cancelButtonText: "Cancel", // Add a Cancel button
+      }).then((result) => {
+        if (result.isConfirmed) {
+          unStaQe();
+          try {
+            setupdate("updatesunstake");
+            unStaQe();
+          } catch (error) {
+            console.error("Unstaking failed:", error);
+          }
+        }
+      });
+
+      return; // Exit the function
+    }
+
     try {
       setupdate("updatesunstake");
       unStaQe();
     } catch (error) {
-      console.error("Staking failed:", error);
+      console.error("Unstaking failed:", error);
     }
   }
 
@@ -293,7 +344,7 @@ export default function LinqStakeTabMenu({
 
   useEffect(() => {
     FetchDetails();
-    console.log("updates")
+    console.log("updates");
   }, [userdetails]);
 
   return (
@@ -377,15 +428,17 @@ export default function LinqStakeTabMenu({
             {unstaqeLoad ? (
               <Spin size="large" indicator={antIcon} className="add-spinner" />
             ) : (
-              <button
-                disabled={userdetails ? userdetails[0] < _amountLinQ : true}
-                onClick={() => HandleUnStaQe()}
-                style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                type="button"
-              >
-                UnStake
-              </button>
+              <>
+                <button
+                  disabled={userdetails ? userdetails[0] < _amountLinQ : true}
+                  onClick={() => HandleUnStaQe()}
+                  style={{ fontFamily: "GroupeMedium" }}
+                  className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                  type="button"
+                >
+                  UnStake
+                </button>
+              </>
             )}
           </div>
           <div className="flex flex-col justify-center items-center my-3">

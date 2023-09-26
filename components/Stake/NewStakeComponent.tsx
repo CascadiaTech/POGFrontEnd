@@ -286,7 +286,7 @@ export default function NewStakeComponent(_token: any) {
 
   return (
     <>
-      <div className={"flex flex-col -mt-20 sm:-translate-y-40 mt-16 "}>
+      <div className={"flex flex-col -mt-20 sm:-translate-y-40 md:-translate-y-96 mdxl:translate-y-72 lg:translate-y-40    "}>
         <div
           style={{
             background:
@@ -371,7 +371,7 @@ export default function NewStakeComponent(_token: any) {
                 className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
               >
-                Send me ETH
+                Claim My ETH
               </button>
               <button
               disabled={pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon == 0}
@@ -393,7 +393,7 @@ export default function NewStakeComponent(_token: any) {
             className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
             type="button"
           >
-            Send me LP
+            Claim My LP
           </button>
         </>
       )}
