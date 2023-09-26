@@ -141,6 +141,7 @@ export default function LinqStakeTabMenu({
       });
 
       setAllowance(Number(allowance_default) * 10 ** 18);
+      setAllowance(Number(allowance_default) * 10 ** 18);
     },
   });
   let [Allowance, setAllowance]: any = useState();
@@ -246,15 +247,63 @@ export default function LinqStakeTabMenu({
       console.error("Staking failed:", error);
     }
   }
+  useContractEvent({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    eventName: 'newStaQe',
+    listener(logs) {
+      // Assuming you are iterating through the logs
+      logs.forEach((log) => {
+        // Use type assertions to access the `args` property
+        const { args } = log as Log & { args: { linq: Number } };
+        console.log(args, "these are my args")
+        // Extract the `linq` value
+        const linqStaked = args.linq;
+  
+        console.log(linqStaked, "this is my linqstaked")
+        const linqStakedNumber = Number(linqStaked) / 10 ** 18;
+        console.log(linqStakedNumber, "this is my stakedNumber")
+  
+        // Add the value to your linqBalance
+        //setLinqBalance((prevBalance) => prevBalance + linqStakedNumber);
+      });
+    },
+    chainId: current_chain,
+  })
 
+
+  const [update, setupdate] = useState('');
   function HandleUnStaQe() {
     if (!address) {
       return;
     }
+    if (address) {
+      Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
+        showCancelButton: true, // Show Cancel button
+        confirmButtonText: "Continue", // Change the Confirm button text
+        cancelButtonText: "Cancel", // Add a Cancel button
+      }).then((result) => {
+        if (result.isConfirmed) {
+          try {
+            setupdate("updatesunstake");
+            unStaQe();
+          } catch (error) {
+            console.error("Unstaking failed:", error);
+          }
+        }
+      });
+
+      return; // Exit the function
+    }
+
     try {
       unStaQe();
       FetchDetails();
     } catch (error) {
+      console.error("Staking failed:", error);
       console.error("Unstaking failed:", error);
     }
   }
@@ -278,6 +327,20 @@ export default function LinqStakeTabMenu({
     Gallowance;
   }
   const [unlocktime, setUnlockTime]: any = useState();
+  useEffect(() => {
+    allowance;
+    Gallowance;
+    FetchDetails();
+    const intervalId = setInterval(() => {
+      UserDetails;
+      FetchDetails();
+    }, 3000);
+
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [_amountLinQ]);
 
   useEffect(() => {
     FetchDetails();
@@ -309,10 +372,7 @@ export default function LinqStakeTabMenu({
               //   let value = e.target.valueAsNumber; // Get the input value as a number
               let inputValue = Number(e.target.value); // Parse the input value as a number
               if (inputValue < 0) {
-                // If the input is negative, reset it to a positive value or display an error message
-                set_amountLinQ(0); // You can choose to set it to 0 or any other default value
-                // Alternatively, you can display an error message to the user
-                // console.error('Please enter a positive number');
+                set_amountLinQ(0);
               } else {
                 set_amountLinQ(inputValue);
               }
