@@ -293,6 +293,7 @@ useEffect(() => {
   allowance;
   Gallowance
 },[_amountLinQ])
+
   useEffect(() => {
     FetchDetails();
     console.log("updates");
@@ -469,7 +470,7 @@ useEffect(() => {
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             StaQed Linq: <br />{" "}
-            {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0}{" "}
+            {userdetails ? (Number(userdetails[0].toString()) / 10 ** 18).toFixed(3) : 0}{" "}
             Linq
           </h2>
 

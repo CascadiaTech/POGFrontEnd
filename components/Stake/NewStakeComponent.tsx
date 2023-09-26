@@ -45,13 +45,13 @@ export default function NewStakeComponent(_token: any) {
     const intervalId = setInterval(() => {
       // Update the timer state variable every 10 seconds
       setTimer((prevTimer) => prevTimer + 1);
-    }, 10000); // 10,000 milliseconds = 10 seconds
+    }, 5000); // 10,000 milliseconds = 10 seconds
 
     // Clean up the interval when the component unmounts
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [timer]);
 
   const { data: BalanceOfMilq } = useContractRead({
     address: LPtokenContract,
@@ -88,19 +88,9 @@ export default function NewStakeComponent(_token: any) {
     setIsLinqStakeOpen(!isLinqStakeOpen);
   };
 
-  const [Allowance, setAllowance]: any = useState();
 
-  const { data: allowance } = useContractRead({
-    address: linqAddress,
-    abi: linqabi,
-    functionName: "allowance",
-    chainId: current_chain,
-    args: [address, StaqeFarm],
-    onSuccess(data: any) {
-      setAllowance(Number(data.toString()) / 10 ** 18);
-    },
-  });
-  const [pendingRewards, setPendingRewards] = useState(0);
+
+  let [pendingRewards, setPendingRewards]:any = useState();
   const [pendingLP, setPendingLP]:any = useState(0)
 
   const { data: PendingLPRewards } = useContractRead({
@@ -125,9 +115,9 @@ export default function NewStakeComponent(_token: any) {
     },
   });
   let [userdetails, setUserDetails]: any = useState();
-  const [owned, setOwned] = useState(false);
-  const [pendingrewardsaddon,  setPendingRewardsAddon] = useState(0)
-  const [Linqpendingrewardsaddon,  setLinqPendingRewardsAddon] = useState(0)
+
+  let [pendingrewardsaddon,  setPendingRewardsAddon]:any = useState()
+  let [Linqpendingrewardsaddon,  setLinqPendingRewardsAddon]:any = useState()
 
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
@@ -138,11 +128,10 @@ export default function NewStakeComponent(_token: any) {
     onSuccess(data: any) {
       setUserDetails(data);
       setUnlockTime(Number(data[2].toString()));
-      setOwned(data[11]);
       setLinqPendingRewardsAddon(Number(data[6].toString()) / 10 ** 18);
     },
   });
-  const [userLPDetails, setUserLPDetails]:any = useState()
+  let [userLPDetails, setUserLPDetails]:any = useState()
   const { data: UserDetailsLP } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -155,7 +144,7 @@ export default function NewStakeComponent(_token: any) {
     },
   });
   
-  const [totallinqStaked, settotalLinqStaked] = useState(0);
+  let [totallinqStaked, settotalLinqStaked] = useState(0);
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -178,15 +167,15 @@ export default function NewStakeComponent(_token: any) {
     },
   });
 
-  const [Linqapr, setLinqapr]:any = useState(0);
-  const [LPapr, setLPapr]:any = useState(0)
+  let [Linqapr, setLinqapr]:any = useState(0);
+  let [LPapr, setLPapr]:any = useState(0)
 
   const { data: VitaliksMilkShipments } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "VitaliksMilkShipments",
     chainId: current_chain,
-    args:[1],
+    args:[index? index : 1],
     onSuccess(data: any) {
       setLinqapr(Number(data[1].toString()) / 10**18);
       setLPapr(Number(data[2].toString()) / 10**18);
@@ -200,7 +189,6 @@ export default function NewStakeComponent(_token: any) {
     daisys;
     VitaliksMilkShipments;
     totalVitaliksMilkShipments;
-    allowance;
     UserDetailsLP
   }
 
@@ -211,9 +199,11 @@ export default function NewStakeComponent(_token: any) {
     BalanceOfMilq;
   }
   useEffect(() => {
-    FetchDetails();
+    FetchDetails()
     FetchBalances();
-  }, [userdetails]);
+    console.log("timerclicking")
+  }, [timer]);
+
 
 
 
@@ -229,6 +219,7 @@ export default function NewStakeComponent(_token: any) {
         icon: "success",
         title: "you have successfully Qompounded",
       });
+      FetchDetails()
     },
     onError(err) {
       Swal.fire({
@@ -258,13 +249,7 @@ export default function NewStakeComponent(_token: any) {
     },
   });
 
-  const RealClaimLP = () => {
-    setLoading(true);
-    ClaimLP(); 
-    setTimeout(() => {
-      setLoading(false); // Simulating the completion of the operation after a timeout
-    }, 2000); // Adjust the timeout as needed
-  };
+
   const { write: Claim } = useContractWrite({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -337,7 +322,7 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable ETH <br /> {pendingRewards ? pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon : "0"}
+                Claimable ETH <br /> {pendingRewards ? (pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon).toFixed(5) : "0"}
               </h2>
               <h2
                 style={{

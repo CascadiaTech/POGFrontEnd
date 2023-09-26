@@ -26,13 +26,12 @@ export default function LpStakeTabMenu({
   const [loading, setLoading] = useState(false);
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
- // const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
- const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De"
+  // const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
+  const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
   let current_chain = 5;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
   const [_amountMilQ, set_amountMilQ] = useState(0);
-
 
   // Connect to an Ethereum node
 
@@ -61,7 +60,7 @@ export default function LpStakeTabMenu({
   }, [address]);
 
   let allowance_default = _amountMilQ > 1 ? _amountMilQ.toString() : "100";
-  const { write: LPApprove } = useContractWrite({
+  const { write: LPApprove, isLoading: approveLoad } = useContractWrite({
     address: LPtokenContract,
     abi: LPTokenAbi,
     functionName: "approve",
@@ -83,7 +82,7 @@ export default function LpStakeTabMenu({
   });
 
   //Begin all functions for Regular Linq Staqing
-  const { write: unStaQe } = useContractWrite({
+  const { write: unStaQe, isLoading: unstaqeLoad } = useContractWrite({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "unstaQe",
@@ -103,7 +102,7 @@ export default function LpStakeTabMenu({
     },
   });
   /// rented till 2
-  const { write: PerpSwitch } = useContractWrite({
+  const { write: PerpSwitch, isLoading: perpLoad } = useContractWrite({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     chainId: current_chain,
@@ -145,7 +144,7 @@ export default function LpStakeTabMenu({
     },
   });
 
-  const { write: StaQe } = useContractWrite({
+  const { write: StaQe, isLoading: staqLoad } = useContractWrite({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "staQe",
@@ -265,91 +264,109 @@ export default function LpStakeTabMenu({
           Please enter the amount of tokens
         </h2>
         <div className="flex flex-col items-center justify-center">
-        <input
-          type="number"
-          id="stakeInput"
-          className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-          style={{ fontFamily: "ethnocentricRg" }}
-          onChange={(e) => {
-            // Get the input value as a number
-            set_amountMilQ(Number(e.target.value));
-          }}
-        />
-        {Allowance >= _amountMilQ ? (
-          <>
-            {" "}
-            {loading ? (
-              <Spin indicator={antIcon} className="add-spinner" />
+          <input
+            type="number"
+            id="stakeInput"
+            className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
+            style={{ fontFamily: "ethnocentricRg" }}
+            onChange={(e) => {
+              // Get the input value as a number
+              set_amountMilQ(Number(e.target.value));
+            }}
+          />
+          {Allowance >= _amountMilQ ? (
+            <>
+              {" "}
+              {staqLoad ? (
+                <Spin indicator={antIcon} className="add-spinner" />
+              ) : (
+                <>
+                  <button
+                    style={{ fontFamily: "GroupeMedium" }}
+                    className="font-sans w-64 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
+                    type="button"
+                    onClick={() => HandleStaQe()}
+                  >
+                    Stake
+                  </button>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {approveLoad ? (
+                <Spin indicator={antIcon} className="add-spinner" />
+              ) : (
+                <>
+                  <button
+                    style={{ fontFamily: "GroupeMedium" }}
+                    className="font-sans  cursor-pointer w-64 text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                    type="button"
+                    onClick={() => LPApprove()}
+                  >
+                    Approve
+                  </button>
+                </>
+              )}
+            </>
+          )}
+          <div className="flex-row justify-center my-3 items-center"></div>
+          <div className="flex-row justify-center my-3 items-center">
+            {unstaqeLoad ? (
+              <Spin size="large" indicator={antIcon} className="add-spinner" />
             ) : (
               <>
+                {" "}
                 <button
+                  disabled={userdetails ? userdetails[0] < _amountMilQ : true}
+                  onClick={() => HandleUnStaQe()}
                   style={{ fontFamily: "GroupeMedium" }}
-                  className="font-sans w-64 text-center cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-black border-white border-2 text-white bg-black py-2 "
+                  className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                   type="button"
-                  onClick={() => HandleStaQe()}
                 >
-                  Stake
+                  UnStake
                 </button>
               </>
             )}
-          </>
-        ) : (
-          <>
-            {loading ? (
-              <Spin indicator={antIcon} className="add-spinner" />
-            ) : (
+          </div>
+          <div className="flex flex-col justify-center items-center my-3">
+            {Number(unlocktime?.toString()) != 0 &&
+            Number(unlocktime?.toString()) < Number(currentTime.toString()) &&
+            owned == false ? (
               <>
-                <button
-                  style={{ fontFamily: "GroupeMedium" }}
-                  className="font-sans  cursor-pointer w-64 text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                  type="button"
-                  onClick={() => LPApprove()}
-                >
-                  Approve
-                </button>
+                {" "}
+                {perpLoad ? (
+                  <Spin
+                    size="large"
+                    indicator={antIcon}
+                    className="add-spinner"
+                  />
+                ) : (
+                  <button
+                    onClick={() => PerpSwitch()}
+                    style={{ fontFamily: "GroupeMedium" }}
+                    className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
+                    type="button"
+                  >
+                    Switch to Perpetual
+                  </button>
+                )}
               </>
+            ) : (
+              <></>
             )}
-          </>
-        )}
-        <div className="flex-row justify-center my-3 items-center"></div>
-        <div className="flex-row justify-center my-3 items-center">
-          <button
-            disabled={userdetails ? userdetails[0] < _amountMilQ : true}
-            onClick={() => HandleUnStaQe()}
-            style={{ fontFamily: "GroupeMedium" }}
-            className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-            type="button"
-          >
-            UnStake
-          </button>
-        </div>
-        <div className="flex flex-col justify-center items-center my-3">
-          {Number(unlocktime?.toString()) != 0 &&
-          Number(unlocktime?.toString()) < Number(currentTime.toString()) &&
-          owned == false ? (
-            <button
-              onClick={() => PerpSwitch()}
-              style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans ml-2 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-              type="button"
-            >
-              Switch to Perpetual
-            </button>
-          ) : (
-            <></>
-          )}
-          {owned && ownedTill == 32503680000 ? (
-            <button
-              onClick={() => RequestUnlock()}
-              style={{ fontFamily: "GroupeMedium" }}
-              className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-              type="button"
-            >
-              Request Unlock
-            </button>
-          ) : (
-            <></>
-          )}
+            {owned && ownedTill == 32503680000 ? (
+              <button
+                onClick={() => RequestUnlock()}
+                style={{ fontFamily: "GroupeMedium" }}
+                className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                type="button"
+              >
+                Request Unlock
+              </button>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>
@@ -387,7 +404,7 @@ export default function LpStakeTabMenu({
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             Your pool %: <br />{" "}
-            {userdetails
+            {userdetails && totalLPStaked
               ? (
                   (Number(userdetails[0].toString()) /
                     10 ** 18 /
