@@ -175,6 +175,7 @@ export default function LpStakeTabMenu({
     },
   });
 
+  const [update, setupdate] = useState("");
   function HandleStaQe() {
     if (!address) {
       return;
@@ -190,13 +191,38 @@ export default function LpStakeTabMenu({
     if (!address) {
       return;
     }
+    if (unlocktime == 0 ) {
+      Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
+        showCancelButton: true, // Show Cancel button
+        confirmButtonText: "Continue", // Change the Confirm button text
+        cancelButtonText: "Cancel", // Add a Cancel button
+      }).then((result) => {
+        if (result.isConfirmed) {
+          unStaQe();
+          try {
+            setupdate("updatesunstake");
+            unStaQe();
+          } catch (error) {
+            console.error("Unstaking failed:", error);
+          }
+        }
+      });
+
+      return; // Exit the function
+    }
+
     try {
+      setupdate("updatesunstake");
       unStaQe();
       
     } catch (error) {
-      console.error("Staking failed:", error);
+      console.error("Unstaking failed:", error);
     }
   }
+
 
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);

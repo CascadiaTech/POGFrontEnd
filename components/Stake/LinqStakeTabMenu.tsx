@@ -11,13 +11,15 @@ import { ToastContainer, toast } from "react-toastify";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import linqABI from "../../contracts/abi/abi.json";
 import Image from "next/image";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { useAccount, useContractEvent, useContractRead, useContractWrite } from "wagmi";
 import Web3 from "web3";
 import Swal from "sweetalert2";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 import { abiObject } from "../../contracts/abi/abi.mjs";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
+import { Provider } from "react-redux";
+import { Log } from "viem";
 interface LpStakeTabMenuProps {
   _token: number;
   setToken: (value: number) => void;
@@ -66,6 +68,7 @@ export default function LinqStakeTabMenu({
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
+
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -261,15 +264,41 @@ export default function LinqStakeTabMenu({
       console.error("Staking failed:", error);
     }
   }
+  useContractEvent({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    eventName: 'newStaQe',
+    listener(logs) {
+      // Assuming you are iterating through the logs
+      logs.forEach((log) => {
+        // Use type assertions to access the `args` property
+        const { args } = log as Log & { args: { linq: Number } };
+        console.log(args, "these are my args")
+        // Extract the `linq` value
+        const linqStaked = args.linq;
+  
+        console.log(linqStaked, "this is my linqstaked")
+        const linqStakedNumber = Number(linqStaked) / 10 ** 18;
+        console.log(linqStakedNumber, "this is my stakedNumber")
+  
+        // Add the value to your linqBalance
+        //setLinqBalance((prevBalance) => prevBalance + linqStakedNumber);
+      });
+    },
+    chainId: current_chain,
+  })
+
+
   function HandleUnStaQe() {
     if (!address) {
       return;
     }
     try {
+      setupdate("updatesunstake");
       unStaQe();
       FetchDetails() 
     } catch (error) {
-      console.error("Staking failed:", error);
+      console.error("Unstaking failed:", error);
     }
   }
 
