@@ -100,6 +100,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully UnStaQed your LP",
       });
+      FetchDetails() 
     },
     onError(err) {
       Swal.fire({
@@ -121,6 +122,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Switched to Perpetual",
       });
+      FetchDetails() 
     },
     onError(err) {
       Swal.fire({
@@ -142,6 +144,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Requested Unlock",
       });
+      FetchDetails() 
     },
     onError(err) {
       Swal.fire({
@@ -162,6 +165,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully StaQed your LP",
       });
+      FetchDetails() 
     },
     onError(err) {
       Swal.fire({
@@ -177,6 +181,7 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
+      
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -187,6 +192,7 @@ export default function LpStakeTabMenu({
     }
     try {
       unStaQe();
+      
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -245,11 +251,11 @@ export default function LpStakeTabMenu({
   }, [timer]);
   useEffect(() => {
     FetchDetails();
-  }, [userdetails]);
+  });
 
   useEffect(() => {
     allowance;
-  },[_amountMilQ])
+  })
   /*
           <button
             onClick={() => Claim()}

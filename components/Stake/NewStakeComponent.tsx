@@ -190,6 +190,7 @@ export default function NewStakeComponent(_token: any) {
     VitaliksMilkShipments;
     totalVitaliksMilkShipments;
     UserDetailsLP
+
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
@@ -201,7 +202,6 @@ export default function NewStakeComponent(_token: any) {
   useEffect(() => {
     FetchDetails()
     FetchBalances();
-    console.log("timerclicking")
   }, [timer]);
 
 
