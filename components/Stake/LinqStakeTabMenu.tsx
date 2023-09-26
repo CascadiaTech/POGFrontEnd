@@ -44,7 +44,9 @@ export default function LinqStakeTabMenu({
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   //const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
-  const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
+  //const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
+  //const StaqeFarm = "0xA109d1E62569A62aC54b4dC62EC655b1E47DF90A"
+  const StaqeFarm = "0x42B112b737ace792Ba333b527b7852e16a58684C";
   const glinq = "0xfDD301D6D353F1DfC5E9d319C245B46E4C4f2CA6";
   let current_chain = 5;
   const [currentTime, setCurrentTime]: any = useState(0);
@@ -79,6 +81,7 @@ export default function LinqStakeTabMenu({
     abi: LPStakingabiObject,
     functionName: "LinQerParlours",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
@@ -114,6 +117,7 @@ export default function LinqStakeTabMenu({
     functionName: "allowance",
     chainId: current_chain,
     args: [address, StaqeFarm],
+    watch: true,
     onSuccess(data: any) {
       setupdate("updateapprove");
       setGAllowance(Number(data.toString()) / 10 ** 18);
@@ -148,6 +152,7 @@ export default function LinqStakeTabMenu({
     functionName: "allowance",
     chainId: current_chain,
     args: [address, StaqeFarm],
+    watch: true,
     onSuccess(data: any) {
       setAllowance(Number(data.toString()) / 10 ** 18);
     },
@@ -160,6 +165,7 @@ export default function LinqStakeTabMenu({
     abi: LPStakingabiObject,
     functionName: "howMuchMilk",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setPendingRewards(Number(data[0].toString()) / 10 ** 18);
@@ -290,7 +296,7 @@ export default function LinqStakeTabMenu({
     if (!address) {
       return;
     }
-    if (address ) {
+    if (address) {
       Swal.fire({
         icon: "warning",
         title: "Warning",
@@ -313,7 +319,6 @@ export default function LinqStakeTabMenu({
     }
 
     try {
-      setupdate("updatesunstake");
       unStaQe();
     } catch (error) {
       console.error("Staking failed:", error);
@@ -326,6 +331,7 @@ export default function LinqStakeTabMenu({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "daisys",
+    watch: true,
     chainId: current_chain,
     onSuccess(data: any) {
       settotalLinqStaked(Number(data.toString()) / 10 ** 18);
@@ -357,8 +363,7 @@ export default function LinqStakeTabMenu({
 
   useEffect(() => {
     FetchDetails();
-    console.log("updates");
-  }, [userdetails]);
+  }, []);
 
   return (
     <div

@@ -27,7 +27,9 @@ export default function LpStakeTabMenu({
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   // const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
-  const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
+  //const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
+  //const StaqeFarm = "0xA109d1E62569A62aC54b4dC62EC655b1E47DF90A"
+  const StaqeFarm = "0x42B112b737ace792Ba333b527b7852e16a58684C"
   let current_chain = 5;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
@@ -82,6 +84,7 @@ export default function LpStakeTabMenu({
     abi: LPTokenAbi,
     functionName: "allowance",
     chainId: current_chain,
+    watch: true,
     args: [address, StaqeFarm],
     onSuccess(data: any) {
       setAllowance(Number(data.toString()) / 10 ** 18);
@@ -100,6 +103,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully UnStaQed your LP",
       });
+      FetchDetails() 
     },
     onError(err) {
       Swal.fire({
@@ -121,6 +125,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Switched to Perpetual",
       });
+      FetchDetails() 
     },
     onError(err) {
       Swal.fire({
@@ -142,6 +147,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Requested Unlock",
       });
+      FetchDetails() 
     },
     onError(err) {
       Swal.fire({
@@ -162,6 +168,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully StaQed your LP",
       });
+      FetchDetails() 
     },
     onError(err) {
       Swal.fire({
@@ -178,6 +185,7 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
+      
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -212,6 +220,7 @@ export default function LpStakeTabMenu({
     try {
       setupdate("updatesunstake");
       unStaQe();
+      
     } catch (error) {
       console.error("Unstaking failed:", error);
     }
@@ -226,6 +235,7 @@ export default function LpStakeTabMenu({
     abi: LPStakingabiObject,
     functionName: "MilQerParlours",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
@@ -239,6 +249,7 @@ export default function LpStakeTabMenu({
   const { data: bessies } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
+    watch: true,
     functionName: "bessies",
     chainId: current_chain,
 
@@ -271,21 +282,8 @@ export default function LpStakeTabMenu({
   }, [timer]);
   useEffect(() => {
     FetchDetails();
-  }, [userdetails]);
+  });
 
-  useEffect(() => {
-    allowance;
-  },[_amountMilQ])
-  /*
-          <button
-            onClick={() => Claim()}
-            style={{ fontFamily: "GroupeMedium" }}
-            className="font-sans  cursor-pointer text-md w-32 mx-4 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-            type="button"
-          >
-            Claim
-          </button>
-*/
   return (
     <div
       style={{

@@ -32,7 +32,9 @@ export default function NewStakeComponent(_token: any) {
   //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
   //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
   //const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
-  const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De"
+  //const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De"
+  //const StaqeFarm = "0xA109d1E62569A62aC54b4dC62EC655b1E47DF90A"
+  const StaqeFarm = "0x42B112b737ace792Ba333b527b7852e16a58684C"
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   let current_chain = 5;
   const [_amountLinQ, set_amountLinQ] = useState(0);
@@ -58,6 +60,7 @@ export default function NewStakeComponent(_token: any) {
     abi: LPTokenAbi,
     functionName: "balanceOf",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setMilqBalance(Number(data.toString()) / 10 ** 18);
@@ -71,6 +74,7 @@ export default function NewStakeComponent(_token: any) {
     abi: abiObject,
     functionName: "balanceOf",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setlinqBalance(Number(data.toString()) / 10 ** 18);
@@ -97,6 +101,7 @@ export default function NewStakeComponent(_token: any) {
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "checkEstMilQRewards",
+    watch: true,
     chainId: current_chain,
     args: [address],
     onSuccess(data: any) {
@@ -108,6 +113,7 @@ export default function NewStakeComponent(_token: any) {
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "viewHowMuchMilk",
+    watch: true,
     chainId: current_chain,
     args: [address],
     onSuccess(data: any) {
@@ -124,6 +130,7 @@ export default function NewStakeComponent(_token: any) {
     abi: LPStakingabiObject,
     functionName: "LinQerParlours",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
@@ -137,6 +144,7 @@ export default function NewStakeComponent(_token: any) {
     abi: LPStakingabiObject,
     functionName: "MilQerParlours",
     chainId: current_chain,
+    watch: true,
     args: [address],
     onSuccess(data: any) {
       setUserLPDetails(data);
@@ -148,6 +156,7 @@ export default function NewStakeComponent(_token: any) {
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
+    watch: true,
     functionName: "daisys",
     chainId: current_chain,
     onSuccess(data: any) {
@@ -160,6 +169,7 @@ export default function NewStakeComponent(_token: any) {
   const { data: totalVitaliksMilkShipments } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
+    watch: true,
     functionName: "totalVitaliksMilkShipments",
     chainId: current_chain,
     onSuccess(data: any) {
@@ -175,6 +185,7 @@ export default function NewStakeComponent(_token: any) {
     abi: LPStakingabiObject,
     functionName: "VitaliksMilkShipments",
     chainId: current_chain,
+    watch: true,
     args:[index? index : 1],
     onSuccess(data: any) {
       setLinqapr(Number(data[1].toString()) / 10**18);
@@ -190,6 +201,7 @@ export default function NewStakeComponent(_token: any) {
     VitaliksMilkShipments;
     totalVitaliksMilkShipments;
     UserDetailsLP
+
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
@@ -201,7 +213,6 @@ export default function NewStakeComponent(_token: any) {
   useEffect(() => {
     FetchDetails()
     FetchBalances();
-    console.log("timerclicking")
   }, [timer]);
 
 
@@ -322,7 +333,7 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable ETH <br /> {pendingRewards ? (pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon).toFixed(5) : "0"}
+                Claimable ETH <br /> {pendingRewards ? (pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon) : "0"}
               </h2>
               <h2
                 style={{
