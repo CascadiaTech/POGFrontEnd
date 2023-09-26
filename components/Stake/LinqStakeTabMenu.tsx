@@ -131,9 +131,12 @@ export default function LinqStakeTabMenu({
         icon: "success",
         title: "you have successfully Approved",
       });
+
+        setAllowance(Number(allowance_default) * 10 ** 18);
+
     },
   });
-  let [Allowance, setAllowance]: any = useState(0);
+  let [Allowance, setAllowance]: any = useState();
 
   const { data: allowance } = useContractRead({
     address: linqAddress,
@@ -142,7 +145,6 @@ export default function LinqStakeTabMenu({
     chainId: current_chain,
     args: [address, StaqeFarm],
     onSuccess(data: any) {
-      setupdate("updateapprove");
       setAllowance(Number(data.toString()) / 10 ** 18);
     },
   });
@@ -256,8 +258,8 @@ export default function LinqStakeTabMenu({
       return;
     }
     try {
-      await StaQe();
-      setupdate("updatestage");
+       StaQe();
+      FetchDetails() 
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -291,32 +293,10 @@ export default function LinqStakeTabMenu({
     if (!address) {
       return;
     }
-    if (unlocktime == 0 ) {
-      Swal.fire({
-        icon: "warning",
-        title: "Warning",
-        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
-        showCancelButton: true, // Show Cancel button
-        confirmButtonText: "Continue", // Change the Confirm button text
-        cancelButtonText: "Cancel", // Add a Cancel button
-      }).then((result) => {
-        if (result.isConfirmed) {
-          unStaQe();
-          try {
-            setupdate("updatesunstake");
-            unStaQe();
-          } catch (error) {
-            console.error("Unstaking failed:", error);
-          }
-        }
-      });
-
-      return; // Exit the function
-    }
-
     try {
       setupdate("updatesunstake");
       unStaQe();
+      FetchDetails() 
     } catch (error) {
       console.error("Unstaking failed:", error);
     }
@@ -341,6 +321,10 @@ export default function LinqStakeTabMenu({
     Gallowance;
   }
   const [unlocktime, setUnlockTime]: any = useState();
+useEffect(() => {
+  allowance;
+  Gallowance
+},[_amountLinQ])
 
   useEffect(() => {
     FetchDetails();
@@ -429,23 +413,51 @@ export default function LinqStakeTabMenu({
               <Spin size="large" indicator={antIcon} className="add-spinner" />
             ) : (
               <>
-                <button
-                  disabled={userdetails ? userdetails[0] < _amountLinQ : true}
-                  onClick={() => HandleUnStaQe()}
-                  style={{ fontFamily: "GroupeMedium" }}
-                  className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                  type="button"
-                >
-                  UnStake
-                </button>
+                {owned == true &&
+                GAllowance <= Number(userdetails[0].toString()) / 10 ** 18 ? (
+                  <>
+                    {glinqLoad ? (
+                      <Spin
+                        size="large"
+                        indicator={antIcon}
+                        className="add-spinner"
+                      />
+                    ) : (
+                      <button
+                        style={{ fontFamily: "GroupeMedium" }}
+                        className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                        type="button"
+                        onClick={() => ApproveGlinq()}
+                      >
+                        Approve Glinq
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <>
+                  {unstaqeLoad? (  <Spin
+                    size="large"
+                    indicator={antIcon}
+                    className="add-spinner"
+                  />) :(<>  <button
+                    disabled={userdetails ? userdetails[0] < _amountLinQ : true}
+                    onClick={() => HandleUnStaQe()}
+                    style={{ fontFamily: "GroupeMedium" }}
+                    className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                    type="button"
+                  >
+                    UnStake
+                  </button></>)}
+                  </>
+                
+                )}
               </>
             )}
           </div>
           <div className="flex flex-col justify-center items-center my-3">
             {Number(unlocktime?.toString()) != 0 &&
             Number(unlocktime?.toString()) < currentTime &&
-            owned == false &&
-            GAllowance >= Number(userdetails[0].toString()) / 10 ** 18 ? (
+            owned == false ? (
               <>
                 {" "}
                 {perpLoad ? (
@@ -466,33 +478,7 @@ export default function LinqStakeTabMenu({
                 )}
               </>
             ) : (
-              <>
-                {" "}
-                {glinqLoad ? (
-                  <Spin
-                    size="large"
-                    indicator={antIcon}
-                    className="add-spinner"
-                  />
-                ) : (
-                  <>
-                    {linqstaked &&
-                    Number(unlocktime?.toString()) != 0 &&
-                    Number(unlocktime?.toString()) < currentTime ? (
-                      <button
-                        style={{ fontFamily: "GroupeMedium" }}
-                        className="font-sans w-64 cursor-pointer text-md rounded-lg text-center border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                        type="button"
-                        onClick={() => ApproveGlinq()}
-                      >
-                        Approve Glinq
-                      </button>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                )}
-              </>
+              <></>
             )}
             {owned ? (
               <button
@@ -523,7 +509,7 @@ export default function LinqStakeTabMenu({
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             StaQed Linq: <br />{" "}
-            {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0}{" "}
+            {userdetails ? (Number(userdetails[0].toString()) / 10 ** 18).toFixed(3) : 0}{" "}
             Linq
           </h2>
 
