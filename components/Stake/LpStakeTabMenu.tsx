@@ -31,7 +31,7 @@ export default function LpStakeTabMenu({
   let current_chain = 5;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
-  const [_amountMilQ, set_amountMilQ] = useState(0);
+  const [_amountMilQ, set_amountMilQ]:any = useState();
 
   // Connect to an Ethereum node
 
@@ -67,8 +67,15 @@ export default function LpStakeTabMenu({
     chainId: current_chain,
     account: address,
     args: [StaqeFarm, Number(allowance_default) * 10 ** 18],
+    onSuccess(data: any) {
+      Swal.fire({
+        icon: "success",
+        title: "you have successfully Approved",
+      });
+      setAllowance(Number(allowance_default) * 10 ** 18);
+    },
   });
-  let [Allowance, setAllowance]: any = useState(0);
+  let [Allowance, setAllowance]: any = useState();
 
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
@@ -220,6 +227,7 @@ export default function LpStakeTabMenu({
     allowance;
   }
 
+
   const [unlocktime, setUnlockTime]: any = useState();
   const [timer, setTimer] = useState(0);
 
@@ -238,6 +246,10 @@ export default function LpStakeTabMenu({
   useEffect(() => {
     FetchDetails();
   }, [userdetails]);
+
+  useEffect(() => {
+    allowance;
+  },[_amountMilQ])
   /*
           <button
             onClick={() => Claim()}
@@ -310,7 +322,7 @@ export default function LpStakeTabMenu({
               )}
             </>
           )}
-          <div className="flex-row justify-center my-3 items-center"></div>
+  
           <div className="flex-row justify-center my-3 items-center">
             {unstaqeLoad ? (
               <Spin size="large" indicator={antIcon} className="add-spinner" />
@@ -329,7 +341,7 @@ export default function LpStakeTabMenu({
               </>
             )}
           </div>
-          <div className="flex flex-col justify-center items-center my-3">
+          <div className="flex flex-col justify-center items-center my-1">
             {Number(unlocktime?.toString()) != 0 &&
             Number(unlocktime?.toString()) < Number(currentTime.toString()) &&
             owned == false ? (

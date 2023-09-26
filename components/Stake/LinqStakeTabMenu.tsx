@@ -128,6 +128,9 @@ export default function LinqStakeTabMenu({
         icon: "success",
         title: "you have successfully Approved",
       });
+
+        setAllowance(Number(allowance_default) * 10 ** 18);
+
     },
   });
   let [Allowance, setAllowance]: any = useState();
@@ -252,8 +255,8 @@ export default function LinqStakeTabMenu({
       return;
     }
     try {
-      await StaQe();
-      setupdate("updatestage");
+       StaQe();
+      FetchDetails() 
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -263,8 +266,8 @@ export default function LinqStakeTabMenu({
       return;
     }
     try {
-      setupdate("updatesunstake");
       unStaQe();
+      FetchDetails() 
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -402,7 +405,12 @@ useEffect(() => {
                     )}
                   </>
                 ) : (
-                  <button
+                  <>
+                  {unstaqeLoad? (  <Spin
+                    size="large"
+                    indicator={antIcon}
+                    className="add-spinner"
+                  />) :(<>  <button
                     disabled={userdetails ? userdetails[0] < _amountLinQ : true}
                     onClick={() => HandleUnStaQe()}
                     style={{ fontFamily: "GroupeMedium" }}
@@ -410,7 +418,9 @@ useEffect(() => {
                     type="button"
                   >
                     UnStake
-                  </button>
+                  </button></>)}
+                  </>
+                
                 )}
               </>
             )}
