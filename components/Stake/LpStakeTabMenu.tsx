@@ -40,15 +40,17 @@ export default function LpStakeTabMenu({
   const [_amountMilQ, set_amountMilQ]: any = useState();
 
   let [currentTime, setCurrentTime]: any = useState(0);
-
+/*
   const { data } = useBlockNumber({
     chainId: current_chain,
     watch: true,
     onBlock(blockNumber) {
       setCurrentTime(blockNumber);
+      console.log(blockNumber)
     },
   });
-/*
+  */
+
   useEffect(() => {
     const web3 =
       current_chain == 1
@@ -62,14 +64,13 @@ export default function LpStakeTabMenu({
       .getBlock("latest")
       .then((block: { timestamp: any }) => {
         const timestamp = block.timestamp; // This is the block timestamp
-        console.log(`Current block timestamp: ${timestamp}`);
         setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
       })
       .catch((error: any) => {
         console.error(error);
       });
   }, [address]);
-*/
+
   let allowance_default = _amountMilQ > 1 ? _amountMilQ.toString() : "100";
   const { write: LPApprove, isLoading: approveLoad } = useContractWrite({
     address: LPtokenContract,
