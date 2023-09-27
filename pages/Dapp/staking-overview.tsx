@@ -15,6 +15,7 @@ const StackingOverview = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  /*
   const videoRefMobile = useRef(null);
   const videoRefNonMobile = useRef(null);
   const [isMobile, setIsMobile] = useState(Boolean);
@@ -41,6 +42,7 @@ const StackingOverview = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   console.log(isMobile);
+  */
 
   useEffect(() => {
     if (!address) {
@@ -53,31 +55,6 @@ const StackingOverview = () => {
       <HeaderComponent />
     </header>
     <main className={`${styles.mainPage} `}>
-    {isMobile ? (
-          <video
-            ref={videoRefMobile}
-            className="min-w-full z-0 min-h-full relative object-cover"
-            playsInline
-            autoPlay
-            loop
-            muted
-          >
-            <source src="/LinqMobileNew.mp4" type="video/mp4" />
-            Your browser does not support the video tag, update your browser
-          </video>
-        ) : (
-          <video
-            ref={videoRefNonMobile}
-            className="min-w-full z-0 min-h-full relative object-cover"
-            playsInline
-            autoPlay
-            loop
-            muted
-          >
-            <source src="/LinqDesktopNew.mp4" type="video/mp4" />
-            Your browser does not support the video tag, update your browser
-          </video>
-        )}
          <div className="absolute z-10">
        
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 m-auto">

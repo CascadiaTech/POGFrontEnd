@@ -240,11 +240,10 @@ export default function ClaimComponent() {
               23123.23213232312321321231232
               </p>
           </div> */}
-
-        {/* {loading ? (
+         {loading ? (
             <Spin indicator={antIcon} className="add-spinner" />
           ) : (
-            )}*/}
+            )}
         <>
           <div className="flex justify-center items-center mt-10 ">
             <button

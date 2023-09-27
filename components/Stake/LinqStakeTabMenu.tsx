@@ -42,22 +42,10 @@ export default function LinqStakeTabMenu({
 }: LpStakeTabMenuProps) {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { address } = useAccount();
-  const linqAddress = "0x1A5f0B4a408c3Cb75921AEC0Ea036F9984c0aA5C";
-  //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
-  //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  //const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
-  //const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
-  //const StaqeFarm = "0xA109d1E62569A62aC54b4dC62EC655b1E47DF90A"
-  //const StaqeFarm = "0x42B112b737ace792Ba333b527b7852e16a58684C";
-  //const StaqeFarm = "0x1E35A6799dDBBB6a4666986C72D328cAC845f007"
-  //  const StaqeFarm = "0x0B353638fAE8f6a0a044B631938D48198EE77292"
-  //const StaqeFarm = "0x6b238C42AC91ffbe3e84ca05f0c1b499ff4Ed666"
-  //const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
-  //const StaqeFarm = "0xcbCDa20794a8385122Ad460aDD50f1e077ddd798"
-  //const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329";
-  const StaqeFarm = "0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d";
+  const linqAddress = "0x3e34eabf5858a126cb583107e643080cee20ca64";
+  const StaqeFarm = "0xE4584C42A69F92Ffaa92AF5E7D5ff5e942F3cb34";
 
-  const glinq = "0xfDD301D6D353F1DfC5E9d319C245B46E4C4f2CA6";
+  const glinq = "0xe973Ea957fF5462B1076f5f61EF2df7A4B2f13d8";
 
   let { chain } = useNetwork()
 

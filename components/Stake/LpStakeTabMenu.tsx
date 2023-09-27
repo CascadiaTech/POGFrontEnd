@@ -30,12 +30,12 @@ export default function LpStakeTabMenu({
   const { address } = useAccount();
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   //const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
-  const StaqeFarm = "0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d";
+  const StaqeFarm = "0xE4584C42A69F92Ffaa92AF5E7D5ff5e942F3cb34";
 
   let { chain } = useNetwork();
 
   let current_chain = chain?.id;
-  const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
+  const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
 
   const [_amountMilQ, set_amountMilQ]: any = useState();
 
@@ -64,7 +64,7 @@ export default function LpStakeTabMenu({
       .getBlock("latest")
       .then((block: { timestamp: any }) => {
         const timestamp = block.timestamp; // This is the block timestamp
-        setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
+                setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
       })
       .catch((error: any) => {
         console.error(error);
@@ -113,7 +113,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully UnStaQed your LP",
       });
-      FetchDetails();
+      FetchDetails(); 
     },
     onError(err) {
       Swal.fire({
@@ -135,7 +135,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Switched to Perpetual",
       });
-      FetchDetails();
+      FetchDetails(); 
     },
     onError(err) {
       Swal.fire({
@@ -157,7 +157,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Requested Unlock",
       });
-      FetchDetails();
+      FetchDetails(); 
     },
     onError(err) {
       Swal.fire({
@@ -178,7 +178,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully StaQed your LP",
       });
-      FetchDetails();
+      FetchDetails(); 
     },
     onError(err) {
       Swal.fire({
@@ -202,7 +202,7 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
-    } catch (error) {
+          } catch (error) {
       console.error("Staking failed:", error);
     }
   }
@@ -263,16 +263,17 @@ export default function LpStakeTabMenu({
     }
 
     try {
-      unStaQe();
+            unStaQe();
     } catch (error) {
       console.error("Unstaking failed:", error);
     }
   }
 
+
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [ownedTill, setOwnedTill]: any = useState();
-  const [lpstaked, setlpstaked]:any = useState(0)
+const [lpstaked, setlpstaked]:any = useState(0)
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -282,7 +283,7 @@ export default function LpStakeTabMenu({
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
-      setlpstaked(Number(data[0].toString()) / 10**18)
+setlpstaked(Number(data[0].toString()) / 10**18)
       setUnlockTime(Number(data[2].toString()));
       setOwned(data[10]);
       setOwnedTill(Number(data[8].toString()));
@@ -309,7 +310,7 @@ export default function LpStakeTabMenu({
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
-
+  
   useEffect(() => {
     FetchDetails();
   },[]);
@@ -326,7 +327,7 @@ export default function LpStakeTabMenu({
         <h1 className="text-xl md:text-2xl mb-10 text-white">
           LP Token StaQing
         </h1>
-        {owned == true ? (        <h1 className="text-md  mb-6 text-white">
+{owned == true ? (        <h1 className="text-md  mb-6 text-white">
           You are Perpetually Staked
         </h1>) : (        <h1 className="text-md mb-6 text-white">
          You are in Basic Staking
@@ -381,7 +382,7 @@ export default function LpStakeTabMenu({
               )}
             </>
           )}
-
+  
           <div className="flex-row justify-center my-3 items-center">
             {unstaqeLoad ? (
               <Spin size="large" indicator={antIcon} className="add-spinner" />
@@ -440,7 +441,7 @@ export default function LpStakeTabMenu({
             )}
           </div>
         </div>
-        <div> {owned == true && ownedTill <= currentTime ? (<h1 className="text-white text-md">Your Perpetual StaQe has ended</h1>) : (<></>)}</div>
+<div> {owned == true && ownedTill <= currentTime ? (<h1 className="text-white text-md">Your Perpetual StaQe has ended</h1>) : (<></>)}</div>
         <div> { lpstaked > 0 &&  owned == false && unlocktime <= currentTime ? (<h1 className="text-white text-md">Your Regular StaQe has ended</h1>) : (<></>)}</div>
       </div>
       <div
@@ -469,13 +470,13 @@ export default function LpStakeTabMenu({
               <>
                 {" "}
                 {unlocktime && unlocktime > currentTime
-                  ? Number(unlocktime.toString()) -
+              ? Number(unlocktime.toString()) -
                       Number(currentTime.toString()) >
-                    0
-                    ? Number(unlocktime.toString()) -
+                0
+                ? Number(unlocktime.toString()) -
                       Number(currentTime.toString())
-                    : "0"
-                  : "0"}{" "}
+                : "0"
+              : "0"}{" "}
               </>
             ) : (
               <>

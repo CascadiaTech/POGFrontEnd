@@ -27,6 +27,7 @@ import {
     const publicClient = usePublicClient()
     const { data: walletClient } = useWalletClient()
     const [loading, setLoading] = useState(false);
+    /*
     const videoRefMobile = useRef(null);
     const videoRefNonMobile = useRef(null);
     const [isMobile, setIsMobile] = useState(Boolean);
@@ -53,10 +54,9 @@ import {
       return () => window.removeEventListener("resize", handleResize);
     }, []);
     console.log(isMobile);
-    
+    */
+
     console.log(address, "connected");
-  
-    
     useEffect(() => {
       if (address) {
         router.push("/Dapp/staking-overview");
@@ -70,32 +70,6 @@ import {
           <HeaderComponent></HeaderComponent>
         </header>{" "}
         <main className={`${styles.mainPage} `}>
-        {isMobile ? (
-            <video
-              ref={videoRefMobile}
-              className="min-w-full z-0 min-h-full relative object-cover"
-              playsInline
-              autoPlay
-              loop
-              muted
-            >
-              <source src="/LinqMobileNew.mp4" type="video/mp4" />
-              Your browser does not support the video tag, update your browser
-            </video>
-          ) : (
-            <video
-              ref={videoRefNonMobile}
-              className="min-w-full z-0 min-h-full relative object-cover"
-              playsInline
-              autoPlay
-              loop
-              muted
-            >
-              <source src="/LinqDesktopNew.mp4" type="video/mp4" />
-              Your browser does not support the video tag, update your browser
-            </video>
-          )}
-          {/* <div className="mt-12 w-[170px] sm:w-[300px] md:w-[350px] lg:w-[500px] "> */}
           <div className="z-10 absolute flex flex-col justify-center items-center w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px]  ">
             <div className="flex justify-center -mt-20 items-center self-center">
               <Image
