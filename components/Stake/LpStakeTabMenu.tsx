@@ -40,7 +40,7 @@ export default function LpStakeTabMenu({
   const [_amountMilQ, set_amountMilQ]: any = useState();
 
   let [currentTime, setCurrentTime]: any = useState(0);
-/*
+  /*
   const { data } = useBlockNumber({
     chainId: current_chain,
     watch: true,
@@ -64,7 +64,7 @@ export default function LpStakeTabMenu({
       .getBlock("latest")
       .then((block: { timestamp: any }) => {
         const timestamp = block.timestamp; // This is the block timestamp
-                setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
+        setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
       })
       .catch((error: any) => {
         console.error(error);
@@ -113,7 +113,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully UnStaQed your LP",
       });
-      FetchDetails(); 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -135,7 +135,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Switched to Perpetual",
       });
-      FetchDetails(); 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -157,7 +157,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Requested Unlock",
       });
-      FetchDetails(); 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -178,7 +178,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully StaQed your LP",
       });
-      FetchDetails(); 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -202,7 +202,7 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
-          } catch (error) {
+    } catch (error) {
       console.error("Staking failed:", error);
     }
   }
@@ -239,14 +239,14 @@ export default function LpStakeTabMenu({
 
       return; // Exit the function
     }
-    if (owned ==true && ownedTill < currentTime) {
+    if (owned == true && ownedTill < currentTime) {
       Swal.fire({
         icon: "warning",
         title: "Warning",
         text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
-        showCancelButton: true, 
+        showCancelButton: true,
         confirmButtonText: "Continue",
-        cancelButtonText: "Cancel", 
+        cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.isConfirmed) {
           unStaQe();
@@ -263,17 +263,29 @@ export default function LpStakeTabMenu({
     }
 
     try {
-            unStaQe();
+      unStaQe();
     } catch (error) {
       console.error("Unstaking failed:", error);
     }
   }
 
+  const [MilqBalance, setMilqBalance] = useState(0);
 
+  const { data: BalanceOfMilq } = useContractRead({
+    address: LPtokenContract,
+    abi: LPTokenAbi,
+    functionName: "balanceOf",
+    chainId: current_chain,
+    watch: true,
+    args: [address],
+    onSuccess(data: any) {
+      setMilqBalance(Number(data.toString()) / 10 ** 18);
+    },
+  });
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [ownedTill, setOwnedTill]: any = useState();
-const [lpstaked, setlpstaked]:any = useState(0)
+  const [lpstaked, setlpstaked]: any = useState(0);
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -283,7 +295,7 @@ const [lpstaked, setlpstaked]:any = useState(0)
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
-setlpstaked(Number(data[0].toString()) / 10**18)
+      setlpstaked(Number(data[0].toString()) / 10 ** 18);
       setUnlockTime(Number(data[2].toString()));
       setOwned(data[10]);
       setOwnedTill(Number(data[8].toString()));
@@ -306,14 +318,15 @@ setlpstaked(Number(data[0].toString()) / 10**18)
   function FetchDetails() {
     UserDetails;
     bessies;
+    BalanceOfMilq;
     allowance;
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
-  
+
   useEffect(() => {
     FetchDetails();
-  },[]);
+  }, []);
 
   return (
     <div
@@ -327,16 +340,19 @@ setlpstaked(Number(data[0].toString()) / 10**18)
         <h1 className="text-xl md:text-2xl mb-10 text-white">
           LP Token StaQing
         </h1>
-{owned == true ? (        <h1 className="text-md  mb-6 text-white">
-          You are Perpetually Staked
-        </h1>) : (        <h1 className="text-md mb-6 text-white">
-         You are in Basic Staking
-        </h1>)}
+        {owned == true ? (
+          <h1 className="text-md  mb-6 text-white">
+            You are Perpetually Staked
+          </h1>
+        ) : (
+          <h1 className="text-md mb-6 text-white">You are in Basic Staking</h1>
+        )}
         <h2 className="text-lg text-white">
           Please enter the amount of tokens
         </h2>
         <div className="flex flex-col items-center justify-center">
           <input
+            defaultValue={MilqBalance}
             type="number"
             id="stakeInput"
             className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
@@ -382,7 +398,7 @@ setlpstaked(Number(data[0].toString()) / 10**18)
               )}
             </>
           )}
-  
+
           <div className="flex-row justify-center my-3 items-center">
             {unstaqeLoad ? (
               <Spin size="large" indicator={antIcon} className="add-spinner" />
@@ -441,8 +457,24 @@ setlpstaked(Number(data[0].toString()) / 10**18)
             )}
           </div>
         </div>
-<div> {owned == true && ownedTill <= currentTime ? (<h1 className="text-white text-md">Your Perpetual StaQe has ended</h1>) : (<></>)}</div>
-        <div> { lpstaked > 0 &&  owned == false && unlocktime <= currentTime ? (<h1 className="text-white text-md">Your Regular StaQe has ended</h1>) : (<></>)}</div>
+        <div>
+          {" "}
+          {owned == true && ownedTill <= currentTime ? (
+            <h1 className="text-white text-md">
+              Your Perpetual StaQe has ended
+            </h1>
+          ) : (
+            <></>
+          )}
+        </div>
+        <div>
+          {" "}
+          {lpstaked > 0 && owned == false && unlocktime <= currentTime ? (
+            <h1 className="text-white text-md">Your Regular StaQe has ended</h1>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
       <div
         style={{ fontFamily: "Azonix" }}
@@ -453,28 +485,24 @@ setlpstaked(Number(data[0].toString()) / 10**18)
             "text-md grid grid-cols-3 col-span-1 gap-2 px-3 py-3 mx-auto"
           }
         >
-          <h2
-            className="text-white md:w-40 text-sm px-2 py-2"
-          >
+          <h2 className="text-white md:w-40 text-sm px-2 py-2">
             StaQed LP: <br />{" "}
             {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} LP
           </h2>
 
-          <h2
-            className="text-white md:w-40 text-sm px-2 py-2"
-          >
+          <h2 className="text-white md:w-40 text-sm px-2 py-2">
             Time Till Unlock:{" "}
             {owned == false ? (
               <>
                 {" "}
                 {unlocktime && unlocktime > currentTime
-              ? Number(unlocktime.toString()) -
+                  ? Number(unlocktime.toString()) -
                       Number(currentTime.toString()) >
-                0
-                ? Number(unlocktime.toString()) -
+                    0
+                    ? Number(unlocktime.toString()) -
                       Number(currentTime.toString())
-                : "0"
-              : "0"}{" "}
+                    : "0"
+                  : "0"}{" "}
               </>
             ) : (
               <>
@@ -491,9 +519,7 @@ setlpstaked(Number(data[0].toString()) / 10**18)
             )}{" "}
             Seconds
           </h2>
-          <h2
-            className="text-white md:w-40 text-sm px-2 py-2"
-          >
+          <h2 className="text-white md:w-40 text-sm px-2 py-2">
             Your pool %: <br />{" "}
             {userdetails && totalLPStaked
               ? (

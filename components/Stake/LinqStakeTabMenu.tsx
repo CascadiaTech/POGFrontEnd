@@ -47,12 +47,12 @@ export default function LinqStakeTabMenu({
 
   const glinq = "0xe973Ea957fF5462B1076f5f61EF2df7A4B2f13d8";
 
-  let { chain } = useNetwork()
+  let { chain } = useNetwork();
 
   let current_chain = chain?.id;
   const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ]: any = useState();
-/*
+  /*
   const { data } = useBlockNumber({
     chainId: current_chain,
     watch: true,
@@ -82,7 +82,7 @@ export default function LinqStakeTabMenu({
         console.error(error);
       });
   });
-  
+
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
@@ -297,7 +297,7 @@ export default function LinqStakeTabMenu({
 
       return; // Exit the function
     }
-    if (owned ==true && ownedTill < currentTime) {
+    if (owned == true && ownedTill < currentTime) {
       Swal.fire({
         icon: "warning",
         title: "Warning",
@@ -322,8 +322,7 @@ export default function LinqStakeTabMenu({
     try {
       unStaQe();
       FetchDetails();
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   const [totallinqStaked, settotalLinqStaked] = useState(0);
@@ -337,12 +336,25 @@ export default function LinqStakeTabMenu({
       settotalLinqStaked(Number(data.toString()) / 10 ** 18);
     },
   });
+  const [linqBalance, setlinqBalance] = useState(0);
 
+  const { data: BalanceOfLinq } = useContractRead({
+    address: linqAddress,
+    abi: abiObject,
+    functionName: "balanceOf",
+    chainId: current_chain,
+    watch: true,
+    args: [address],
+    onSuccess(data: any) {
+      setlinqBalance(Number(data.toString()) / 10 ** 18);
+    },
+  });
   function FetchDetails() {
     UserDetails;
     daisys;
     allowance;
     Gallowance;
+    BalanceOfLinq;
   }
   const [unlocktime, setUnlockTime]: any = useState();
   useEffect(() => {
@@ -377,17 +389,27 @@ export default function LinqStakeTabMenu({
           Linq Token StaQing
         </h1>
         <>
-        {owned == true ? (        <h1 className="text-md  mb-6 text-white">
-          You are Perpetually Staked
-        </h1>) : (        <h1 className="text-md mb-6 text-white">
-         You are in Basic Staking
-        </h1>)}
+          {owned == true ? (
+            <h1 className="text-md  mb-6 text-white">
+              You are Perpetually Staked
+            </h1>
+          ) : (
+            <h1 className="text-md mb-6 text-white">
+              You are in Basic Staking
+            </h1>
+          )}
         </>
         <h2 className="text-lg text-white">
           Please enter the amount of tokens
         </h2>
+
+        <h2 className="text-md my-1 text-white">
+          Available Linq To StaQe: {linqBalance}
+        </h2>
+
         <div className="flex flex-col items-center justify-center">
           <input
+            defaultValue={linqBalance}
             type="number"
             id="stakeInput"
             className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
@@ -536,7 +558,7 @@ export default function LinqStakeTabMenu({
                 ) : (
                   <>
                     {" "}
-                    {owned == true && ownedTill ==  32503680000 ? (
+                    {owned == true && ownedTill == 32503680000 ? (
                       <button
                         onClick={() => RequestUnlock()}
                         style={{ fontFamily: "GroupeMedium" }}
@@ -555,8 +577,26 @@ export default function LinqStakeTabMenu({
               <></>
             )}
           </div>
-          <div> {owned == true && ownedTill <= currentTime ? (<h1 className="text-white text-md">Your Perpetual StaQe has ended</h1>) : (<></>)}</div>
-        <div> {linqstaked > 0 && owned == false && unlocktime <= currentTime ? (<h1 className="text-white text-md">Your Regular StaQe has ended</h1>) : (<></>)}</div>
+          <div>
+            {" "}
+            {owned == true && ownedTill <= currentTime ? (
+              <h1 className="text-white text-md">
+                Your Perpetual StaQe has ended
+              </h1>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div>
+            {" "}
+            {linqstaked > 0 && owned == false && unlocktime <= currentTime ? (
+              <h1 className="text-white text-md">
+                Your Regular StaQe has ended
+              </h1>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
       </div>
       <div
@@ -568,9 +608,7 @@ export default function LinqStakeTabMenu({
             "text-md grid grid-cols-3 col-span-1 gap-2 px-3 py-3 mx-auto"
           }
         >
-          <h2
-            className="text-white md:w-40 text-sm px-2 py-2"
-          >
+          <h2 className="text-white md:w-40 text-sm px-2 py-2">
             StaQed Linq: <br />{" "}
             {userdetails
               ? (Number(userdetails[0].toString()) / 10 ** 18).toFixed(3)
@@ -578,9 +616,7 @@ export default function LinqStakeTabMenu({
             Linq
           </h2>
 
-          <h2
-            className="text-white md:w-40 text-sm  px-2 py-2"
-          >
+          <h2 className="text-white md:w-40 text-sm  px-2 py-2">
             Time Till Unlock:{" "}
             {owned == false ? (
               <>
@@ -609,9 +645,7 @@ export default function LinqStakeTabMenu({
             )}
             Seconds
           </h2>
-          <h2
-            className="text-white md:w-40 text-sm px-2 py-2"
-          >
+          <h2 className="text-white md:w-40 text-sm px-2 py-2">
             Your Pool %: <br />{" "}
             {userdetails
               ? (
