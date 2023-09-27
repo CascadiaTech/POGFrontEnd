@@ -78,13 +78,13 @@ export default function LpStakeTabMenu({
     functionName: "approve",
     chainId: current_chain,
     account: address,
-    args: [StaqeFarm, Number(allowance_default) * 10 ** 18],
+    args: [StaqeFarm, (Number(allowance_default) * 10 ** 18) * 1.2],
     onSuccess(data: any) {
       Swal.fire({
         icon: "success",
         title: "you have successfully Approved",
       });
-      setAllowance(Number(allowance_default) * 10 ** 18);
+      setAllowance((Number(allowance_default) * 10 ** 18) * 1.2);
     },
   });
   let [Allowance, setAllowance]: any = useState();
