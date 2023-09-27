@@ -117,7 +117,7 @@ export default function HeaderComponent() {
                         style={{ fontFamily: "Azonix" }}
                         className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
                       >
-                        <Link href={"/Dapp/LpStakingPage"}>Deprecated StaQing</Link>
+                        <Link href={"/Dapp/LpStakingPage"}>Depreciated StaQing</Link>
                       </li>
                       <li
                         style={{ fontFamily: "Azonix" }}
@@ -130,7 +130,7 @@ export default function HeaderComponent() {
                         style={{ fontFamily: "Azonix" }}
                       >
                         <Link href={"https://linktr.ee/linqgroup"}>
-                          Link Tree
+                          LinQ Tree
                         </Link>
                       </li>
                       <li>
