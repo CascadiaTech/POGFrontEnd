@@ -250,6 +250,7 @@ export default function LpStakeTabMenu({
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [ownedTill, setOwnedTill]: any = useState();
+  const [lpstaked, setlpstaked]:any = useState(0)
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -259,6 +260,7 @@ export default function LpStakeTabMenu({
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
+      setlpstaked(Number(data[0].toString()) / 10**18)
       setUnlockTime(Number(data[2].toString()));
       setOwned(data[10]);
       setOwnedTill(Number(data[8].toString()));
@@ -312,9 +314,14 @@ export default function LpStakeTabMenu({
       className="rounded-2xl px-3 w-fit py-3 opacity-90"
     >
       <div>
-        <h1 className="text-xl md:text-2xl mb-12 text-white">
+        <h1 className="text-xl md:text-2xl mb-10 text-white">
           LP Token StaQing
         </h1>
+        {owned == true ? (        <h1 className="text-md  mb-6 text-white">
+          You are Perpetually Staked
+        </h1>) : (        <h1 className="text-md mb-6 text-white">
+         You are in Basic Staking
+        </h1>)}
         <h2 className="text-lg text-white">
           Please enter the amount of tokens
         </h2>
@@ -424,6 +431,8 @@ export default function LpStakeTabMenu({
             )}
           </div>
         </div>
+        <div> {owned == true && ownedTill <= currentTime ? (<h1 className="text-white text-md">Your Perpetual StaQe has ended</h1>) : (<></>)}</div>
+        <div> { lpstaked > 0 &&  owned == false && unlocktime <= currentTime ? (<h1 className="text-white text-md">Your Regular StaQe has ended</h1>) : (<></>)}</div>
       </div>
       <div
         style={{ fontFamily: "BebasNeue" }}

@@ -366,9 +366,16 @@ export default function LinqStakeTabMenu({
       className="rounded-2xl px-3 w-fit py-3 opacity-90"
     >
       <div>
-        <h1 className="text-xl md:text-2xl mb-12 text-white">
+        <h1 className="text-xl md:text-2xl mb-10 text-white">
           Linq Token StaQing
         </h1>
+        <>
+        {owned == true ? (        <h1 className="text-md  mb-6 text-white">
+          You are Perpetually Staked
+        </h1>) : (        <h1 className="text-md mb-6 text-white">
+         You are in Basic Staking
+        </h1>)}
+        </>
         <h2 className="text-lg text-white">
           Please enter the amount of tokens
         </h2>
@@ -541,6 +548,8 @@ export default function LinqStakeTabMenu({
               <></>
             )}
           </div>
+          <div> {owned == true && ownedTill <= currentTime ? (<h1 className="text-white text-md">Your Perpetual StaQe has ended</h1>) : (<></>)}</div>
+        <div> {linqstaked > 0 && owned == false && unlocktime <= currentTime ? (<h1 className="text-white text-md">Your Regular StaQe has ended</h1>) : (<></>)}</div>
         </div>
       </div>
       <div
