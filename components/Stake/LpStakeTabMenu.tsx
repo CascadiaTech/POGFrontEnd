@@ -4,7 +4,13 @@ import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import Image from "next/image";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import {
+  useAccount,
+  useContractRead,
+  useContractWrite,
+  useBlockNumber,
+  useNetwork,
+} from "wagmi";
 import error from "next/error";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 import { LPabiObject } from "../../contracts/abi/LPTokenAbi.mjs";
@@ -23,26 +29,27 @@ export default function LpStakeTabMenu({
 }: LpStakeTabMenuProps) {
   const { address } = useAccount();
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-  const [loading, setLoading] = useState(false);
-  //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
-  //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  // const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
-  //const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
-  //const StaqeFarm = "0xA109d1E62569A62aC54b4dC62EC655b1E47DF90A"
-  //const StaqeFarm = "0x42B112b737ace792Ba333b527b7852e16a58684C"
-  //const StaqeFarm = "0x1E35A6799dDBBB6a4666986C72D328cAC845f007"
-  //const StaqeFarm = "0x0B353638fAE8f6a0a044B631938D48198EE77292"
-  //const StaqeFarm = "0x6b238C42AC91ffbe3e84ca05f0c1b499ff4Ed666"
-  //const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
-  //const StaqeFarm = "0xcbCDa20794a8385122Ad460aDD50f1e077ddd798"
-  const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
-  let current_chain = 5;
+  //const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
+  const StaqeFarm = "0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d";
+
+  let { chain } = useNetwork();
+
+  let current_chain = chain?.id;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
-  const [_amountMilQ, set_amountMilQ]:any = useState();
-
+  const [_amountMilQ, set_amountMilQ]: any = useState();
 
   let [currentTime, setCurrentTime]: any = useState(0);
+/*
+  const { data } = useBlockNumber({
+    chainId: current_chain,
+    watch: true,
+    onBlock(blockNumber) {
+      setCurrentTime(blockNumber);
+      console.log(blockNumber)
+    },
+  });
+  */
 
   useEffect(() => {
     const web3 =
@@ -57,7 +64,6 @@ export default function LpStakeTabMenu({
       .getBlock("latest")
       .then((block: { timestamp: any }) => {
         const timestamp = block.timestamp; // This is the block timestamp
-        console.log(`Current block timestamp: ${timestamp}`);
         setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
       })
       .catch((error: any) => {
@@ -107,7 +113,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully UnStaQed your LP",
       });
-      FetchDetails() 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -129,7 +135,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Switched to Perpetual",
       });
-      FetchDetails() 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -151,7 +157,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Requested Unlock",
       });
-      FetchDetails() 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -172,7 +178,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully StaQed your LP",
       });
-      FetchDetails() 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -187,7 +193,7 @@ export default function LpStakeTabMenu({
     if (!address) {
       return;
     }
-    if(_amountMilQ <= 0) {
+    if (_amountMilQ <= 0) {
       Swal.fire({
         icon: "error",
         title: `You must StaQe an amount above 0 `,
@@ -196,7 +202,6 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
-      
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -205,14 +210,36 @@ export default function LpStakeTabMenu({
     if (!address) {
       return;
     }
-    if(_amountMilQ <= 0) {
+    if (_amountMilQ <= 0) {
       Swal.fire({
         icon: "error",
-        title: `You must StaQe an amount above 0 `,
+        title: `You must UnstaQe an amount above 0 `,
       });
       return;
     }
-    if (unlocktime == 0 ) {
+    if (unlocktime < currentTime) {
+      Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
+        showCancelButton: true, // Show Cancel button
+        confirmButtonText: "Continue", // Change the Confirm button text
+        cancelButtonText: "Cancel", // Add a Cancel button
+      }).then((result) => {
+        if (result.isConfirmed) {
+          unStaQe();
+          try {
+            setupdate("updatesunstake");
+            unStaQe();
+          } catch (error) {
+            console.error("Unstaking failed:", error);
+          }
+        }
+      });
+
+      return; // Exit the function
+    }
+    if (owned ==true && ownedTill < currentTime) {
       Swal.fire({
         icon: "warning",
         title: "Warning",
@@ -236,18 +263,16 @@ export default function LpStakeTabMenu({
     }
 
     try {
-      setupdate("updatesunstake");
       unStaQe();
-      
     } catch (error) {
       console.error("Unstaking failed:", error);
     }
   }
 
-
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
-  const [ownedTill, setOwnedTill]: any = useState(32503680000);
+  const [ownedTill, setOwnedTill]: any = useState();
+  const [lpstaked, setlpstaked]:any = useState(0)
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -257,9 +282,10 @@ export default function LpStakeTabMenu({
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
+      setlpstaked(Number(data[0].toString()) / 10**18)
       setUnlockTime(Number(data[2].toString()));
       setOwned(data[10]);
-      setOwnedTill(data[8]);
+      setOwnedTill(Number(data[8].toString()));
     },
   });
 
@@ -283,23 +309,10 @@ export default function LpStakeTabMenu({
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
-  const [timer, setTimer] = useState(0);
 
-  // Create a useEffect hook to update the timer every 10 seconds
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      // Update the timer state variable every 10 seconds
-      setTimer((prevTimer) => prevTimer + 1);
-    }, 4000); // 10,000 milliseconds = 10 seconds
-
-    // Clean up the interval when the component unmounts
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [timer]);
   useEffect(() => {
     FetchDetails();
-  });
+  },[]);
 
   return (
     <div
@@ -310,9 +323,14 @@ export default function LpStakeTabMenu({
       className="rounded-2xl px-3 w-fit py-3 opacity-90"
     >
       <div>
-        <h1 className="text-xl md:text-2xl mb-12 text-white">
-          LP token StaQing
+        <h1 className="text-xl md:text-2xl mb-10 text-white">
+          LP Token StaQing
         </h1>
+        {owned == true ? (        <h1 className="text-md  mb-6 text-white">
+          You are Perpetually Staked
+        </h1>) : (        <h1 className="text-md mb-6 text-white">
+         You are in Basic Staking
+        </h1>)}
         <h2 className="text-lg text-white">
           Please enter the amount of tokens
         </h2>
@@ -340,7 +358,7 @@ export default function LpStakeTabMenu({
                     type="button"
                     onClick={() => HandleStaQe()}
                   >
-                    Stake
+                    StaQe
                   </button>
                 </>
               )}
@@ -363,7 +381,7 @@ export default function LpStakeTabMenu({
               )}
             </>
           )}
-  
+
           <div className="flex-row justify-center my-3 items-center">
             {unstaqeLoad ? (
               <Spin size="large" indicator={antIcon} className="add-spinner" />
@@ -377,7 +395,7 @@ export default function LpStakeTabMenu({
                   className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                   type="button"
                 >
-                  UnStake
+                  UnStaQe
                 </button>
               </>
             )}
@@ -415,13 +433,15 @@ export default function LpStakeTabMenu({
                 className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
               >
-                Request Unlock
+                ReQuest Unlock
               </button>
             ) : (
               <></>
             )}
           </div>
         </div>
+        <div> {owned == true && ownedTill <= currentTime ? (<h1 className="text-white text-md">Your Perpetual StaQe has ended</h1>) : (<></>)}</div>
+        <div> { lpstaked > 0 &&  owned == false && unlocktime <= currentTime ? (<h1 className="text-white text-md">Your Regular StaQe has ended</h1>) : (<></>)}</div>
       </div>
       <div
         style={{ fontFamily: "BebasNeue" }}
@@ -445,12 +465,32 @@ export default function LpStakeTabMenu({
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             Time Till Unlock:{" "}
-            {unlocktime
-              ? Number(unlocktime.toString()) - Number(currentTime.toString()) >
-                0
-                ? Number(unlocktime.toString()) - Number(currentTime.toString())
-                : "0"
-              : "0"}
+            {owned == false ? (
+              <>
+                {" "}
+                {unlocktime && unlocktime > currentTime
+                  ? Number(unlocktime.toString()) -
+                      Number(currentTime.toString()) >
+                    0
+                    ? Number(unlocktime.toString()) -
+                      Number(currentTime.toString())
+                    : "0"
+                  : "0"}{" "}
+              </>
+            ) : (
+              <>
+                {" "}
+                {ownedTill && ownedTill > currentTime
+                  ? Number(ownedTill.toString()) -
+                      Number(currentTime.toString()) >
+                    0
+                    ? Number(ownedTill.toString()) -
+                      Number(currentTime.toString())
+                    : "0"
+                  : "0"}{" "}
+              </>
+            )}{" "}
+            Seconds
           </h2>
           <h2
             style={{ fontFamily: "GroupeMedium" }}

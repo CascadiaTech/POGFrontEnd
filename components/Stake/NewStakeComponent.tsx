@@ -2,15 +2,11 @@ import { Spin } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import {
-  configureChains,
-  createConfig,
-  WagmiConfig,
   usePublicClient,
-  useWalletClient,
   useAccount,
-  useEnsName,
   useContractWrite,
   useContractRead,
+  useNetwork,
 } from "wagmi";
 import linqabi from "../../contracts/abi/abi.json";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -40,26 +36,16 @@ export default function NewStakeComponent(_token: any) {
   //const StaqeFarm = "0x6b238C42AC91ffbe3e84ca05f0c1b499ff4Ed666"
   //const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
   //const StaqeFarm = "0xcbCDa20794a8385122Ad460aDD50f1e077ddd798"
-  const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
+  //const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
+  const StaqeFarm ="0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d"
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-  let current_chain = 5;
+  let { chain } = useNetwork()
+
+  let current_chain = chain?.id;
   const [_amountLinQ, set_amountLinQ] = useState(0);
 
   const [MilqBalance, setMilqBalance] = useState(0);
-  const [timer, setTimer] = useState(0);
 
-  // Create a useEffect hook to update the timer every 10 seconds
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      // Update the timer state variable every 10 seconds
-      setTimer((prevTimer) => prevTimer + 1);
-    }, 5000); // 10,000 milliseconds = 10 seconds
-
-    // Clean up the interval when the component unmounts
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [timer]);
 
   const { data: BalanceOfMilq } = useContractRead({
     address: LPtokenContract,
@@ -91,7 +77,7 @@ export default function NewStakeComponent(_token: any) {
 
   const [isLpStakeOpen, setIsLpStakeOpen] = useState(true); // Initial state for LP Stake
   const [isLinqStakeOpen, setIsLinqStakeOpen] = useState(false); // Initial state for LINQ Stake
-  const [isStaked, setIsStaked] = useState(false); // Initial state is "Unstake"
+
 
   const toggleModals = () => {
     setIsLpStakeOpen(!isLpStakeOpen);
@@ -219,7 +205,7 @@ export default function NewStakeComponent(_token: any) {
   useEffect(() => {
     FetchDetails()
     FetchBalances();
-  }, [timer]);
+  }, []);
 
 
 
@@ -437,7 +423,7 @@ export default function NewStakeComponent(_token: any) {
               }`}
               onClick={() => {
                 toggleModals();
-                setIsStaked(true);
+               
               }}
             >
               LINQ Stake
@@ -449,7 +435,7 @@ export default function NewStakeComponent(_token: any) {
               }`}
               onClick={() => {
                 toggleModals();
-                setIsStaked(false);
+          
               }}
             >
               LP Stake
