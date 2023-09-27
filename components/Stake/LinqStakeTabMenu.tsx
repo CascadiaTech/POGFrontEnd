@@ -288,7 +288,7 @@ export default function LinqStakeTabMenu({
       });
       return;
     }
-    if (address) {
+    if (unlocktime < currentTime) {
       Swal.fire({
         icon: "warning",
         title: "Warning",
@@ -309,13 +309,32 @@ export default function LinqStakeTabMenu({
 
       return; // Exit the function
     }
+    if (owned ==true && ownedTill < currentTime) {
+      Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
+        showCancelButton: true, // Show Cancel button
+        confirmButtonText: "Continue", // Change the Confirm button text
+        cancelButtonText: "Cancel", // Add a Cancel button
+      }).then((result) => {
+        if (result.isConfirmed) {
+          unStaQe();
+          try {
+            unStaQe();
+          } catch (error) {
+            console.error("Unstaking failed:", error);
+          }
+        }
+      });
+
+      return; // Exit the function
+    }
 
     try {
       unStaQe();
       FetchDetails();
     } catch (error) {
-      console.error("Staking failed:", error);
-      console.error("Unstaking failed:", error);
     }
   }
 

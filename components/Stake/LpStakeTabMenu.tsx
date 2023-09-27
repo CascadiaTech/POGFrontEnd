@@ -212,11 +212,33 @@ export default function LpStakeTabMenu({
     if (_amountMilQ <= 0) {
       Swal.fire({
         icon: "error",
-        title: `You must StaQe an amount above 0 `,
+        title: `You must UnstaQe an amount above 0 `,
       });
       return;
     }
-    if (unlocktime == 0) {
+    if (unlocktime < currentTime) {
+      Swal.fire({
+        icon: "warning",
+        title: "Warning",
+        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
+        showCancelButton: true, // Show Cancel button
+        confirmButtonText: "Continue", // Change the Confirm button text
+        cancelButtonText: "Cancel", // Add a Cancel button
+      }).then((result) => {
+        if (result.isConfirmed) {
+          unStaQe();
+          try {
+            setupdate("updatesunstake");
+            unStaQe();
+          } catch (error) {
+            console.error("Unstaking failed:", error);
+          }
+        }
+      });
+
+      return; // Exit the function
+    }
+    if (owned ==true && ownedTill < currentTime) {
       Swal.fire({
         icon: "warning",
         title: "Warning",
@@ -240,7 +262,6 @@ export default function LpStakeTabMenu({
     }
 
     try {
-      setupdate("updatesunstake");
       unStaQe();
     } catch (error) {
       console.error("Unstaking failed:", error);
@@ -287,23 +308,10 @@ export default function LpStakeTabMenu({
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
-  const [timer, setTimer] = useState(0);
 
-  // Create a useEffect hook to update the timer every 10 seconds
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      // Update the timer state variable every 10 seconds
-      setTimer((prevTimer) => prevTimer + 1);
-    }, 4000); // 10,000 milliseconds = 10 seconds
-
-    // Clean up the interval when the component unmounts
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [timer]);
   useEffect(() => {
     FetchDetails();
-  });
+  },[]);
 
   return (
     <div
