@@ -187,6 +187,13 @@ export default function LpStakeTabMenu({
     if (!address) {
       return;
     }
+    if(_amountMilQ <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: `You must StaQe an amount above 0 `,
+      });
+      return;
+    }
     try {
       StaQe();
       
@@ -196,6 +203,13 @@ export default function LpStakeTabMenu({
   }
   function HandleUnStaQe() {
     if (!address) {
+      return;
+    }
+    if(_amountMilQ <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: `You must StaQe an amount above 0 `,
+      });
       return;
     }
     if (unlocktime == 0 ) {
@@ -267,7 +281,6 @@ export default function LpStakeTabMenu({
     bessies;
     allowance;
   }
-
 
   const [unlocktime, setUnlockTime]: any = useState();
   const [timer, setTimer] = useState(0);
@@ -423,7 +436,7 @@ export default function LpStakeTabMenu({
             style={{ fontFamily: "GroupeMedium" }}
             className="text-white md:w-40 text-sm px-2 py-2"
           >
-            Your StaQed LP Balance: <br />{" "}
+            StaQed LP: <br />{" "}
             {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} LP
           </h2>
 

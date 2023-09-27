@@ -246,6 +246,14 @@ export default function LinqStakeTabMenu({
     if (!address) {
       return;
     }
+
+    if(_amountLinQ <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: `You must StaQe an amount above 0 `,
+      });
+      return;
+    }
     try {
       StaQe();
       FetchDetails();
@@ -281,6 +289,13 @@ export default function LinqStakeTabMenu({
   const [update, setupdate] = useState('');
   function HandleUnStaQe() {
     if (!address) {
+      return;
+    }  
+    if(_amountLinQ <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: `You must StaQe an amount above 0 `,
+      });
       return;
     }
     if (address) {
@@ -373,7 +388,6 @@ export default function LinqStakeTabMenu({
             id="stakeInput"
             className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
             style={{ fontFamily: "ethnocentricRg" }}
-            value={_amountLinQ}
             onChange={(e) => {
               //   let value = e.target.valueAsNumber; // Get the input value as a number
               let inputValue = Number(e.target.value); // Parse the input value as a number
