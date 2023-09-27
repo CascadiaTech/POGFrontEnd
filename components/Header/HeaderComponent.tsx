@@ -117,13 +117,13 @@ export default function HeaderComponent() {
                         style={{ fontFamily: "Azonix" }}
                         className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
                       >
-                        <Link href={"/Dapp/LpStakingPage"}>Depreciated StaQing</Link>
+                        <Link href={"/Dapp/LpStakingPage"}>Old StaQing</Link>
                       </li>
                       <li
                         style={{ fontFamily: "Azonix" }}
                         className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
                       >
-                        <Link href={"/StaQing"}>StaQing V2 </Link>
+                        <Link href={"/StaQing"}>StaQing</Link>
                       </li>
                       <li
                         className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"

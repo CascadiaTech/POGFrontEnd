@@ -15,6 +15,7 @@ export default function ClaimPage() {
     setNormalStakeModal(!normalStakeModal);
   };
   
+/*
   const notify = () => toast("Wow so easy !");
   const attemptPlay = (videoRef: any) => {
     videoRef && videoRef.current && videoRef.current.defaultMuted == false;
@@ -23,14 +24,13 @@ export default function ClaimPage() {
         console.log("error attempting to play", error);
       });
   };
-
   useEffect(() => {
     const videoRef = isMobile ? videoRefMobile : videoRefNonMobile;
     attemptPlay(videoRef);
   }, [isMobile]);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 800);
+    const handleResize = () => setIsMobile(window.innerWidth <= 900);
 
     handleResize(); // set initial value
 
@@ -38,6 +38,8 @@ export default function ClaimPage() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+*/
+
 /*
   let ComingSoon = false
   if(ComingSoon == true){
@@ -96,32 +98,6 @@ export default function ClaimPage() {
       </header>
       {/* <div className={"flex flex-col  z-10 mx-auto justify-center "}></div> */}
       <main className={`${styles.mainPage} `}>
-        {isMobile ? (
-          <video
-            ref={videoRefMobile}
-            className="min-w-full z-0 min-h-full relative object-cover"
-            playsInline
-            autoPlay
-            loop
-            muted
-          >
-            <source src="/LINQDappMobile.mp4" type="video/mp4" />
-            Your browser does not support the video tag, update your browser
-          </video>
-        ) : (
-          <video
-            ref={videoRefNonMobile}
-            className="min-w-full z-0 relative"
-            playsInline
-            height={300}
-            autoPlay
-            loop
-            muted
-          >
-            <source src="/LINQDappDesktop.mp4" type="video/mp4" />
-            Your browser does not support the video tag, update your browser
-          </video>
-        )}
         <div className="absolute z-10">
           <div
             className={`flex flex-col justify-center mx-auto text-center`}

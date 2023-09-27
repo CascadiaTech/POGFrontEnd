@@ -217,9 +217,9 @@ export default function LpStakeTabMenu({
         icon: "warning",
         title: "Warning",
         text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
-        showCancelButton: true, // Show Cancel button
-        confirmButtonText: "Continue", // Change the Confirm button text
-        cancelButtonText: "Cancel", // Add a Cancel button
+        showCancelButton: true, 
+        confirmButtonText: "Continue",
+        cancelButtonText: "Cancel", 
       }).then((result) => {
         if (result.isConfirmed) {
           unStaQe();

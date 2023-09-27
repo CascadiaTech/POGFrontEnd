@@ -288,7 +288,7 @@ export default function NewStakeComponent(_token: any) {
 
   return (
     <>
-      <div className={"flex flex-col -mt-20 sm:-translate-y-40 md:-translate-y-96 mdxl:translate-y-72 lg:translate-y-20 xl:translate-y-0"}>
+      <div className={"flex flex-col -mt-20 translate-y-28"}>
           <h1
             className="text-3xl mb-2 md:text-4xl lg:text-4xl font-semibold text-white"
             style={{ fontFamily: "Azonix" }}
