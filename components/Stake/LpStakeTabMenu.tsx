@@ -55,10 +55,10 @@ export default function LpStakeTabMenu({
     const web3 =
       current_chain == 1
         ? new Web3(
-            "https://mainnet.infura.io/v3/a7b52e948423488e8da7de62e23f3a92"
+            "https://mainnet.infura.io/v3/43c711c77abe491f81758495e3944bb6"
           )
         : new Web3(
-            "https://goerli.infura.io/v3/a7b52e948423488e8da7de62e23f3a92"
+            "https://goerli.infura.io/v3/43c711c77abe491f81758495e3944bb6"
           );
     web3.eth
       .getBlock("latest")

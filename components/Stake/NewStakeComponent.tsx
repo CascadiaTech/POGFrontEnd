@@ -25,15 +25,14 @@ export default function NewStakeComponent(_token: any) {
   const { address } = useAccount();
   const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
   const linqAddress = "0x3e34eabf5858a126cb583107e643080cee20ca64";
-  const StaqeFarm ="0xE4584C42A69F92Ffaa92AF5E7D5ff5e942F3cb34"
+  const StaqeFarm = "0xE4584C42A69F92Ffaa92AF5E7D5ff5e942F3cb34";
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-  let { chain } = useNetwork()
+  let { chain } = useNetwork();
 
   let current_chain = chain?.id;
   const [_amountLinQ, set_amountLinQ] = useState(0);
 
   const [MilqBalance, setMilqBalance] = useState(0);
-
 
   const { data: BalanceOfMilq } = useContractRead({
     address: LPtokenContract,
@@ -61,21 +60,16 @@ export default function NewStakeComponent(_token: any) {
     },
   });
 
- 
-
   const [isLpStakeOpen, setIsLpStakeOpen] = useState(true); // Initial state for LP Stake
   const [isLinqStakeOpen, setIsLinqStakeOpen] = useState(false); // Initial state for LINQ Stake
-
 
   const toggleModals = () => {
     setIsLpStakeOpen(!isLpStakeOpen);
     setIsLinqStakeOpen(!isLinqStakeOpen);
   };
 
-
-
-  let [pendingRewards, setPendingRewards]:any = useState();
-  const [pendingLP, setPendingLP]:any = useState(0)
+  let [pendingRewards, setPendingRewards]: any = useState();
+  const [pendingLP, setPendingLP]: any = useState(0);
 
   const { data: PendingLPRewards } = useContractRead({
     address: StaqeFarm,
@@ -102,8 +96,8 @@ export default function NewStakeComponent(_token: any) {
   });
   let [userdetails, setUserDetails]: any = useState();
 
-  let [pendingrewardsaddon,  setPendingRewardsAddon]:any = useState()
-  let [Linqpendingrewardsaddon,  setLinqPendingRewardsAddon]:any = useState()
+  let [pendingrewardsaddon, setPendingRewardsAddon]: any = useState();
+  let [Linqpendingrewardsaddon, setLinqPendingRewardsAddon]: any = useState();
 
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
@@ -118,7 +112,7 @@ export default function NewStakeComponent(_token: any) {
       setLinqPendingRewardsAddon(Number(data[6].toString()) / 10 ** 18);
     },
   });
-  let [userLPDetails, setUserLPDetails]:any = useState()
+  let [userLPDetails, setUserLPDetails]: any = useState();
   const { data: UserDetailsLP } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -128,10 +122,10 @@ export default function NewStakeComponent(_token: any) {
     args: [address],
     onSuccess(data: any) {
       setUserLPDetails(data);
-      setPendingRewardsAddon(Number(data[6].toString()) / 10 ** 18)
+      setPendingRewardsAddon(Number(data[6].toString()) / 10 ** 18);
     },
   });
-  
+
   let [totallinqStaked, settotalLinqStaked] = useState(0);
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
@@ -157,8 +151,8 @@ export default function NewStakeComponent(_token: any) {
     },
   });
 
-  let [Linqapr, setLinqapr]:any = useState(0);
-  let [LPapr, setLPapr]:any = useState(0)
+  let [Linqapr, setLinqapr]: any = useState(0);
+  let [LPapr, setLPapr]: any = useState(0);
 
   const { data: VitaliksMilkShipments } = useContractRead({
     address: StaqeFarm,
@@ -166,10 +160,22 @@ export default function NewStakeComponent(_token: any) {
     functionName: "VitaliksMilkShipments",
     chainId: current_chain,
     watch: true,
-    args:[index? index : 1],
+    args: [index ? index : 1],
     onSuccess(data: any) {
-      setLinqapr(Number(data[1].toString()) / 10**18);
-      setLPapr(Number(data[2].toString()) / 10**18);
+      setLinqapr(Number(data[1].toString()) / 10 ** 18);
+      setLPapr(Number(data[2].toString()) / 10 ** 18);
+    },
+  });
+  const [pendinglp, setpendinglp]: any = useState();
+  const { data: CheckMilQrewards } = useContractRead({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    functionName: "checkEstMilQRewards",
+    chainId: current_chain,
+    watch: true,
+    args: [address],
+    onSuccess(data: any) {
+      setpendinglp(Number(data.toString()) / 10 ** 18);
     },
   });
 
@@ -177,11 +183,11 @@ export default function NewStakeComponent(_token: any) {
     UserDetails;
     PendingRewards;
     PendingLPRewards;
+    CheckMilQrewards;
     daisys;
     VitaliksMilkShipments;
     totalVitaliksMilkShipments;
-    UserDetailsLP
-
+    UserDetailsLP;
   }
 
   const [unlocktime, setUnlockTime]: any = useState();
@@ -191,12 +197,9 @@ export default function NewStakeComponent(_token: any) {
     BalanceOfMilq;
   }
   useEffect(() => {
-    FetchDetails()
+    FetchDetails();
     FetchBalances();
   }, []);
-
-
-
 
   const { write: Qompound } = useContractWrite({
     address: StaqeFarm,
@@ -210,7 +213,7 @@ export default function NewStakeComponent(_token: any) {
         icon: "success",
         title: "you have successfully Qompounded",
       });
-      FetchDetails()
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -233,13 +236,10 @@ export default function NewStakeComponent(_token: any) {
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with Claiming please contact support if issue perists${err.cause}`,
-
+        title: `An error occured with Claiming please contact support if issue perists${err.cause}`,
       });
     },
   });
-
 
   const { write: Claim } = useContractWrite({
     address: StaqeFarm,
@@ -253,9 +253,7 @@ export default function NewStakeComponent(_token: any) {
     onError(err) {
       Swal.fire({
         icon: "error",
-        title:
-        `An error occured with Claiming please contact support if issue perists${err.cause}`,
-
+        title: `An error occured with Claiming please contact support if issue perists${err.cause}`,
       });
     },
   });
@@ -263,12 +261,12 @@ export default function NewStakeComponent(_token: any) {
   return (
     <>
       <div className={"flex flex-col -mt-20 translate-y-60"}>
-          <h1
-            className="text-3xl mb-2 md:text-4xl lg:text-4xl font-semibold text-white"
-            style={{ fontFamily: "Azonix" }}
-          >
-            StaQing
-          </h1>
+        <h1
+          className="text-3xl mb-2 md:text-4xl lg:text-4xl font-semibold text-white"
+          style={{ fontFamily: "Azonix" }}
+        >
+          StaQing
+        </h1>
         <div
           style={{
             background:
@@ -299,8 +297,7 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white px-2 py-2"
               >
-                LP In wallet <br /> {MilqBalance? (MilqBalance).toFixed(2) : "0" }{" "}
-      
+                LP In wallet <br /> {MilqBalance ? MilqBalance.toFixed(2) : "0"}{" "}
                 LP Tokens
               </h2>
               <h2
@@ -309,9 +306,8 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                LinQ in wallet <br /> {linqBalance?  (linqBalance).toFixed(2) : "0"}{" "}
-              
-                Linq
+                LinQ in wallet <br />{" "}
+                {linqBalance ? linqBalance.toFixed(2) : "0"} Linq
               </h2>
               <h2
                 style={{
@@ -319,7 +315,12 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable ETH <br /> {pendingRewards ? (pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon).toFixed(8) : "0"}
+                Claimable ETH <br />{" "}
+                {pendingRewards.toFixed(8)
+                  ? pendingRewards +
+                    pendingrewardsaddon +
+                    Linqpendingrewardsaddon.toFixed(8)
+                  : "0"}
               </h2>
               <h2
                 style={{
@@ -327,7 +328,8 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable LP <br /> {pendingLP.toFixed(8) ? pendingLP.toFixed(8) : "0"}
+                Claimable LP <br />{" "}
+                {pendingLP.toFixed(8) ? pendingLP.toFixed(8) : "0"}
               </h2>
               <h2
                 style={{
@@ -336,7 +338,14 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 ETH Per Day LinQ StaQing
-                <br /> {Linqapr && userdetails ? (Linqapr  * (Number(userdetails[0].toString()) / 10**18) * 86400).toFixed(8) : "0"}
+                <br />{" "}
+                {Linqapr && userdetails
+                  ? (
+                      Linqapr *
+                      (Number(userdetails[0].toString()) / 10 ** 18) *
+                      86400
+                    ).toFixed(8)
+                  : "0"}
               </h2>
               <h2
                 style={{
@@ -345,7 +354,14 @@ export default function NewStakeComponent(_token: any) {
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
                 Eth Per Day LP StaQing
-                <br /> {LPapr && userLPDetails ? (LPapr * (Number(userLPDetails[0].toString() ) / 10**18) * 86400).toFixed(8) : "0"}
+                <br />{" "}
+                {LPapr && userLPDetails
+                  ? (
+                      LPapr *
+                      (Number(userLPDetails[0].toString()) / 10 ** 18) *
+                      86400
+                    ).toFixed(8)
+                  : "0"}
               </h2>
               <button
                 onClick={() => Claim()}
@@ -356,29 +372,54 @@ export default function NewStakeComponent(_token: any) {
                 Claim My ETH
               </button>
               <button
-              disabled={pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon == 0}
-              onClick ={() => Qompound()}
+                disabled={
+                  pendingRewards +
+                    pendingrewardsaddon +
+                    Linqpendingrewardsaddon ==
+                  0
+                }
+                onClick={() => Qompound()}
                 style={{ fontFamily: "GroupeMedium" }}
                 className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
               >
                 Qompound
               </button>
-              
+
               {isLoading ? (
-        <Spin size="large" indicator={antIcon} className="add-spinner" />
-      ) : (
-        <>
-          <button
-            onClick={() => ClaimLP()}
-            style={{ fontFamily: "GroupeMedium" }}
-            className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-            type="button"
-          >
-            Claim My LP
-          </button>
-        </>
-      )}
+                <Spin
+                  size="large"
+                  indicator={antIcon}
+                  className="add-spinner"
+                />
+              ) : (
+                <>
+                  {pendinglp > 0 ? (
+                    <button
+                      onClick={() => ClaimLP()}
+                      style={{ fontFamily: "GroupeMedium" }}
+                      className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                      type="button"
+                    >
+                      Claim My LP
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() =>
+                        Swal.fire({
+                          icon: "error",
+                          title: `You do not have LP to Claim at this time`,
+                        })
+                      }
+                      style={{ fontFamily: "GroupeMedium" }}
+                      className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                      type="button"
+                    >
+                      Claim My LP
+                    </button>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -411,7 +452,6 @@ export default function NewStakeComponent(_token: any) {
               }`}
               onClick={() => {
                 toggleModals();
-               
               }}
             >
               LINQ Stake
@@ -423,7 +463,6 @@ export default function NewStakeComponent(_token: any) {
               }`}
               onClick={() => {
                 toggleModals();
-          
               }}
             >
               LP Stake
