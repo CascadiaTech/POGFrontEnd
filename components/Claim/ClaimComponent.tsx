@@ -232,19 +232,6 @@ export default function ClaimComponent() {
             {balance}
           </p>
         </div>
-        {/* <div className="grid grid-cols-2 font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
-            <p className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px]" style={{textAlign:'initial' ,fontFamily: "GroupeMedium" }}>Total LP Distributed </p>
-            <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1 
-            text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[200px]" 
-            style={{ fontFamily: "GroupeMedium", wordWrap: "break-word" }}>
-              23123.23213232312321321231232
-              </p>
-          </div> */}
-         {loading ? (
-            <Spin indicator={antIcon} className="add-spinner" />
-          ) : (
-            )}
-        <>
           <div className="flex justify-center items-center mt-10 ">
             <button
               style={{ fontFamily: "Azonix" }}
@@ -255,9 +242,7 @@ export default function ClaimComponent() {
               LP CLAIM
             </button>
           </div>
-        </>
       </div>
-      {/* </div> */}
 
       <div className="fixed mb-10 px-2 sm:px-5 md:px-10 lg:px-10 left-0 bottom-0 bg-transparent  w-full  grid grid-cols-2 ">
         <p
