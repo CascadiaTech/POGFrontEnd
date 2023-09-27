@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { useAccount, useContractRead, useContractWrite, usePublicClient, useWalletClient } from "wagmi";
 import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import error from "next/error";
 import { LPabiObject } from "../../contracts/abi/LPTokenAbi.mjs";
+import { fourteenDayStackAbi } from "../../contracts/abi/14DayStackabi.mjs"
 import { abiObject } from "../../contracts/abi/abi.mjs";
 const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
 const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
@@ -17,8 +18,24 @@ const OverviewComponent = () => {
   const LPtokenContract = "0xbD08FcFd3b2a7bB90196F056dea448841FC5A580";
   const linqContract = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
 
+  const [getrewards, setgetRewards]: any = useState();
+  const [staked, setstaked] = useState();
 
+  const publicClient = usePublicClient();
+  const { data: walletClient } = useWalletClient();
+  const user = '0xd9bdC7a0c99C06660f7e5a7B4783FF4870c1d394';
 
+  const { data: getRewards } = useContractRead({
+    address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
+    abi: fourteenDayStackAbi,
+    functionName: "calculateRewardSinceLastClaim",
+    chainId: 1,
+    args: [user],
+    onSuccess(data: any) {
+      setgetRewards(Number(data.toString()) / 10 ** 18);
+    },
+  });
+console.log(getrewards, "these are rewards")
 
   const [MilqBalance, setMilqBalance] = useState(0);
 
@@ -45,7 +62,12 @@ const OverviewComponent = () => {
       setlinqBalance(Number(data.toString()) / 10 ** 18);
     },
   });
-
+  function FetchBalances() {
+   getRewards
+  }
+  useEffect(() => {
+    FetchBalances();
+  }, []);
 
   const [loading, setLoading] = useState(false);
   const [unstakeStatus, setUnstakeStatus] = useState(false);
@@ -65,9 +87,9 @@ const OverviewComponent = () => {
         </p>
         <p
           style={{ fontFamily: "ethnocentricRg" }}
-          className="text-xl text-gray-700 font-semibold border-[1px] text-center border-black rounded-md px-2 md:px-4 py-1 w-36"
+          className="text-md text-gray-700 font-semibold border-[1px] text-center border-black rounded-md px-2 md:px-4 py-1 w-36"
         >
-
+            {getrewards}
         </p>
 
         <button
@@ -308,14 +330,6 @@ const StackComponent = () => {
           {refinedAllowance > stake_amount ? (
             <>
           
-              <button
-                style={{ fontFamily: "GroupeMedium" }}
-                className="font-sans cursor-pointer text-[20px] rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-black border-2 text-white bg-black py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-                type="button"
-                onClick={() => handleStake()}
-              >
-                Stake
-              </button>
             </>
           ) : (
             <>
