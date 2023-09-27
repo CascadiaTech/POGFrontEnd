@@ -38,7 +38,57 @@ export default function ClaimPage() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  console.log(isMobile);
+
+  let ComingSoon = true
+  if(ComingSoon ==true){
+    return (
+      <div className="scroll-smooth ">
+      <header>
+        <HeaderComponent />
+      </header>
+      {/* <div className={"flex flex-col  z-10 mx-auto justify-center "}></div> */}
+      <main className={`${styles.mainPage} `}>
+      <div className="absolute z-10">
+          <div
+            className={`flex flex-col items-top h-full  text-center`}
+          >
+            <div className={`  text-center`}>
+             <h1 className="text-9xl text-white mb-46" style={{ fontSize: "40px", fontFamily: "GroupeMedium" }}> Coming Soon </h1>
+            </div>
+
+          </div>
+        </div>
+        {isMobile ? (
+          <video
+            ref={videoRefMobile}
+            className="min-w-full z-0 min-h-full relative object-cover"
+            playsInline
+            autoPlay
+            loop
+            muted
+          >
+            <source src="/LINQDappMobile.mp4" type="video/mp4" />
+            Your browser does not support the video tag, update your browser
+          </video>
+        ) : (
+          <video
+            ref={videoRefNonMobile}
+            className="min-w-full z-0 relative"
+            playsInline
+            height={300}
+            autoPlay
+            loop
+            muted
+          >
+            <source src="/LINQDappDesktop.mp4" type="video/mp4" />
+            Your browser does not support the video tag, update your browser
+          </video>
+        )}
+
+      </main>
+    </div>
+    )
+  }else {
   return (
     <div className="scroll-smooth ">
       <header>
@@ -77,7 +127,7 @@ export default function ClaimPage() {
             className={`flex flex-col justify-center mx-auto text-center`}
           >
             <div className={`  text-center self-center justify-center`}>
-              <NewStakeComponent />
+        
             </div>
             <p className={"my-5"}></p>
           </div>
@@ -85,4 +135,5 @@ export default function ClaimPage() {
       </main>
     </div>
   );
+}
 }

@@ -87,7 +87,7 @@ export default function NewStakeComponent(_token: any) {
     },
   });
 
-  const notify = () => toast("Wow so easy !");
+ 
 
   const [isLpStakeOpen, setIsLpStakeOpen] = useState(true); // Initial state for LP Stake
   const [isLinqStakeOpen, setIsLinqStakeOpen] = useState(false); // Initial state for LINQ Stake
