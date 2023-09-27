@@ -47,7 +47,10 @@ export default function LinqStakeTabMenu({
   //const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
   //const StaqeFarm = "0xA109d1E62569A62aC54b4dC62EC655b1E47DF90A"
   //const StaqeFarm = "0x42B112b737ace792Ba333b527b7852e16a58684C";
-  const StaqeFarm = "0x1E35A6799dDBBB6a4666986C72D328cAC845f007"
+  //const StaqeFarm = "0x1E35A6799dDBBB6a4666986C72D328cAC845f007"
+  //  const StaqeFarm = "0x0B353638fAE8f6a0a044B631938D48198EE77292"
+  const StaqeFarm = "0x6b238C42AC91ffbe3e84ca05f0c1b499ff4Ed666"
+
   const glinq = "0xfDD301D6D353F1DfC5E9d319C245B46E4C4f2CA6";
 
   let current_chain = 5;
@@ -108,7 +111,7 @@ export default function LinqStakeTabMenu({
       });
     },
   });
-  const [GAllowance, setGAllowance]: any = useState(0);
+  let [GAllowance, setGAllowance]: any = useState();
 
   const { data: Gallowance } = useContractRead({
     address: glinq,
@@ -425,7 +428,7 @@ export default function LinqStakeTabMenu({
             ) : (
               <>
                 {owned == true &&
-                GAllowance <= Number(userdetails[0].toString()) / 10 ** 18 ? (
+                Number(GAllowance) < Number(Number(userdetails[0].toString()) / 10 ** 18) ? (
                   <>
                     {glinqLoad ? (
                       <Spin
