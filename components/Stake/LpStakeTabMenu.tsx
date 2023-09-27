@@ -35,7 +35,8 @@ export default function LpStakeTabMenu({
   //const StaqeFarm = "0x6b238C42AC91ffbe3e84ca05f0c1b499ff4Ed666"
   //const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
   //const StaqeFarm = "0xcbCDa20794a8385122Ad460aDD50f1e077ddd798"
-  const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
+  //const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
+  const StaqeFarm ="0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d"
   let current_chain = 5;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
@@ -247,7 +248,7 @@ export default function LpStakeTabMenu({
 
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
-  const [ownedTill, setOwnedTill]: any = useState(32503680000);
+  const [ownedTill, setOwnedTill]: any = useState();
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -259,7 +260,7 @@ export default function LpStakeTabMenu({
       setUserDetails(data);
       setUnlockTime(Number(data[2].toString()));
       setOwned(data[10]);
-      setOwnedTill(data[8]);
+      setOwnedTill(Number(data[8].toString()));
     },
   });
 
@@ -445,12 +446,31 @@ export default function LpStakeTabMenu({
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             Time Till Unlock:{" "}
-            {unlocktime
-              ? Number(unlocktime.toString()) - Number(currentTime.toString()) >
-                0
-                ? Number(unlocktime.toString()) - Number(currentTime.toString())
-                : "0"
-              : "0"}
+            {owned == false ? (
+              <>
+                {" "}
+                {unlocktime
+                  ? Number(unlocktime.toString()) -
+                      Number(currentTime.toString()) >
+                    0
+                    ? Number(unlocktime.toString()) -
+                      Number(currentTime.toString())
+                    : "0"
+                  : "0"}{" "}
+              </>
+            ) : (
+              <>
+                {" "}
+                {ownedTill
+                  ? Number(ownedTill.toString()) -
+                      Number(currentTime.toString()) >
+                    0
+                    ? Number(ownedTill.toString()) -
+                      Number(currentTime.toString())
+                    : "0"
+                  : "0"}{" "}
+              </>
+            )} Seconds
           </h2>
           <h2
             style={{ fontFamily: "GroupeMedium" }}

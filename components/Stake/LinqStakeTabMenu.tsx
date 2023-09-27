@@ -52,8 +52,8 @@ export default function LinqStakeTabMenu({
   //const StaqeFarm = "0x6b238C42AC91ffbe3e84ca05f0c1b499ff4Ed666"
   //const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
   //const StaqeFarm = "0xcbCDa20794a8385122Ad460aDD50f1e077ddd798"
-  const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
-
+  //const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329";
+  const StaqeFarm ="0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d"
 
   const glinq = "0xfDD301D6D353F1DfC5E9d319C245B46E4C4f2CA6";
 
@@ -84,7 +84,7 @@ export default function LinqStakeTabMenu({
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
-
+  const [ownedTill, setOwnedTill]: any = useState();
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -96,6 +96,7 @@ export default function LinqStakeTabMenu({
       setUserDetails(data);
       setLinqStaqbalance(Number(data[0].toString()) / 10 ** 18);
       setUnlockTime(Number(data[2].toString()));
+      setOwnedTill(Number(data[8].toString()));
       setOwned(data[10]);
     },
   });
@@ -146,7 +147,6 @@ export default function LinqStakeTabMenu({
         title: "you have successfully Approved",
       });
 
-      setAllowance(Number(allowance_default) * 10 ** 18);
       setAllowance(Number(allowance_default) * 10 ** 18);
     },
   });
@@ -247,7 +247,7 @@ export default function LinqStakeTabMenu({
       return;
     }
 
-    if(_amountLinQ <= 0) {
+    if (_amountLinQ <= 0) {
       Swal.fire({
         icon: "error",
         title: `You must StaQe an amount above 0 `,
@@ -261,37 +261,14 @@ export default function LinqStakeTabMenu({
       console.error("Staking failed:", error);
     }
   }
-  useContractEvent({
-    address: StaqeFarm,
-    abi: LPStakingabiObject,
-    eventName: 'newStaQe',
-    listener(logs) {
-      // Assuming you are iterating through the logs
-      logs.forEach((log) => {
-        // Use type assertions to access the `args` property
-        const { args } = log as Log & { args: { linq: Number } };
-        console.log(args, "these are my args")
-        // Extract the `linq` value
-        const linqStaked = args.linq;
-  
-        console.log(linqStaked, "this is my linqstaked")
-        const linqStakedNumber = Number(linqStaked) / 10 ** 18;
-        console.log(linqStakedNumber, "this is my stakedNumber")
-  
-        // Add the value to your linqBalance
-        //setLinqBalance((prevBalance) => prevBalance + linqStakedNumber);
-      });
-    },
-    chainId: current_chain,
-  })
 
 
-  const [update, setupdate] = useState('');
+  const [update, setupdate] = useState("");
   function HandleUnStaQe() {
     if (!address) {
       return;
-    }  
-    if(_amountLinQ <= 0) {
+    }
+    if (_amountLinQ <= 0) {
       Swal.fire({
         icon: "error",
         title: `You must StaQe an amount above 0 `,
@@ -303,9 +280,9 @@ export default function LinqStakeTabMenu({
         icon: "warning",
         title: "Warning",
         text: "You are unstaking before you are unlocked. You will be charged a 15% early withdraw fee.",
-        showCancelButton: true, 
-        confirmButtonText: "Continue", 
-        cancelButtonText: "Cancel", 
+        showCancelButton: true,
+        confirmButtonText: "Continue",
+        cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.isConfirmed) {
           try {
@@ -446,7 +423,8 @@ export default function LinqStakeTabMenu({
             ) : (
               <>
                 {owned == true &&
-                Number(GAllowance) < Number(Number(userdetails[0].toString()) / 10 ** 18) ? (
+                Number(GAllowance) <
+                  Number(Number(userdetails[0].toString()) / 10 ** 18) ? (
                   <>
                     {glinqLoad ? (
                       <Spin
@@ -570,12 +548,31 @@ export default function LinqStakeTabMenu({
             className="text-white md:w-40 text-sm  px-2 py-2"
           >
             Time Till Unlock:{" "}
-            {unlocktime
-              ? Number(unlocktime.toString()) - Number(currentTime.toString()) >
-                0
-                ? Number(unlocktime.toString()) - Number(currentTime.toString())
-                : "0"
-              : "0"}{" "}
+            {owned == false ? (
+              <>
+                {" "}
+                {unlocktime
+                  ? Number(unlocktime.toString()) -
+                      Number(currentTime.toString()) >
+                    0
+                    ? Number(unlocktime.toString()) -
+                      Number(currentTime.toString())
+                    : "0"
+                  : "0"}{" "}
+              </>
+            ) : (
+              <>
+                {" "}
+                {ownedTill
+                  ? Number(ownedTill.toString()) -
+                      Number(currentTime.toString()) >
+                    0
+                    ? Number(ownedTill.toString()) -
+                      Number(currentTime.toString())
+                    : "0"
+                  : "0"}{" "}
+              </>
+            )}
             Seconds
           </h2>
           <h2
