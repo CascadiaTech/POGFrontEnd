@@ -459,7 +459,7 @@ export default function LpStakeTabMenu({
             {owned == false ? (
               <>
                 {" "}
-                {unlocktime
+                {unlocktime && unlocktime > currentTime
                   ? Number(unlocktime.toString()) -
                       Number(currentTime.toString()) >
                     0
@@ -471,7 +471,7 @@ export default function LpStakeTabMenu({
             ) : (
               <>
                 {" "}
-                {ownedTill
+                {ownedTill && ownedTill > currentTime
                   ? Number(ownedTill.toString()) -
                       Number(currentTime.toString()) >
                     0

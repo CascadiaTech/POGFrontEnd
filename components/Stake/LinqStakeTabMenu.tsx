@@ -580,7 +580,7 @@ export default function LinqStakeTabMenu({
             {owned == false ? (
               <>
                 {" "}
-                {unlocktime
+                {unlocktime && unlocktime > currentTime
                   ? Number(unlocktime.toString()) -
                       Number(currentTime.toString()) >
                     0
@@ -592,7 +592,7 @@ export default function LinqStakeTabMenu({
             ) : (
               <>
                 {" "}
-                {ownedTill
+                {ownedTill && ownedTill > currentTime
                   ? Number(ownedTill.toString()) -
                       Number(currentTime.toString()) >
                     0
