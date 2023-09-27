@@ -319,7 +319,7 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable ETH <br /> {pendingRewards ? (pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon) : "0"}
+                Claimable ETH <br /> {pendingRewards ? (pendingRewards + pendingrewardsaddon + Linqpendingrewardsaddon).toFixed(8) : "0"}
               </h2>
               <h2
                 style={{
@@ -327,7 +327,7 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable LP <br /> {pendingLP ? pendingLP : "0"}
+                Claimable LP <br /> {pendingLP.toFixed(8) ? pendingLP.toFixed(8) : "0"}
               </h2>
               <h2
                 style={{

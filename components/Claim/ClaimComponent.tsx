@@ -193,7 +193,7 @@ export default function ClaimComponent() {
           <p
             className="mr-6 flex justify-start
             text-[10px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
-            style={{ fontFamily: "GroupeMedium" }}
+            style={{ fontFamily: "Azonix" }}
           >
             {pendingreflections}
           </p>
@@ -210,7 +210,7 @@ export default function ClaimComponent() {
           <p
             className="mr-6 flex justify-start
             text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
-            style={{ fontFamily: "GroupeMedium" }}
+            style={{ fontFamily: "Azonix" }}
           >
             {totaldistributed}
           </p>
@@ -227,7 +227,7 @@ export default function ClaimComponent() {
           <p
             className="mr-6 flex justify-start text-center mx-auto
             text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
-            style={{ fontFamily: "GroupeMedium" }}
+            style={{ fontFamily: "Azonix" }}
           >
             {balance}
           </p>

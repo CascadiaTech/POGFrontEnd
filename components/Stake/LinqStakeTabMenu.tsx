@@ -560,7 +560,7 @@ export default function LinqStakeTabMenu({
         </div>
       </div>
       <div
-        style={{ fontFamily: "BebasNeue" }}
+        style={{ fontFamily: "Azonix" }}
         className=" mt-5 opacity-90 flex flex-row transition-all duration-300 py-3"
       >
         <div
@@ -569,7 +569,6 @@ export default function LinqStakeTabMenu({
           }
         >
           <h2
-            style={{ fontFamily: "GroupeMedium" }}
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             StaQed Linq: <br />{" "}
@@ -580,7 +579,6 @@ export default function LinqStakeTabMenu({
           </h2>
 
           <h2
-            style={{ fontFamily: "GroupeMedium" }}
             className="text-white md:w-40 text-sm  px-2 py-2"
           >
             Time Till Unlock:{" "}
@@ -612,7 +610,6 @@ export default function LinqStakeTabMenu({
             Seconds
           </h2>
           <h2
-            style={{ fontFamily: "GroupeMedium" }}
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             Your Pool %: <br />{" "}

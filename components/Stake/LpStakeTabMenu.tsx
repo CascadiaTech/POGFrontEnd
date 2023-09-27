@@ -445,7 +445,7 @@ setlpstaked(Number(data[0].toString()) / 10**18)
         <div> { lpstaked > 0 &&  owned == false && unlocktime <= currentTime ? (<h1 className="text-white text-md">Your Regular StaQe has ended</h1>) : (<></>)}</div>
       </div>
       <div
-        style={{ fontFamily: "BebasNeue" }}
+        style={{ fontFamily: "Azonix" }}
         className=" mt-5 opacity-90 flex flex-row transition-all duration-300 py-3"
       >
         <div
@@ -454,7 +454,6 @@ setlpstaked(Number(data[0].toString()) / 10**18)
           }
         >
           <h2
-            style={{ fontFamily: "GroupeMedium" }}
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             StaQed LP: <br />{" "}
@@ -462,7 +461,6 @@ setlpstaked(Number(data[0].toString()) / 10**18)
           </h2>
 
           <h2
-            style={{ fontFamily: "GroupeMedium" }}
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             Time Till Unlock:{" "}
@@ -494,7 +492,6 @@ setlpstaked(Number(data[0].toString()) / 10**18)
             Seconds
           </h2>
           <h2
-            style={{ fontFamily: "GroupeMedium" }}
             className="text-white md:w-40 text-sm px-2 py-2"
           >
             Your pool %: <br />{" "}
