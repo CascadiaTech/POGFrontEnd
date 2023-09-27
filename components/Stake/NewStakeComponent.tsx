@@ -40,7 +40,7 @@ export default function NewStakeComponent(_token: any) {
   //const StaqeFarm = "0x6b238C42AC91ffbe3e84ca05f0c1b499ff4Ed666"
   //const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
   //const StaqeFarm = "0xcbCDa20794a8385122Ad460aDD50f1e077ddd798"
-  const StaqFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
+  const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   let current_chain = 5;
   const [_amountLinQ, set_amountLinQ] = useState(0);
