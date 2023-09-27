@@ -280,10 +280,10 @@ export default function LinqStakeTabMenu({
       Swal.fire({
         icon: "warning",
         title: "Warning",
-        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
-        showCancelButton: true, // Show Cancel button
-        confirmButtonText: "Continue", // Change the Confirm button text
-        cancelButtonText: "Cancel", // Add a Cancel button
+        text: "You are unstaking before you are unlocked. You will be charged a 15% early withdraw fee.",
+        showCancelButton: true, 
+        confirmButtonText: "Continue", 
+        cancelButtonText: "Cancel", 
       }).then((result) => {
         if (result.isConfirmed) {
           try {
