@@ -37,7 +37,7 @@ export default function ClaimPage() {
       <header>
         <HeaderComponent />
       </header>
-      <main className={`${styles.mainPage} `}>
+      <main className={`${styles.main} `}>
         <div className="w-full absolute z-10">
           <div
             className={` w-full lg:w-auto  flex justify-center mx-auto text-center`}

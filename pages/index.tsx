@@ -143,7 +143,7 @@ const Home: NextPage = () => {
         <HeaderComponent />
       </header>
       {/* <div className={"flex flex-col  z-10 mx-auto justify-center "}></div> */}
-      <main className={`${styles.mainPage} `}>
+      <main className={`${styles.main} `}>
 
         <div className="w-full -translate-y-80 md:-translate-y-80 absolute z-10">
           <Image

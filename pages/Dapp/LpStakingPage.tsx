@@ -69,7 +69,7 @@ import {
           {" "}
           <HeaderComponent></HeaderComponent>
         </header>{" "}
-        <main className={`${styles.mainPage} `}>
+        <main className={`${styles.main} `}>
           <div className="z-10 absolute flex flex-col justify-center items-center w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px]  ">
             <div className="flex justify-center -mt-20 items-center self-center">
               <Image

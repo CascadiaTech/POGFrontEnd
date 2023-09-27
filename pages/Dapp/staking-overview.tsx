@@ -54,7 +54,7 @@ const StackingOverview = () => {
     <header>
       <HeaderComponent />
     </header>
-    <main className={`${styles.mainPage} `}>
+    <main className={`${styles.main} `}>
          <div className="absolute z-10">
        
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 m-auto">
