@@ -109,7 +109,7 @@ export default function LinqStakeTabMenu({
       });
     },
   });
-  const [GAllowance, setGAllowance]: any = useState(0);
+  let [GAllowance, setGAllowance]: any = useState();
 
   const { data: Gallowance } = useContractRead({
     address: glinq,
@@ -426,7 +426,7 @@ export default function LinqStakeTabMenu({
             ) : (
               <>
                 {owned == true &&
-                GAllowance <= Number(userdetails[0].toString()) / 10 ** 18 ? (
+                Number(GAllowance) < Number(Number(userdetails[0].toString()) / 10 ** 18) ? (
                   <>
                     {glinqLoad ? (
                       <Spin
