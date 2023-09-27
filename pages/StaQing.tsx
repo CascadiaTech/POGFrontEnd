@@ -38,15 +38,15 @@ export default function ClaimPage() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  let ComingSoon = true
-  if(ComingSoon ==true){
+/*
+  let ComingSoon = false
+  if(ComingSoon == true){
     return (
       <div className="scroll-smooth ">
       <header>
         <HeaderComponent />
       </header>
-      {/* <div className={"flex flex-col  z-10 mx-auto justify-center "}></div> */}
+
       <main className={`${styles.mainPage} `}>
       <div className="absolute z-10">
           <div
@@ -88,7 +88,7 @@ export default function ClaimPage() {
       </main>
     </div>
     )
-  }else {
+  }else { */
   return (
     <div className="scroll-smooth ">
       <header>
@@ -136,4 +136,4 @@ export default function ClaimPage() {
     </div>
   );
 }
-}
+//}
