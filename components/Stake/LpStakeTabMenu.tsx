@@ -33,15 +33,14 @@ export default function LpStakeTabMenu({
   //const StaqeFarm = "0x1E35A6799dDBBB6a4666986C72D328cAC845f007"
   //const StaqeFarm = "0x0B353638fAE8f6a0a044B631938D48198EE77292"
   //const StaqeFarm = "0x6b238C42AC91ffbe3e84ca05f0c1b499ff4Ed666"
-  const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
+  //const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
+  const StaqeFarm = "0xcbCDa20794a8385122Ad460aDD50f1e077ddd798"
   let current_chain = 5;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
   const [_amountMilQ, set_amountMilQ]:any = useState();
 
-  // Connect to an Ethereum node
 
-  // Fetch the current block number
   let [currentTime, setCurrentTime]: any = useState(0);
 
   useEffect(() => {
