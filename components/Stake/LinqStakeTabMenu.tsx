@@ -16,6 +16,7 @@ import {
   useContractEvent,
   useContractRead,
   useContractWrite,
+  useNetwork,
 } from "wagmi";
 import Web3 from "web3";
 import Swal from "sweetalert2";
@@ -53,11 +54,13 @@ export default function LinqStakeTabMenu({
   //const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
   //const StaqeFarm = "0xcbCDa20794a8385122Ad460aDD50f1e077ddd798"
   //const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329";
-  const StaqeFarm ="0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d"
+  const StaqeFarm = "0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d";
 
   const glinq = "0xfDD301D6D353F1DfC5E9d319C245B46E4C4f2CA6";
 
-  let current_chain = 5;
+  let { chain } = useNetwork()
+
+  let current_chain = chain?.id;
   const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ]: any = useState();
 
@@ -261,7 +264,6 @@ export default function LinqStakeTabMenu({
       console.error("Staking failed:", error);
     }
   }
-
 
   const [update, setupdate] = useState("");
   function HandleUnStaQe() {
@@ -507,14 +509,21 @@ export default function LinqStakeTabMenu({
                     className="add-spinner"
                   />
                 ) : (
-                  <button
-                    onClick={() => RequestUnlock()}
-                    style={{ fontFamily: "GroupeMedium" }}
-                    className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-                    type="button"
-                  >
-                    Request Unlock
-                  </button>
+                  <>
+                    {" "}
+                    {owned == true && ownedTill ==  32503680000 ? (
+                      <button
+                        onClick={() => RequestUnlock()}
+                        style={{ fontFamily: "GroupeMedium" }}
+                        className="font-sans mt-3 cursor-pointer text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 bg-yellow-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                        type="button"
+                      >
+                        Request Unlock
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+                  </>
                 )}
               </>
             ) : (

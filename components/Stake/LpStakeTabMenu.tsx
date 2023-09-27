@@ -4,7 +4,13 @@ import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import Image from "next/image";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import {
+  useAccount,
+  useContractRead,
+  useContractWrite,
+  useBlockNumber,
+  useNetwork,
+} from "wagmi";
 import error from "next/error";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 import { LPabiObject } from "../../contracts/abi/LPTokenAbi.mjs";
@@ -23,27 +29,25 @@ export default function LpStakeTabMenu({
 }: LpStakeTabMenuProps) {
   const { address } = useAccount();
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-  const [loading, setLoading] = useState(false);
-  //const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
-  //const StaqeFarm = "0x03b20d5C096b694607A74eC92F940Bc91bDEb5d5";
-  // const StaqeFarm = "0x841Eb5A3EF26F876dDB234391704E213935AC457";
-  //const StaqeFarm = "0x0E6B6213CfEAa514ac757437b946D5B06D8118De";
-  //const StaqeFarm = "0xA109d1E62569A62aC54b4dC62EC655b1E47DF90A"
-  //const StaqeFarm = "0x42B112b737ace792Ba333b527b7852e16a58684C"
-  //const StaqeFarm = "0x1E35A6799dDBBB6a4666986C72D328cAC845f007"
-  //const StaqeFarm = "0x0B353638fAE8f6a0a044B631938D48198EE77292"
-  //const StaqeFarm = "0x6b238C42AC91ffbe3e84ca05f0c1b499ff4Ed666"
-  //const StaqeFarm = "0xd885Af0984EdacF420A49038E84B7cBe92d90B10"
-  //const StaqeFarm = "0xcbCDa20794a8385122Ad460aDD50f1e077ddd798"
   //const StaqeFarm = "0xFA5982f95B5200c97bE5f27C8F9D6a73B59f3329"
-  const StaqeFarm ="0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d"
-  let current_chain = 5;
+  const StaqeFarm = "0xa28C2019Dff217B39e53A28Ba4AB6F7FF1E7D08d";
+
+  let { chain } = useNetwork();
+
+  let current_chain = chain?.id;
   const LPtokenContract = "0x99B589D832095c3Ca8F0821E98adf08d435d1d6a";
 
-  const [_amountMilQ, set_amountMilQ]:any = useState();
-
+  const [_amountMilQ, set_amountMilQ]: any = useState();
 
   let [currentTime, setCurrentTime]: any = useState(0);
+
+  const { data } = useBlockNumber({
+    chainId: current_chain,
+    watch: true,
+    onSuccess(data: any) {
+      setCurrentTime(data);
+    },
+  });
 
   useEffect(() => {
     const web3 =
@@ -108,7 +112,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully UnStaQed your LP",
       });
-      FetchDetails() 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -130,7 +134,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Switched to Perpetual",
       });
-      FetchDetails() 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -152,7 +156,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully Requested Unlock",
       });
-      FetchDetails() 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -173,7 +177,7 @@ export default function LpStakeTabMenu({
         icon: "success",
         title: "you have successfully StaQed your LP",
       });
-      FetchDetails() 
+      FetchDetails();
     },
     onError(err) {
       Swal.fire({
@@ -188,7 +192,7 @@ export default function LpStakeTabMenu({
     if (!address) {
       return;
     }
-    if(_amountMilQ <= 0) {
+    if (_amountMilQ <= 0) {
       Swal.fire({
         icon: "error",
         title: `You must StaQe an amount above 0 `,
@@ -197,7 +201,6 @@ export default function LpStakeTabMenu({
     }
     try {
       StaQe();
-      
     } catch (error) {
       console.error("Staking failed:", error);
     }
@@ -206,14 +209,14 @@ export default function LpStakeTabMenu({
     if (!address) {
       return;
     }
-    if(_amountMilQ <= 0) {
+    if (_amountMilQ <= 0) {
       Swal.fire({
         icon: "error",
         title: `You must StaQe an amount above 0 `,
       });
       return;
     }
-    if (unlocktime == 0 ) {
+    if (unlocktime == 0) {
       Swal.fire({
         icon: "warning",
         title: "Warning",
@@ -239,12 +242,10 @@ export default function LpStakeTabMenu({
     try {
       setupdate("updatesunstake");
       unStaQe();
-      
     } catch (error) {
       console.error("Unstaking failed:", error);
     }
   }
-
 
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
@@ -364,7 +365,7 @@ export default function LpStakeTabMenu({
               )}
             </>
           )}
-  
+
           <div className="flex-row justify-center my-3 items-center">
             {unstaqeLoad ? (
               <Spin size="large" indicator={antIcon} className="add-spinner" />
@@ -470,7 +471,8 @@ export default function LpStakeTabMenu({
                     : "0"
                   : "0"}{" "}
               </>
-            )} Seconds
+            )}{" "}
+            Seconds
           </h2>
           <h2
             style={{ fontFamily: "GroupeMedium" }}
