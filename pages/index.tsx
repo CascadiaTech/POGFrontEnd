@@ -164,7 +164,7 @@ const Home: NextPage = () => {
                 className="cursor-pointer  block  text-[12px] sm:text-[18px] md:text-[18px] lg:text-[22px] text-center  text-white rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
                 style={{ fontFamily: "GroupeMedium" }}
               >
-                <Link href={"/Dapp/LPstakingpage"}>StaQing</Link>
+                <Link href={"/StaQing"}>StaQing</Link>
               </p>
             </button>
             <p className="mx-5"></p>
