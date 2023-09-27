@@ -13,6 +13,7 @@ import linqABI from "../../contracts/abi/abi.json";
 import Image from "next/image";
 import {
   useAccount,
+  useBlockNumber,
   useContractEvent,
   useContractRead,
   useContractWrite,
@@ -64,7 +65,15 @@ export default function LinqStakeTabMenu({
   const [currentTime, setCurrentTime]: any = useState(0);
   const [_amountLinQ, set_amountLinQ]: any = useState();
 
-  const notify = () => toast("Wow so easy !");
+  const { data } = useBlockNumber({
+    chainId: current_chain,
+    watch: true,
+    onSuccess(data: any) {
+      setCurrentTime(data);
+    },
+  });
+
+  /*
   useEffect(() => {
     const web3 =
       current_chain == 1
@@ -84,6 +93,7 @@ export default function LinqStakeTabMenu({
         console.error(error);
       });
   });
+  */
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
