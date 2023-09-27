@@ -127,6 +127,7 @@ export default function ClaimPage() {
             className={`flex flex-col justify-center mx-auto text-center`}
           >
             <div className={`  text-center self-center justify-center`}>
+              <><NewStakeComponent></NewStakeComponent> </>
         
             </div>
             <p className={"my-5"}></p>
