@@ -70,7 +70,6 @@ export default function LpStakeTabMenu({
         console.error(error);
       });
   }, [address]);
-
   let allowance_default = _amountMilQ > 1 ? _amountMilQ.toString() : "100";
   const { write: LPApprove, isLoading: approveLoad } = useContractWrite({
     address: LPtokenContract,

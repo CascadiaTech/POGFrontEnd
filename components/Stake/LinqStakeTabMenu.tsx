@@ -63,6 +63,7 @@ export default function LinqStakeTabMenu({
   });
 
   */
+
   useEffect(() => {
     const web3 =
       current_chain == 1

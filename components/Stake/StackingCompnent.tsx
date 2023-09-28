@@ -121,10 +121,10 @@ const StackingCompnent = () => {
           className="py-5 px-4 sm:p-5 mt-5 sm:mt-10 md:mt-10 lg:mt-10 border-2 border-gray-700 rounded-2xl  w-[350px] sm:w-[350px] md:w-[550px] min-h-[450px] lg:w-[700px] bg-black"
         >
           <h1
-            className="text-white justify-center text-center items-center text-[30px]"
+            className="text-white text-xl md:text-2xl justify-center text-center items-center text-[30px]"
             style={{ fontFamily: "Azonix" }}
           >
-            This Pool is Depreceated you can only unstake and claim here, Go to
+            This Pool is depreciated you can only unstake and claim here. Go to
             our new StaQing page if you want to Staqe.
           </h1>
 
@@ -159,7 +159,7 @@ const StackingCompnent = () => {
             >
               <button
                 style={{ fontFamily: "Azonix" }}
-                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                className="font-sans cursor-pointer text-sm md:w-40 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
                 onClick={() => claimRewards()}
               >
@@ -168,7 +168,7 @@ const StackingCompnent = () => {
               <p className={"mx-3"}></p>
               <button
                 style={{ fontFamily: "Azonix" }}
-                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                className="font-sans cursor-pointer text-sm md:w-40 rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                 type="button"
                 onClick={() => unStake()}
               >
