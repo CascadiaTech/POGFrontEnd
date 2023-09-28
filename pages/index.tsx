@@ -152,7 +152,7 @@ const Home: NextPage = () => {
           loop
           muted
         >
-          <source src="/LinqMobileNew.mp4" type="video/mp4" />
+          <source src="/LinqMobileBG.mp4" type="video/mp4" />
           Your browser does not support the video tag, update your browser
         </video>
       ) : (
@@ -164,7 +164,7 @@ const Home: NextPage = () => {
           loop
           muted
         >
-          <source src="/LinqDesktopNew.mp4" type="video/mp4" />
+          <source src="/LinqDesktopBG.mp4" type="video/mp4" />
           Your browser does not support the video tag, update your browser
         </video>
       )}
