@@ -185,34 +185,7 @@ const StackComponent = () => {
 
   const [stake_amount, set_stake_amount] = useState<number>(0);
 
- 
 
-  const stakeWithPromise = () => {
-    return null
-      }
-
-  // Use toast.promise to handle the promise
-  const handleStake = () => {
-  };
-
-
-  function NoStake() {
-    if (!address) {
-      return;
-    }
-    try {
-      setLoading(true);
-      Swal.fire("Error!", "Stake has been turned off", "error");
-      set_stake_amount(stake_amount);
-      return;
-      /////
-    } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const { data: allowance } = useContractRead({
     address: LPtokenContract,
@@ -456,14 +429,9 @@ const StackingCompnent = () => {
           className="text-black font-sans flex justify-center text-center items-center text-[30px]"
           style={{ fontFamily: "GroupeMedium" }}
         >
-          14 Day Staking
+          This Pool is Depreciated you can only unstake here, Go to our new StaQing page if you want to Staqe.
         </h1>
-        <h1
-          className="text-black font-sans flex justify-center text-center items-center text-[18px]"
-          style={{ fontFamily: "GroupeMedium" }}
-        >
-          You must Approve before you can Stake
-        </h1>
+  
         <div className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5"></div>
         <div className="flex justify-center items-center">
           <button
@@ -477,18 +445,6 @@ const StackingCompnent = () => {
             onClick={() => handleStepChange("overview")}
           >
             Overview
-          </button>
-          <button
-            style={{ fontFamily: "GroupeMedium" }}
-            className={`font-sans ml-6  cursor-pointer  md:text-[20px] lg:text-[20px] sm:text-[10px] rounded-lg text-center border-black border-2 py-2 px-5 sm:px-10 md:px-6 lg:px-6 ${
-              activeStep === "stack"
-                ? "text-black bg-gray-300"
-                : "text-gray-500"
-            }`}
-            type="button"
-            onClick={() => handleStepChange("stack")}
-          >
-            Stake
           </button>
         </div>
         <div className="mt-4">
