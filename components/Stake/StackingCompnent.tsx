@@ -12,9 +12,9 @@ const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
 const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
 
 const OverviewComponent = () => {
-  const { address } = useAccount();
+
   const StaqeFarm = "0x0AE06016e600f65393072e06BBFCDE07266adD0d";
-  let current_chain = 5;
+  let current_chain = 1;
   const LPtokenContract = "0xbD08FcFd3b2a7bB90196F056dea448841FC5A580";
   const linqContract = "0x5f35753d26C5dDF25950c47E1726c2e9705a87EA";
 
@@ -23,19 +23,19 @@ const OverviewComponent = () => {
 
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
-  const user = '0xd9bdC7a0c99C06660f7e5a7B4783FF4870c1d394';
+  const { address } = useAccount()
 
   const { data: getRewards } = useContractRead({
     address: "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb",
     abi: fourteenDayStackAbi,
     functionName: "calculateRewardSinceLastClaim",
     chainId: 1,
-    args: [user],
+    args: [address],
     onSuccess(data: any) {
-      setgetRewards(Number(data.toString()) / 10 ** 18);
+      setRewards(Number(data.toString()) / 10 ** 18);
     },
   });
-console.log(getrewards, "these are rewards")
+
 
   const [MilqBalance, setMilqBalance] = useState(0);
 
@@ -64,6 +64,7 @@ console.log(getrewards, "these are rewards")
   });
   function FetchBalances() {
    getRewards
+   BalanceOfMilq
   }
   useEffect(() => {
     FetchBalances();
@@ -73,7 +74,7 @@ console.log(getrewards, "these are rewards")
   const [unstakeStatus, setUnstakeStatus] = useState(false);
   const [rewards, setRewards] = useState(0);
 
-  const [newrewards, setnewRewards] = useState(Number);
+ 
 
   return (
     <div
@@ -125,7 +126,7 @@ console.log(getrewards, "these are rewards")
         >
           <p
             className={`cursor-pointer block text-sm sm:text-base text-center ${
-              !unstakeStatus ? "text-gray-600" : "text-gray-400"
+              "text-gray-400"
             } rounded`}
             style={{ fontFamily: "GroupeMedium" }}
           >
