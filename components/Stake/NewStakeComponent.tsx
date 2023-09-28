@@ -260,7 +260,7 @@ export default function NewStakeComponent(_token: any) {
 
   return (
     <>
-      <div className={"flex flex-col -mt-20 translate-y-60"}>
+      <div className={"flex flex-col -mt-20"}>
         <h1
           className="text-3xl mb-2 md:text-4xl lg:text-4xl font-semibold text-white"
           style={{ fontFamily: "Azonix" }}
@@ -315,11 +315,14 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable ETH <br />{" "}
-                {pendingRewards
-                  ? (pendingRewards +
-                    pendingrewardsaddon +
-                    Linqpendingrewardsaddon).toFixed(8)
+                Eth Per Day LP StaQing
+                <br />{" "}
+                {LPapr && userLPDetails
+                  ? (
+                      LPapr *
+                      (Number(userLPDetails[0].toString()) / 10 ** 18) *
+                      86400
+                    ).toFixed(8)
                   : "0"}
               </h2>
               <h2
@@ -328,8 +331,12 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable LP <br />{" "}
-                {pendingLP ? pendingLP.toFixed(8) : "0"}
+                Claimable ETH <br />{" "}
+                {pendingRewards
+                  ? (pendingRewards +
+                    pendingrewardsaddon +
+                    Linqpendingrewardsaddon).toFixed(8)
+                  : "0"}
               </h2>
               <h2
                 style={{
@@ -347,21 +354,15 @@ export default function NewStakeComponent(_token: any) {
                     ).toFixed(8)
                   : "0"}
               </h2>
+              
               <h2
                 style={{
                   boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Eth Per Day LP StaQing
-                <br />{" "}
-                {LPapr && userLPDetails
-                  ? (
-                      LPapr *
-                      (Number(userLPDetails[0].toString()) / 10 ** 18) *
-                      86400
-                    ).toFixed(8)
-                  : "0"}
+                Claimable LP <br />{" "}
+                {pendingLP ? pendingLP.toFixed(8) : "0"}
               </h2>
               <button
                 onClick={() => Claim()}

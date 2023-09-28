@@ -4,7 +4,7 @@ import HeaderComponent from "../components/Header/HeaderComponent";
 import { useEffect, useRef, useState } from "react";
 
 export default function ClaimPage() {
-  /*
+  
   const videoRefMobile = useRef(null);
   const videoRefNonMobile = useRef(null);
   const [isMobile, setIsMobile] = useState(Boolean);
@@ -31,13 +31,38 @@ export default function ClaimPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   console.log(isMobile);
-  */
+  
   return (
     <div className="scroll-smooth ">
       <header>
         <HeaderComponent />
       </header>
       <main className={`${styles.main} `}>
+      {isMobile ? (
+        <video
+          ref={videoRefMobile}
+          className="min-w-full z-0 min-h-full relative object-cover"
+          playsInline
+          autoPlay
+          loop
+          muted
+        >
+          <source src="/LinqMobileNew.mp4" type="video/mp4" />
+          Your browser does not support the video tag, update your browser
+        </video>
+      ) : (
+        <video
+          ref={videoRefNonMobile}
+          className="min-w-full z-0 min-h-full relative object-cover"
+          playsInline
+          autoPlay
+          loop
+          muted
+        >
+          <source src="/LinqDesktopNew.mp4" type="video/mp4" />
+          Your browser does not support the video tag, update your browser
+        </video>
+      )}
         <div className="w-full absolute z-10">
           <div
             className={` w-full lg:w-auto  flex justify-center mx-auto text-center`}

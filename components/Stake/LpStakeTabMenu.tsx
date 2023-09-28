@@ -350,6 +350,10 @@ export default function LpStakeTabMenu({
         <h2 className="text-lg text-white">
           Please enter the amount of tokens
         </h2>
+        
+        <h2 className="text-md my-1 text-white">
+          Available LP To StaQe: {MilqBalance.toFixed(0)}
+        </h2>
         <div className="flex flex-col items-center justify-center">
           <input
             defaultValue={MilqBalance}

@@ -40,7 +40,6 @@ export default function ClaimComponent() {
     chainId: 1,
     args: [address],
     onSuccess(data) {
-      console.log("Success", PendingReflections);
     },
   });
   const { data: TotalDividends } = useContractRead({
@@ -49,7 +48,6 @@ export default function ClaimComponent() {
     functionName: "getTotalDividendsDistributed",
     chainId: 1,
     onSuccess(data) {
-      console.log("Success", TotalDividends);
     },
   });
   const { data: balanceOf } = useContractRead({
@@ -59,7 +57,6 @@ export default function ClaimComponent() {
     chainId: 1,
     args: [address],
     onSuccess(data) {
-      console.log("Success", balanceOf);
     },
   });
   function Fetchbalance() {
@@ -101,7 +98,6 @@ export default function ClaimComponent() {
       if (Number.isNaN(roundedNumber)) {
         return 0;
       }
-      console.log(roundedNumber);
       setpendingreflections(roundedNumber);
 
       return roundedNumber;
@@ -165,17 +161,13 @@ export default function ClaimComponent() {
         });
     } catch (err) {
       console.log(`err: ${console.error()}`);
-      toast.error('Cound not fetch nationalities, please try again later', {
-        position: toast.POSITION.TOP_RIGHT,
-        toastId
-      });
     }
   }
 
   return (
     <>
       
-      <div className="-translate-y-40 md:-translate-y-20 py-6 px-4 sm:p-10 mt-5 sm:mt-10 md:mt-10 lg:mt-15 inline-block w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px] overflow-x-auto opacity-80 bg-white">
+      <div className="-translate-y-72 py-6 px-4 sm:p-10 mt-5 sm:mt-10 md:mt-10 lg:mt-15 inline-block w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px] overflow-x-auto opacity-80 bg-white">
         <p
           className="text-[15px] sm:text-[20px] md:text-[23px] lg:md:text-[25px] font-semibold text-black"
           style={{ fontFamily: "Azonix" }}
@@ -216,16 +208,16 @@ export default function ClaimComponent() {
           </p>
         </div>
               <p className={'my-5'}></p>
-        <div className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
+              <div className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
           <p
             className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px]"
             style={{ textAlign: "initial", fontFamily: "GroupeMedium" }}
           >
-            Your current LP Balance{" "}
+           Your Current  LP Balance{" "}
           </p>
           {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
           <p
-            className="mr-6 flex justify-start text-center mx-auto
+            className="mr-6 flex justify-start
             text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
             style={{ fontFamily: "Azonix" }}
           >
@@ -244,16 +236,16 @@ export default function ClaimComponent() {
           </div>
       </div>
 
-      <div className="fixed mb-10 px-2 sm:px-5 md:px-10 lg:px-10 left-0 bottom-0 bg-transparent  w-full  grid grid-cols-2 ">
+      <div className="fixed mb-10 text-white px-2 sm:px-5 md:px-10 lg:px-10 left-0 bottom-0 bg-transparent  w-full  grid grid-cols-2 ">
         <p
-          className="font-sans text-black text-[18px] sm:text-[15px] md:text-[15px] lg:text-[16px] 
+          className="font-sans text-[18px] sm:text-[15px] md:text-[15px] lg:text-[16px] 
         col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 "
           style={{ fontFamily: "Azonix" }}
         >
           LINQGROUP.IO
         </p>
         <p
-          className="font-sans text-black text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] 
+          className="font-sans text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] 
         col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1"
           style={{ fontFamily: "Azonix" }}
         >

@@ -19,8 +19,9 @@ import { abiObject } from "../../contracts/abi/abi.mjs";
 const StackingCompnent = () => {
   const [activeStep, setActiveStep] = useState("overview");
   //@ts-ignore
-const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
-const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
+  const fourteenDayContractAddress =
+    "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
+  const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
   let current_chain = 1;
   const [staked, setstaked] = useState();
   const publicClient = usePublicClient();
@@ -114,61 +115,68 @@ const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
 
   return (
     <>
-          <main className={`${styles.mainPage} `}>
-      <div 
-      style={{boxShadow: '0px 0px 17px -7px rgba(255,255,255,0.7)'}}
-      className="py-5 px-4 sm:p-5 mt-5 sm:mt-10 md:mt-10 lg:mt-10 border-2 border-gray-700 rounded-2xl  w-[350px] sm:w-[350px] md:w-[550px] min-h-[450px] lg:w-[700px] bg-black">
-        <h1
-          className="text-white justify-center text-center items-center text-[30px]"
-          style={{ fontFamily: "Azonix" }}
+      <main>
+        <div
+          style={{ boxShadow: "0px 0px 17px -7px rgba(255,255,255,0.7)" }}
+          className="py-5 px-4 sm:p-5 mt-5 sm:mt-10 md:mt-10 lg:mt-10 border-2 border-gray-700 rounded-2xl  w-[350px] sm:w-[350px] md:w-[550px] min-h-[450px] lg:w-[700px] bg-black"
         >
-          This Pool is Depreceated you can only unstake and claim here, Go to our new
-          StaQing page if you want to Staqe.
-        </h1>
+          <h1
+            className="text-white justify-center text-center items-center text-[30px]"
+            style={{ fontFamily: "Azonix" }}
+          >
+            This Pool is Depreceated you can only unstake and claim here, Go to
+            our new StaQing page if you want to Staqe.
+          </h1>
 
-        <div className="mx-auto justify-center text-center text-white border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
-        <div className="flex flex-col md:flex-row justify-center items-center">
-          <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)", fontFamily: "Azonix",
-            }}
-            className="text-white text-center text-md mb-2 md:w-40 h-24 border border-white  px-2 py-4"
-          >
-            Claimable ETH: 
-            <br />{" "} {rewards}
-          </h2>
-          <p className={'mx-3'}></p>
-          <h2
-            style={{
-              boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)", fontFamily: "Azonix",
-            }}
-            className="text-white text-center text-md mb-2 md:w-40 h-24 border border-white  px-2 py-4"
-          >
-            Amount of LP in pool:
-            <br />{" "} {LPStaked}
-          </h2>
-          </div>
-          <div className={'flex flex-row mx-auto text-center justify-center my-3'}>
-          <button
-            style={{ fontFamily: "Azonix" }}
-            className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-            type="button"
-            onClick={() => claimRewards()}
-          >
-            Claim ETH
-          </button>
-          <p className={'mx-3'}></p>
-          <button
-            style={{ fontFamily: "Azonix" }}
-            className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
-            type="button"
-            onClick={() => unStake()}
-          >
-            UnStaQe
-          </button>
+          <div className="mx-auto justify-center text-center text-white border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
+            <div className="flex flex-col md:flex-row justify-center items-center">
+              <h2
+                style={{
+                  boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+                  fontFamily: "Azonix",
+                }}
+                className="text-white text-center text-md mb-2 md:w-40 h-24 border border-white  px-2 py-4"
+              >
+                Claimable ETH:
+                <br /> {rewards}
+              </h2>
+              <p className={"mx-3"}></p>
+              <h2
+                style={{
+                  boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
+                  fontFamily: "Azonix",
+                }}
+                className="text-white text-center text-md mb-2 md:w-40 h-24 border border-white  px-2 py-4"
+              >
+                Amount of LP in pool:
+                <br /> {LPStaked}
+              </h2>
+            </div>
+            <div
+              className={
+                "flex flex-row mx-auto text-center justify-center my-3"
+              }
+            >
+              <button
+                style={{ fontFamily: "Azonix" }}
+                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                type="button"
+                onClick={() => claimRewards()}
+              >
+                Claim ETH
+              </button>
+              <p className={"mx-3"}></p>
+              <button
+                style={{ fontFamily: "Azonix" }}
+                className="font-sans cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
+                type="button"
+                onClick={() => unStake()}
+              >
+                UnStaQe
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       </main>
     </>
   );

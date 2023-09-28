@@ -36,8 +36,6 @@ const Home: NextPage = () => {
   const { address, isConnected } = useAccount();
   const { data: walletClient }: any = useWalletClient();
 
-
-/*
   const videoRefMobile = useRef(null);
   const videoRefNonMobile = useRef(null);
   const [isMobile, setIsMobile] = useState(Boolean);
@@ -64,7 +62,7 @@ const Home: NextPage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   console.log(isMobile);
-*/
+
 
   useEffect(() => {
     async function ScrollpositionAnimation() {
@@ -145,6 +143,31 @@ const Home: NextPage = () => {
       {/* <div className={"flex flex-col  z-10 mx-auto justify-center "}></div> */}
       <main className={`${styles.main} `}>
 
+      {isMobile ? (
+        <video
+          ref={videoRefMobile}
+          className="min-w-full z-0 min-h-full relative object-cover"
+          playsInline
+          autoPlay
+          loop
+          muted
+        >
+          <source src="/LinqMobileNew.mp4" type="video/mp4" />
+          Your browser does not support the video tag, update your browser
+        </video>
+      ) : (
+        <video
+          ref={videoRefNonMobile}
+          className="min-w-full z-0 min-h-full relative object-cover"
+          playsInline
+          autoPlay
+          loop
+          muted
+        >
+          <source src="/LinqDesktopNew.mp4" type="video/mp4" />
+          Your browser does not support the video tag, update your browser
+        </video>
+      )}
         <div className="w-full -translate-y-80 md:-translate-y-80 absolute z-10">
           <Image
             className={
