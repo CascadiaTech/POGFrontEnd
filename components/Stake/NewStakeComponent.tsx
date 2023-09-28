@@ -317,9 +317,9 @@ export default function NewStakeComponent(_token: any) {
               >
                 Claimable ETH <br />{" "}
                 {pendingRewards
-                  ? pendingRewards +
+                  ? (pendingRewards +
                     pendingrewardsaddon +
-                    Linqpendingrewardsaddon.toFixed(8)
+                    Linqpendingrewardsaddon).toFixed(8)
                   : "0"}
               </h2>
               <h2
