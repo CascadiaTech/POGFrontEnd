@@ -70,6 +70,8 @@ export default function LpStakeTabMenu({
         console.error(error);
       });
   }, [address]);
+
+
   let allowance_default = _amountMilQ > 1 ? _amountMilQ.toString() : "100";
   const { write: LPApprove, isLoading: approveLoad } = useContractWrite({
     address: LPtokenContract,
@@ -285,23 +287,8 @@ export default function LpStakeTabMenu({
   const [owned, setOwned] = useState(false);
   const [ownedTill, setOwnedTill]: any = useState();
   const [lpstaked, setlpstaked]: any = useState(0);
-  const { data: UserDetails } = useContractRead({
-    address: StaqeFarm,
-    abi: LPStakingabiObject,
-    functionName: "MilQerParlours",
-    chainId: current_chain,
-    watch: true,
-    args: [address],
-    onSuccess(data: any) {
-      setUserDetails(data);
-      setlpstaked(Number(data[0].toString()) / 10 ** 18);
-      setUnlockTime(Number(data[2].toString()));
-      setOwned(data[10]);
-      setOwnedTill(Number(data[8].toString()));
-    },
-  });
-
   const [totalLPStaked, settotalLPStaked] = useState(0);
+  
   const { data: bessies } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -313,6 +300,36 @@ export default function LpStakeTabMenu({
       settotalLPStaked(Number(data.toString()) / 10 ** 18);
     },
   });
+  const [qompounded, setQompounded]: any = useState();
+  const [unlocktime, setUnlockTime]: any = useState();
+  const [finalUserLockTime, setfinalUserLockTime]: any = useState();
+
+  const { data: UserDetails } = useContractRead({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    functionName: "MilQerParlours",
+    chainId: current_chain,
+    watch: true,
+    args: [address],
+    onSuccess(data: any) {
+      setUserDetails(data);
+      setlpstaked(Number(data[0].toString()) / 10 ** 18);
+      setQompounded(Number(data[6].toString()) / 10 ** 18);
+      setUnlockTime(Number(data[2].toString()));
+      setOwned(data[10]);
+      setOwnedTill(Number(data[8].toString()));
+    },
+  });
+
+  function secondsToDHMS(seconds: number) {
+    const days = Math.floor(seconds / (3600 * 24));
+    seconds -= days * 3600 * 24;
+    const hours = Math.floor(seconds / 3600);
+    seconds -= hours * 3600;
+    const minutes = Math.floor(seconds / 60);
+    seconds -= minutes * 60;
+    return { days, hours, minutes, seconds };
+  }
 
   function FetchDetails() {
     UserDetails;
@@ -321,11 +338,12 @@ export default function LpStakeTabMenu({
     allowance;
   }
 
-  const [unlocktime, setUnlockTime]: any = useState();
-
-  useEffect(() => {
-    FetchDetails();
-  }, []);
+useEffect(() => {
+  FetchDetails();
+  const { days, hours, minutes, seconds } = secondsToDHMS(unlocktime);
+  setfinalUserLockTime(unlocktime);
+}, [unlocktime]);
+console.log(finalUserLockTime, "this is my lock time");
 
   return (
     <div
@@ -492,8 +510,7 @@ export default function LpStakeTabMenu({
             StaQed LP: <br />{" "}
             {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} LP
           </h2>
-
-          <h2 className="text-white md:w-40 text-sm px-2 py-2">
+          <h2 className="text-white md:w-40 text-sm  px-2 py-2">
             Time Till Unlock:{" "}
             {owned == false ? (
               <>
@@ -519,7 +536,7 @@ export default function LpStakeTabMenu({
                     : "0"
                   : "0"}{" "}
               </>
-            )}{" "}
+            )}
             Seconds
           </h2>
           <h2 className="text-white md:w-40 text-sm px-2 py-2">

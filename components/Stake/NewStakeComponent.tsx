@@ -82,7 +82,7 @@ export default function NewStakeComponent(_token: any) {
       setPendingLP(Number(data.toString()) / 10 ** 18);
     },
   });
-
+  
   const { data: PendingRewards } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -98,7 +98,7 @@ export default function NewStakeComponent(_token: any) {
 
   let [pendingrewardsaddon, setPendingRewardsAddon]: any = useState();
   let [Linqpendingrewardsaddon, setLinqPendingRewardsAddon]: any = useState();
-
+  const [qompounded, setQompounded]: any = useState();
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -108,11 +108,14 @@ export default function NewStakeComponent(_token: any) {
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
+      setQompounded(Number(data[6].toString()) / 10 ** 18);
       setUnlockTime(Number(data[2].toString()));
-      setLinqPendingRewardsAddon(Number(data[6].toString()) / 10 ** 18);
+      setLinqPendingRewardsAddon(Number(data[5].toString()) / 10 ** 18);
     },
   });
+  console.log(qompounded, "this is my qompoundede")
   let [userLPDetails, setUserLPDetails]: any = useState();
+
   const { data: UserDetailsLP } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -344,7 +347,7 @@ export default function NewStakeComponent(_token: any) {
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                ETH Per Day LinQ StaQing
+                ETH Per 24hr
                 <br />{" "}
                 {Linqapr && userdetails
                   ? (
@@ -421,6 +424,7 @@ export default function NewStakeComponent(_token: any) {
                   )}
                 </>
               )}
+              
             </div>
           </div>
         </div>

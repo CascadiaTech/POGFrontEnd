@@ -88,6 +88,8 @@ export default function LinqStakeTabMenu({
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
   const [ownedTill, setOwnedTill]: any = useState();
+
+  
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -103,6 +105,29 @@ export default function LinqStakeTabMenu({
       setOwned(data[10]);
     },
   });
+
+  const [unlocktime, setUnlockTime]: any = useState();
+  function secondsToDHMS(seconds: number) {
+    const days = Math.floor(seconds / (3600 * 24));
+    seconds -= days * 3600 * 24;
+    const hours = Math.floor(seconds / 3600);
+    seconds -= hours * 3600;
+    const minutes = Math.floor(seconds / 60);
+    seconds -= minutes * 60;
+    return { days, hours, minutes, seconds };
+  }
+  const blocks = 1696287035;
+  const seconds = blocks * 15;
+  const { days, hours, minutes, seconds: remainingSeconds } = secondsToDHMS(seconds);
+  console.log(`Days: ${days}, Hours: ${hours}, Minutes: ${minutes}, Seconds: ${remainingSeconds}`);
+  
+
+  const [finalUserLockTime, setfinalUserLockTime]: any = useState();
+  useEffect(() => {
+    const { days, hours, minutes, seconds } = secondsToDHMS(unlocktime);
+    setfinalUserLockTime(unlocktime);
+  }, [unlocktime]);
+  console.log(finalUserLockTime, "this is my lock time");
   ///Glinq stuff
 
   const { write: ApproveGlinq, isLoading: glinqLoad } = useContractWrite({
@@ -357,7 +382,6 @@ export default function LinqStakeTabMenu({
     Gallowance;
     BalanceOfLinq;
   }
-  const [unlocktime, setUnlockTime]: any = useState();
   useEffect(() => {
     allowance;
     Gallowance;
@@ -405,7 +429,7 @@ export default function LinqStakeTabMenu({
         </h2>
 
         <h2 className="text-md my-1 text-white">
-          Available Linq To StaQe: {linqBalance}
+          Available Linq To StaQe: {linqBalance.toFixed(2)}
         </h2>
 
         <div className="flex flex-col items-center justify-center">
