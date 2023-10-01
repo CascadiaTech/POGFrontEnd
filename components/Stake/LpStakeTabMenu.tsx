@@ -464,6 +464,16 @@ useEffect(() => {
               </>
             )}
           </div>
+          
+          <p
+            className={
+              "text-red-500 text-md mx-auto justify-center text-center"
+            }
+          >
+            Please wait until unlock time reaches 0, otherwise you will incur a
+            withdraw fee to leave staQe early
+          </p>
+          
           <div className="flex flex-col justify-center items-center my-1">
             {Number(unlocktime?.toString()) != 0 &&
             Number(unlocktime?.toString()) < Number(currentTime.toString()) &&
