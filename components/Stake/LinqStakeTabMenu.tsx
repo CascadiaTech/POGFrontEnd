@@ -532,7 +532,14 @@ export default function LinqStakeTabMenu({
                           disabled={
                             userdetails ? userdetails[0] < _amountLinQ : true
                           }
-                          onClick={() => HandleUnStaQe()}
+                              onClick={() =>   
+                     Swal.fire({
+                    icon: "warning",
+                    title: "Warning",
+                    text: "We are currently working on the Unstake UI. It will be fixed and active shortly, please be patient for the next hour or two.",
+                    showCancelButton: true, // Show Cancel button
+                    confirmButtonText: "Ok", // Change the Confirm button text
+                  })}
                           style={{ fontFamily: "GroupeMedium" }}
                           className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                           type="button"
