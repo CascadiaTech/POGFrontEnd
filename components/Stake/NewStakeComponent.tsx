@@ -19,6 +19,7 @@ import { LPabiObject } from "../../contracts/abi/LPTokenAbi.mjs";
 import { abiObject } from "../../contracts/abi/abi.mjs";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 import Swal from "sweetalert2";
+import ClaimStationComponent from "./ClaimStation";
 export default function NewStakeComponent(_token: any) {
   const publicClient = usePublicClient();
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,6 @@ export default function NewStakeComponent(_token: any) {
 
   let current_chain = chain?.id;
   const [_amountLinQ, set_amountLinQ] = useState(0);
-
   const [MilqBalance, setMilqBalance] = useState(0);
 
   const { data: BalanceOfMilq } = useContractRead({
@@ -82,7 +82,7 @@ export default function NewStakeComponent(_token: any) {
       setPendingLP(Number(data.toString()) / 10 ** 18);
     },
   });
-  
+
   const { data: PendingRewards } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -99,6 +99,7 @@ export default function NewStakeComponent(_token: any) {
   let [pendingrewardsaddon, setPendingRewardsAddon]: any = useState();
   let [Linqpendingrewardsaddon, setLinqPendingRewardsAddon]: any = useState();
   const [qompounded, setQompounded]: any = useState();
+
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -108,12 +109,45 @@ export default function NewStakeComponent(_token: any) {
     args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
+      setlpstaked(Number(data[0].toString()) / 10 ** 18);
       setQompounded(Number(data[6].toString()) / 10 ** 18);
       setUnlockTime(Number(data[2].toString()));
       setLinqPendingRewardsAddon(Number(data[5].toString()) / 10 ** 18);
     },
   });
-  console.log(qompounded, "this is my qompoundede")
+
+  const [lpstaked, setlpstaked]: any = useState(0);
+  const [totalLPStaked, settotalLPStaked] = useState(0);
+
+  const { data: bessies } = useContractRead({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    watch: true,
+    functionName: "bessies",
+    chainId: current_chain,
+
+    onSuccess(data: any) {
+      settotalLPStaked(Number(data.toString()) / 10 ** 18);
+    },
+  });
+  const [finalUserLockTime, setfinalUserLockTime]: any = useState();
+
+  let [milqerUserDetails, setMilqerUserDetails]: any = useState();
+  const { data: MilqerUserDetails } = useContractRead({
+    address: StaqeFarm,
+    abi: LPStakingabiObject,
+    functionName: "MilQerParlours",
+    chainId: current_chain,
+    watch: true,
+    args: [address],
+    onSuccess(data: any) {
+      setMilqerUserDetails(data);
+      setlpstaked(Number(data[0].toString()) / 10 ** 18);
+      setQompounded(Number(data[6].toString()) / 10 ** 18);
+      setUnlockTime(Number(data[2].toString()));
+    },
+  });
+
   let [userLPDetails, setUserLPDetails]: any = useState();
 
   const { data: UserDetailsLP } = useContractRead({
@@ -260,10 +294,9 @@ export default function NewStakeComponent(_token: any) {
       });
     },
   });
-
   return (
     <>
-      <div className={"flex flex-col -mt-20"}>
+      <div className={"flex flex-col"}>
         <h1
           className="text-3xl mb-2 md:text-4xl lg:text-4xl font-semibold text-white"
           style={{ fontFamily: "Azonix" }}
@@ -336,9 +369,11 @@ export default function NewStakeComponent(_token: any) {
               >
                 Claimable ETH <br />{" "}
                 {pendingRewards
-                  ? (pendingRewards +
-                    pendingrewardsaddon +
-                    Linqpendingrewardsaddon).toFixed(8)
+                  ? (
+                      pendingRewards +
+                      pendingrewardsaddon +
+                      Linqpendingrewardsaddon
+                    ).toFixed(8)
                   : "0"}
               </h2>
               <h2
@@ -357,15 +392,14 @@ export default function NewStakeComponent(_token: any) {
                     ).toFixed(8)
                   : "0"}
               </h2>
-              
+
               <h2
                 style={{
                   boxShadow: "inset 0px 0px 15px -5px rgba(255,255,255,0.6)",
                 }}
                 className="text-white mb-2 md:w-40 border border-white  px-2 py-2"
               >
-                Claimable LP <br />{" "}
-                {pendingLP ? pendingLP.toFixed(8) : "0"}
+                Claimable LP <br /> {pendingLP ? pendingLP.toFixed(8) : "0"}
               </h2>
               <button
                 onClick={() => Claim()}
@@ -424,13 +458,10 @@ export default function NewStakeComponent(_token: any) {
                   )}
                 </>
               )}
-              
             </div>
           </div>
         </div>
-
         <p className={"my-5"}></p>
-
         <div
           className={"mx-auto self-center justify-center top-0 flex flex-col"}
         >
@@ -509,3 +540,175 @@ export default function NewStakeComponent(_token: any) {
     </>
   );
 }
+
+
+       {/*
+          <h2
+            style={{ fontFamily: "Azonix" }}
+            className=" w-fit mb-2 mx-auto text-3xl text-gray-400 opacity-90"
+          >
+            Account Summary
+          </h2>{" "}
+        <div
+          className={
+            "bg-black text-xl w-full grid grid-cols-2 col-span-4 mb-4 opacity-90 rounded-2xl border border-white text-white px-16 py-4 mx-auto"
+          }
+        >
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            LINQ Balance:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+            {linqBalance ? linqBalance.toFixed(2) : "0"} LINQ
+          </h2>
+          
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            LP Balance:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+            {MilqBalance ? MilqBalance.toFixed(2) : "0"}{" "} LP
+          </h2>
+
+          
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            LINQ StaQed:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+                 {userdetails
+              ? (Number(userdetails[0].toString()) / 10 ** 18).toFixed(3)
+              : 0}{" "}
+            LINQ
+          </h2>
+          
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            LP StaQed:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+            
+            {milqerUserDetails ? Number(milqerUserDetails[0].toString()) / 10 ** 18 : 0} LP
+          </h2>
+        </div>
+
+        <h2
+            style={{ fontFamily: "Azonix" }}
+            className=" w-fit mb-2 mx-auto text-2xl text-gray-200 opacity-90"
+          >
+            Claimable Balances
+          </h2>{" "}
+        <div
+          className={
+            "bg-black text-xl w-full grid grid-cols-2 col-span-4 mb-4 opacity-90 rounded-2xl border border-white text-white px-16 py-4 mx-auto"
+          }
+        >
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            ETH Claimable (LP & LINQ):
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+            {linqBalance ? linqBalance.toFixed(2) : "0"} ETH
+          </h2>
+          
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            LP Claimable:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+            {pendingLP ? pendingLP.toFixed(8) : "0"} ETH
+          </h2>
+        </div>
+
+        <h2
+            style={{ fontFamily: "Azonix" }}
+            className=" w-fit mb-2 mx-auto text-2xl text-gray-200 opacity-90"
+          >
+            Earnings Summary
+          </h2>{" "}
+        <div
+          className={
+            "bg-black text-xl w-full grid grid-cols-2 col-span-4 mb-4 opacity-90 rounded-2xl border border-white text-white px-16 py-4 mx-auto"
+          }
+        >
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            ETH Earned (Linq + LP) Per 24hr:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+             LINQ
+          </h2>
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            ETH Earned LINQ Per 24hr: 
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+              {Linqapr && userdetails
+                  ? (
+                      Linqapr *
+                      (Number(userdetails[0].toString()) / 10 ** 18) *
+                      86400
+                    ).toFixed(8)
+                  : "0"} ETH
+          </h2>
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            ETH Earned LP Per 24hr:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+            {" "}
+                {LPapr && userLPDetails
+                  ? (
+                      LPapr *
+                      (Number(userLPDetails[0].toString()) / 10 ** 18) *
+                      86400
+                    ).toFixed(8)
+                  : "0"} ETH
+          </h2>
+        </div>
+                */}{" "}

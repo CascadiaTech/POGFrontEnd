@@ -7,14 +7,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function ClaimPage() {
+  const videoRefMobile = useRef(null);
+  const videoRefNonMobile = useRef(null);
+  const [isMobile, setIsMobile] = useState(Boolean);
   const [normalStakeModal, setNormalStakeModal] = useState(Boolean);
   const toggleNormalStakeModal = () => {
     setNormalStakeModal(!normalStakeModal);
   };
-  
-  const videoRefMobile = useRef(null);
-  const videoRefNonMobile = useRef(null);
-  const [isMobile, setIsMobile] = useState(Boolean);
   const attemptPlay = (videoRef: any) => {
     videoRef && videoRef.current && videoRef.current.defaultMuted == false;
     videoRef.current.load() &&

@@ -1,20 +1,8 @@
 import React, { useEffect, useState } from "react";
-import HeaderComponent from "../Header/HeaderComponent";
-import FooterComponent from "../Footer/FooterComponent";
-import { Carousel, CarouselProps } from "flowbite-react";
-import { MilqFarmABI } from "../../contracts/abi/MilqFarmAbi.mjs";
-import { useContext } from "react";
 import { Tooltip } from "react-tooltip";
-import info from "../../public/info.png";
-import { useRouter } from "next/router";
-import { ToastContainer, toast } from "react-toastify";
-import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
 import linqABI from "../../contracts/abi/abi.json";
-import Image from "next/image";
 import {
   useAccount,
-  useBlockNumber,
-  useContractEvent,
   useContractRead,
   useContractWrite,
   useNetwork,
@@ -25,6 +13,8 @@ import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 import { abiObject } from "../../contracts/abi/abi.mjs";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
+import { JsonRpcProvider } from "ethers/src.ts/providers"; // Import JsonRpcProvider from ethers
+import ethers from "ethers";
 import { Provider } from "react-redux";
 import { Log } from "viem";
 interface LpStakeTabMenuProps {
@@ -63,32 +53,56 @@ export default function LinqStakeTabMenu({
   });
 
   */
-
   useEffect(() => {
-    const web3 =
-      current_chain == 1
-        ? new Web3(
-            "https://mainnet.infura.io/v3/43c711c77abe491f81758495e3944bb6"
-          )
-        : new Web3(
-            "https://goerli.infura.io/v3/43c711c77abe491f81758495e3944bb6"
-          );
-    web3.eth
-      .getBlock("latest")
-      .then((block: { timestamp: any }) => {
-        const timestamp = block.timestamp; // This is the block timestamp
-        setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
-      })
-      .catch((error: any) => {
+    const fetchTimestamp = async () => {
+      try {
+        const web3 =
+          current_chain === 1
+            ? new Web3("https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad")
+            : new Web3("https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad");
+
+        const block = await web3.eth.getBlock("latest");
+        if (block) {
+          const timestamp = Number(block.timestamp); // This is the block timestamp
+          setCurrentTime(timestamp);
+        } else {
+          console.log("Block is pending");
+        }
+      } catch (error) {
         console.error(error);
-      });
-  });
+      }
+    };
+    fetchTimestamp();
+    const intervalId = setInterval(fetchTimestamp, 3000);
+
+    return () => clearInterval(intervalId);
+  }, [current_chain]);
+    
+  /*
+  useEffect(() => {
+    const provider = new ethers.JsonRpcProvider("https://twilight-lively-wish.discover.quiknode.pro/f952ff5ac1c946ffed4d7bc7e607f4e98eedef80/");
+    provider.getBlock("latest")
+    .then((block) => {
+      if (block) {
+        const timestamp = block.timestamp; // This is the block timestamp
+        console.log(timestamp, "this is my timestamp");
+        setCurrentTime(timestamp);
+      } else {
+        console.log("Block is pending");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}, [address]);
+*/
 
   let [userdetails, setUserDetails]: any = useState();
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
   const [ownedTill, setOwnedTill]: any = useState();
-
+// rentedDaissysTill - CurrentBlockTimeStamp
+// 345600 -
   
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
@@ -107,27 +121,22 @@ export default function LinqStakeTabMenu({
   });
 
   const [unlocktime, setUnlockTime]: any = useState();
+  console.log(unlocktime, "this is unlockTime")
+  
   function secondsToDHMS(seconds: number) {
-    const days = Math.floor(seconds / (3600 * 24));
-    seconds -= days * 3600 * 24;
     const hours = Math.floor(seconds / 3600);
     seconds -= hours * 3600;
     const minutes = Math.floor(seconds / 60);
     seconds -= minutes * 60;
-    return { days, hours, minutes, seconds };
+    return { hours, minutes, seconds };
   }
-  const blocks = 1696287035;
-  const seconds = blocks * 15;
-  const { days, hours, minutes, seconds: remainingSeconds } = secondsToDHMS(seconds);
-  console.log(`Days: ${days}, Hours: ${hours}, Minutes: ${minutes}, Seconds: ${remainingSeconds}`);
+  
+  // Assuming unlocktime is in seconds
+  const unlocktimeInSeconds = parseInt(unlocktime, 10);
+  const { hours, minutes, seconds } = secondsToDHMS(unlocktimeInSeconds);
+  
   
 
-  const [finalUserLockTime, setfinalUserLockTime]: any = useState();
-  useEffect(() => {
-    const { days, hours, minutes, seconds } = secondsToDHMS(unlocktime);
-    setfinalUserLockTime(unlocktime);
-  }, [unlocktime]);
-  console.log(finalUserLockTime, "this is my lock time");
   ///Glinq stuff
 
   const { write: ApproveGlinq, isLoading: glinqLoad } = useContractWrite({
@@ -312,6 +321,7 @@ export default function LinqStakeTabMenu({
         cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.isConfirmed) {
+          unStaQe();
           try {
             setupdate("updatesunstake");
             unStaQe();
@@ -350,7 +360,6 @@ export default function LinqStakeTabMenu({
       FetchDetails();
     } catch (error) {}
   }
-
   const [totallinqStaked, settotalLinqStaked] = useState(0);
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
@@ -653,7 +662,7 @@ export default function LinqStakeTabMenu({
                     ? Number(unlocktime.toString()) -
                       Number(currentTime.toString())
                     : "0"
-                  : "0"}{" "}
+                  : "0"}{" "} Seconds
               </>
             ) : (
               <>
@@ -665,10 +674,9 @@ export default function LinqStakeTabMenu({
                     ? Number(ownedTill.toString()) -
                       Number(currentTime.toString())
                     : "0"
-                  : "0"}{" "}
+                  : "0"}{" "} Seconds
               </>
             )}
-            Seconds
           </h2>
           <h2 className="text-white md:w-40 text-sm px-2 py-2">
             Your Pool %: <br />{" "}
@@ -687,3 +695,7 @@ export default function LinqStakeTabMenu({
     </div>
   );
 }
+
+/*
+ 
+            */

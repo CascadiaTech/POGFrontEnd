@@ -15,6 +15,7 @@
     "@uniswap/widgets": "^2.53.2",
     "@web3-react/core": "^8.2.2",
     "antd": "^5.8.6",
+    "ethers": "^6.7.1",
     "flowbite-react": "^0.5.0",
     "next": "^13.4.19",
     "react": "^18.2.0",

@@ -15,7 +15,9 @@ import error from "next/error";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 import { LPabiObject } from "../../contracts/abi/LPTokenAbi.mjs";
 import { abiObject } from "../../contracts/abi/abi.mjs";
-import Web3 from "web3";
+import { JsonRpcProvider } from "ethers/src.ts/providers"; // Import JsonRpcProvider from ethers
+import ethers from "ethers";
+import { Web3 } from "web3";
 import Swal from "sweetalert2";
 interface LpStakeTabMenuProps {
   _token: number;
@@ -52,6 +54,32 @@ export default function LpStakeTabMenu({
   */
 
   useEffect(() => {
+    const fetchTimestamp = async () => {
+      try {
+        const web3 =
+          current_chain === 1
+            ? new Web3("https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad")
+            : new Web3("https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad");
+
+        const block = await web3.eth.getBlock("latest");
+        if (block) {
+          const timestamp = block.timestamp; // This is the block timestamp
+          setCurrentTime(timestamp);
+        } else {
+          console.log("Block is pending");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchTimestamp();
+    const intervalId = setInterval(fetchTimestamp, 4000);
+
+    return () => clearInterval(intervalId);
+  }, [current_chain]);
+
+  /*
+  useEffect(() => {
     const web3 =
       current_chain == 1
         ? new Web3(
@@ -61,16 +89,17 @@ export default function LpStakeTabMenu({
             "https://goerli.infura.io/v3/43c711c77abe491f81758495e3944bb6"
           );
     web3.eth
-      .getBlock("latest")
-      .then((block: { timestamp: any }) => {
-        const timestamp = block.timestamp; // This is the block timestamp
-        setCurrentTime(timestamp); // Assuming setCurrentTime is a function for setting the timestamp in your frontend
-      })
-      .catch((error: any) => {
-        console.error(error);
-      });
+    const provider = new ethers.JsonRpcProvider("https://twilight-lively-wish.discover.quiknode.pro/f952ff5ac1c946ffed4d7bc7e607f4e98eedef80/");
+    try {
+      const block = provider.getBlock("latest");
+      const timestamp = block.timestamp; // This is the block timestamp
+      console.log(timestamp, "this is my timestamp");
+      setCurrentTime(timestamp);
+    } catch (error) {
+      console.error(error);
+    }
   }, [address]);
-
+*/
 
   let allowance_default = _amountMilQ > 1 ? _amountMilQ.toString() : "100";
   const { write: LPApprove, isLoading: approveLoad } = useContractWrite({
@@ -207,6 +236,7 @@ export default function LpStakeTabMenu({
       console.error("Staking failed:", error);
     }
   }
+
   function HandleUnStaQe() {
     if (!address) {
       return;
@@ -227,8 +257,7 @@ export default function LpStakeTabMenu({
         confirmButtonText: "Continue", // Change the Confirm button text
         cancelButtonText: "Cancel", // Add a Cancel button
       }).then((result) => {
-        if (result.isConfirmed) {
-          unStaQe();
+        if (result.isConfirmed) { 
           try {
             setupdate("updatesunstake");
             unStaQe();
@@ -343,7 +372,6 @@ useEffect(() => {
   const { days, hours, minutes, seconds } = secondsToDHMS(unlocktime);
   setfinalUserLockTime(unlocktime);
 }, [unlocktime]);
-console.log(finalUserLockTime, "this is my lock time");
 
   return (
     <div

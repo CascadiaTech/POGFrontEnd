@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 
 const EthereumRPC = 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID'; // Replace with your Infura project ID
 
+interface BlockTimestampProps {
+  blockTimestamp: number; // Replace 'number' with the actual type of blockTimestamp
+}
+
 function getCurrentBlockTimestamp() {
   const requestData = {
     jsonrpc: '2.0',
@@ -29,19 +33,23 @@ function getCurrentBlockTimestamp() {
     });
 }
 
-function BlockTimestamp() {
-  const [blockTimestamp, setBlockTimestamp] = useState<Date | null>(null);
+function BlockTimestamp({ blockTimestamp }: BlockTimestampProps) {
+  const [currentBlockTimestamp, setCurrentBlockTimestamp] = useState<Date | null>(null);
 
   useEffect(() => {
-    getCurrentBlockTimestamp()
-      .then((timestamp) => setBlockTimestamp(timestamp))
-      .catch((error) => console.error(error));
-  }, []);
+    if (blockTimestamp) {
+      setCurrentBlockTimestamp(new Date(blockTimestamp));
+    } else {
+      getCurrentBlockTimestamp()
+        .then((timestamp) => setCurrentBlockTimestamp(timestamp))
+        .catch((error) => console.error(error));
+    }
+  }, [blockTimestamp]);
 
   return (
     <div>
       <h1>Current Block Timestamp:</h1>
-      {blockTimestamp ? <p>{blockTimestamp.toString()}</p> : <p>Loading...</p>}
+      {currentBlockTimestamp ? <p>{currentBlockTimestamp.toString()}</p> : <p>Loading...</p>}
     </div>
   );
 }
