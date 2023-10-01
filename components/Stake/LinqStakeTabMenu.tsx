@@ -105,6 +105,7 @@ export default function LinqStakeTabMenu({
   const [ownedTill, setOwnedTill]: any = useState();
   // rentedDaissysTill - CurrentBlockTimeStamp
   // 345600 -
+  
 
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
@@ -123,6 +124,8 @@ export default function LinqStakeTabMenu({
   });
 
   const [unlocktime, setUnlockTime]: any = useState();
+  console.log(unlocktime, "this is unlockTime")
+  console.log(currentTime, "this is currenttime")
 
   function secondsToDHMS(seconds: number) {
     const hours = Math.floor(seconds / 3600);
@@ -310,7 +313,7 @@ export default function LinqStakeTabMenu({
       });
       return;
     }
-    if (unlocktime < currentTime) {
+    if (currentTime < unlocktime) {
       Swal.fire({
         icon: "warning",
         title: "Warning",
