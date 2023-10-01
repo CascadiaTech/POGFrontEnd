@@ -98,7 +98,6 @@ const StackingCompnent = () => {
       setLPStaked(Number(data.toString()) / 10 ** 18);
     },
   });
-
   function FetchBalances() {
     getRewards;
     BalanceOfMilq;
