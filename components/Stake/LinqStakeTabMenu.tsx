@@ -332,33 +332,12 @@ export default function LinqStakeTabMenu({
 
       return; // Exit the function
     }
-    if (owned == true && ownedTill < currentTime) {
-      Swal.fire({
-        icon: "warning",
-        title: "Warning",
-        text: "You will incur a withdraw fee if you unstake early",
-        showCancelButton: true, // Show Cancel button
-        confirmButtonText: "Continue", // Change the Confirm button text
-        cancelButtonText: "Cancel", // Add a Cancel button
-      }).then((result) => {
-        if (result.isConfirmed) {
-          unStaQe();
-          try {
-            unStaQe();
-          } catch (error) {
-            console.error("Unstaking failed:", error);
-          }
-        }
-      });
-
-      return; // Exit the function
-    }
-
     try {
       unStaQe();
       FetchDetails();
     } catch (error) {}
   }
+  
   const [totallinqStaked, settotalLinqStaked] = useState(0);
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
