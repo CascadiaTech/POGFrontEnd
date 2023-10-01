@@ -336,7 +336,7 @@ export default function LinqStakeTabMenu({
       Swal.fire({
         icon: "warning",
         title: "Warning",
-        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
+        text: "You will incur a withdraw fee if you unstake early",
         showCancelButton: true, // Show Cancel button
         confirmButtonText: "Continue", // Change the Confirm button text
         cancelButtonText: "Cancel", // Add a Cancel button
