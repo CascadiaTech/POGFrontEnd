@@ -56,8 +56,12 @@ export default function LinqStakeTabMenu({
       try {
         const web3 =
           current_chain === 1
-            ? new Web3("https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad")
-            : new Web3("https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad");
+            ? new Web3(
+                "https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"
+              )
+            : new Web3(
+                "https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"
+              );
 
         const block = await web3.eth.getBlock("latest");
         if (block) {
@@ -75,7 +79,7 @@ export default function LinqStakeTabMenu({
 
     return () => clearInterval(intervalId);
   }, [current_chain]);
-    
+
   /*
   useEffect(() => {
     const provider = new ethers.JsonRpcProvider("https://twilight-lively-wish.discover.quiknode.pro/f952ff5ac1c946ffed4d7bc7e607f4e98eedef80/");
@@ -99,9 +103,9 @@ export default function LinqStakeTabMenu({
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
   const [ownedTill, setOwnedTill]: any = useState();
-// rentedDaissysTill - CurrentBlockTimeStamp
-// 345600 -
-  
+  // rentedDaissysTill - CurrentBlockTimeStamp
+  // 345600 -
+
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -119,7 +123,7 @@ export default function LinqStakeTabMenu({
   });
 
   const [unlocktime, setUnlockTime]: any = useState();
-  
+
   function secondsToDHMS(seconds: number) {
     const hours = Math.floor(seconds / 3600);
     seconds -= hours * 3600;
@@ -127,12 +131,10 @@ export default function LinqStakeTabMenu({
     seconds -= minutes * 60;
     return { hours, minutes, seconds };
   }
-  
+
   // Assuming unlocktime is in seconds
   const unlocktimeInSeconds = parseInt(unlocktime, 10);
   const { hours, minutes, seconds } = secondsToDHMS(unlocktimeInSeconds);
-  
-  
 
   ///Glinq stuff
 
@@ -174,14 +176,14 @@ export default function LinqStakeTabMenu({
     functionName: "approve",
     chainId: current_chain,
     account: address,
-    args: [StaqeFarm, (Number(allowance_default) * 10 ** 18) * 1.2],
+    args: [StaqeFarm, Number(allowance_default) * 10 ** 18 * 1.2],
     onSuccess(data) {
       Swal.fire({
         icon: "success",
         title: "you have successfully Approved",
       });
 
-      setAllowance((Number(allowance_default) * 10 ** 18) * 1.2);
+      setAllowance(Number(allowance_default) * 10 ** 18 * 1.2);
     },
   });
   let [Allowance, setAllowance]: any = useState();
@@ -517,7 +519,7 @@ export default function LinqStakeTabMenu({
                           disabled={
                             userdetails ? userdetails[0] < _amountLinQ : true
                           }
-                              onClick={() => HandleUnStaQe()}
+                          onClick={() => HandleUnStaQe()}
                           style={{ fontFamily: "GroupeMedium" }}
                           className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                           type="button"
@@ -531,6 +533,16 @@ export default function LinqStakeTabMenu({
               </>
             )}
           </div>
+
+          <p
+            className={
+              "text-red-500 text-md mx-auto justify-center text-center"
+            }
+          >
+            Please wait until unlock time reaches 0, otherwise you will incur a
+            withdraw fee to leave staQe early
+          </p>
+
           <div className="flex flex-col justify-center items-center my-3">
             {Number(unlocktime?.toString()) != 0 &&
             Number(unlocktime?.toString()) < currentTime &&
@@ -638,7 +650,8 @@ export default function LinqStakeTabMenu({
                     ? Number(unlocktime.toString()) -
                       Number(currentTime.toString())
                     : "0"
-                  : "0"}{" "} Seconds
+                  : "0"}{" "}
+                Seconds
               </>
             ) : (
               <>
@@ -650,7 +663,8 @@ export default function LinqStakeTabMenu({
                     ? Number(ownedTill.toString()) -
                       Number(currentTime.toString())
                     : "0"
-                  : "0"}{" "} Seconds
+                  : "0"}{" "}
+                Seconds
               </>
             )}
           </h2>
