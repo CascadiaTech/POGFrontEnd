@@ -15,8 +15,6 @@ import error from "next/error";
 import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 import { LPabiObject } from "../../contracts/abi/LPTokenAbi.mjs";
 import { abiObject } from "../../contracts/abi/abi.mjs";
-import { JsonRpcProvider } from "ethers/src.ts/providers"; // Import JsonRpcProvider from ethers
-import ethers from "ethers";
 import { Web3 } from "web3";
 import Swal from "sweetalert2";
 interface LpStakeTabMenuProps {

@@ -13,8 +13,6 @@ import { LPStakingabiObject } from "../../contracts/abi/LpStakingAbi.mjs";
 import { abiObject } from "../../contracts/abi/abi.mjs";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
-import { JsonRpcProvider } from "ethers/src.ts/providers"; // Import JsonRpcProvider from ethers
-import ethers from "ethers";
 import { Provider } from "react-redux";
 import { Log } from "viem";
 interface LpStakeTabMenuProps {
@@ -337,7 +335,7 @@ export default function LinqStakeTabMenu({
       FetchDetails();
     } catch (error) {}
   }
-  
+
   const [totallinqStaked, settotalLinqStaked] = useState(0);
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
