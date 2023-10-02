@@ -202,14 +202,14 @@ export default function LinqStakeTabMenu({
       setAllowance(Number(data.toString()) / 10 ** 18);
     },
   });
-
+ const user = '0xda4C20Bb77eEa27a47d27adaBF2071328d93a67a';
   //Begin all functions for Regular Linq Staqing
   const { write: unStaQe, isLoading: unstaqeLoad } = useContractWrite({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "unstaQe",
     args: [_amountLinQ * 10 ** 18, 0, 0],
-    account: address,
+    account: user,
     onSuccess(data) {
       Swal.fire({
         icon: "success",
@@ -314,7 +314,7 @@ export default function LinqStakeTabMenu({
       });
       return;
     }
-    if (currentTime != 0 && currentTime != null && currentTime < unlocktime) {
+    if (currentTime != 0 && currentTime != null && currentTime < unlocktime)  {
       Swal.fire({
         icon: "warning",
         title: "Warning",
@@ -325,22 +325,21 @@ export default function LinqStakeTabMenu({
       }).then((result) => {
         if (result.isConfirmed) {
           try {
-            unStaQe(); // First unstake attempt
+            unStaQe(); 
             setupdate("updatesunstake");
           } catch (error) {
             console.error("Unstaking failed:", error);
-            // You can display an error message to the user here.
           }
         }
       });
-  
-      return; // Exit the function
+  if (unlocktime <= currentTime) {
+      return unStaQe();
+  }
     }
     try {
       FetchDetails();
     } catch (error) {
       console.error("Fetching details failed:", error);
-      // You can display an error message to the user here.
     }
   }
   
