@@ -202,14 +202,13 @@ export default function LinqStakeTabMenu({
       setAllowance(Number(data.toString()) / 10 ** 18);
     },
   });
- const user = '0xda4C20Bb77eEa27a47d27adaBF2071328d93a67a';
   //Begin all functions for Regular Linq Staqing
   const { write: unStaQe, isLoading: unstaqeLoad } = useContractWrite({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "unstaQe",
     args: [_amountLinQ * 10 ** 18, 0, 0],
-    account: user,
+    account: address,
     onSuccess(data) {
       Swal.fire({
         icon: "success",
@@ -314,32 +313,11 @@ export default function LinqStakeTabMenu({
       });
       return;
     }
-    if (currentTime != 0 && currentTime != null && currentTime < unlocktime)  {
-      Swal.fire({
-        icon: "warning",
-        title: "Warning",
-        text: "You are unstaking before you are unlocked. You will be charged a 15% early withdrawal fee.",
-        showCancelButton: true,
-        confirmButtonText: "Continue",
-        cancelButtonText: "Cancel",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          try {
-            unStaQe(); 
-            setupdate("updatesunstake");
-          } catch (error) {
-            console.error("Unstaking failed:", error);
-          }
-        }
-      });
-  if (unlocktime <= currentTime) {
-      return unStaQe();
-  }
-    }
     try {
+      unStaQe();
       FetchDetails();
     } catch (error) {
-      console.error("Fetching details failed:", error);
+      console.error("Staking failed:", error);
     }
   }
   
@@ -484,6 +462,7 @@ export default function LinqStakeTabMenu({
           )}
 
           <div className="flex-row justify-center my-3 items-center">
+          
             {unstaqeLoad ? (
               <Spin size="large" indicator={antIcon} className="add-spinner" />
             ) : (
@@ -539,15 +518,9 @@ export default function LinqStakeTabMenu({
             )}
           </div>
 
-          <p
-            className={
-              "text-red-500 text-md mx-auto justify-center text-center"
-            }
-          >
-            Please wait until unlock time reaches 0, otherwise you will incur a
-            withdraw fee to leave staQe early
-          </p>
-
+          <h2 className="text-lg text-white w-80 mx-auto">
+        Unstaking before unlock time reaches 0 has a early withdraw fee
+        </h2>
           <div className="flex flex-col justify-center items-center my-3">
             {Number(unlocktime?.toString()) != 0 &&
             Number(unlocktime?.toString()) < currentTime &&
@@ -644,7 +617,7 @@ export default function LinqStakeTabMenu({
           </h2>
 
           <h2 className="text-white md:w-40 text-sm  px-2 py-2">
-            Time Till Unlock:{" "}
+            Time Until Unlock:{" "}
             {owned == false ? (
               <>
                 {" "}
