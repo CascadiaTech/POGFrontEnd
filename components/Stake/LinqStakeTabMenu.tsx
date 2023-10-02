@@ -302,6 +302,7 @@ export default function LinqStakeTabMenu({
   }
 
   const [update, setupdate] = useState("");
+
   function HandleUnStaQe() {
     if (!address) {
       return;
@@ -313,34 +314,36 @@ export default function LinqStakeTabMenu({
       });
       return;
     }
-    if (currentTime < unlocktime) {
+    if (currentTime != 0 && currentTime != null && currentTime < unlocktime) {
       Swal.fire({
         icon: "warning",
         title: "Warning",
-        text: "You are unstaking before you are unlocked. You will be charged a 15% early withdraw fee.",
+        text: "You are unstaking before you are unlocked. You will be charged a 15% early withdrawal fee.",
         showCancelButton: true,
         confirmButtonText: "Continue",
         cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.isConfirmed) {
-          unStaQe();
           try {
+            unStaQe(); // First unstake attempt
             setupdate("updatesunstake");
-            unStaQe();
           } catch (error) {
             console.error("Unstaking failed:", error);
+            // You can display an error message to the user here.
           }
         }
       });
-
+  
       return; // Exit the function
     }
     try {
-      unStaQe();
       FetchDetails();
-    } catch (error) {}
+    } catch (error) {
+      console.error("Fetching details failed:", error);
+      // You can display an error message to the user here.
+    }
   }
-
+  
   const [totallinqStaked, settotalLinqStaked] = useState(0);
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
