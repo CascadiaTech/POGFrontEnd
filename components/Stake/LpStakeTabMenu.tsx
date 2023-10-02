@@ -234,7 +234,23 @@ export default function LpStakeTabMenu({
       console.error("Staking failed:", error);
     }
   }
-
+ function HandleUnStaQe() {
+      return;
+    }
+    if (_amountMilQ <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: `You must UnstaQe an amount above 0 `,
+      });
+      return;
+    }
+    try {
+      unStaQe();
+    } catch (error) {
+      console.error("Staking failed:", error);
+    }
+  }
+/*
   function HandleUnStaQe() {
     if (!address) {
       return;
@@ -296,6 +312,7 @@ export default function LpStakeTabMenu({
       console.error("Unstaking failed:", error);
     }
   }
+  */
 
   const [MilqBalance, setMilqBalance] = useState(0);
 
