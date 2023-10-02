@@ -518,7 +518,7 @@ export default function LinqStakeTabMenu({
             )}
           </div>
 
-          <h2 className="text-lg text-white w-80 mx-auto">
+          <h2 className="text-lg text-red-600 w-80 mx-auto">
         Unstaking before unlock time reaches 0 has a early withdraw fee
         </h2>
           <div className="flex flex-col justify-center items-center my-3">
