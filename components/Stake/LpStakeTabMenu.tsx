@@ -50,21 +50,18 @@ export default function LpStakeTabMenu({
     },
   });
   */
+
   useEffect(() => {
     const fetchTimestamp = async () => {
       try {
         const web3 =
           current_chain === 1
-            ? new Web3(
-                "https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"
-              )
-            : new Web3(
-                "https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"
-              );
+            ? new Web3("https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad")
+            : new Web3("https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad");
 
         const block = await web3.eth.getBlock("latest");
         if (block) {
-          const timestamp = Number(block.timestamp); // This is the block timestamp
+          const timestamp = block.timestamp; // This is the block timestamp
           setCurrentTime(timestamp);
         } else {
           console.log("Block is pending");
@@ -74,7 +71,7 @@ export default function LpStakeTabMenu({
       }
     };
     fetchTimestamp();
-    const intervalId = setInterval(fetchTimestamp, 3000);
+    const intervalId = setInterval(fetchTimestamp, 4000);
 
     return () => clearInterval(intervalId);
   }, [current_chain]);
@@ -237,23 +234,7 @@ export default function LpStakeTabMenu({
       console.error("Staking failed:", error);
     }
   }
- function HandleUnStaQe() {
-      return;
-    }
-    if (_amountMilQ <= 0) {
-      Swal.fire({
-        icon: "error",
-        title: `You must UnstaQe an amount above 0 `,
-      });
-      return;
-    }
-    try {
-      unStaQe();
-    } catch (error) {
-      console.error("Staking failed:", error);
-    }
-  }
-/*
+
   function HandleUnStaQe() {
     if (!address) {
       return;
@@ -315,7 +296,6 @@ export default function LpStakeTabMenu({
       console.error("Unstaking failed:", error);
     }
   }
-  */
 
   const [MilqBalance, setMilqBalance] = useState(0);
 
@@ -487,6 +467,7 @@ export default function LpStakeTabMenu({
               <>
                 {" "}
                 <button
+                  disabled={userdetails ? userdetails[0] < _amountMilQ : true}
                        onClick={() => unStaQe()}
                   style={{ fontFamily: "GroupeMedium" }}
                   className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
