@@ -105,7 +105,6 @@ export default function LinqStakeTabMenu({
   const [ownedTill, setOwnedTill]: any = useState();
   // rentedDaissysTill - CurrentBlockTimeStamp
   // 345600 -
-  
 
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
@@ -124,8 +123,13 @@ export default function LinqStakeTabMenu({
   });
 
   const [unlocktime, setUnlockTime]: any = useState();
-  console.log(unlocktime, "this is unlockTime")
-  console.log(currentTime, "this is currenttime")
+  console.log(unlocktime, "this is unlockTime");
+  console.log(currentTime, "this is currenttime");
+
+  const [unlockTimeInSeconds, setUnlockTimeInSeconds] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
 
   function secondsToDHMS(seconds: number) {
     const hours = Math.floor(seconds / 3600);
@@ -134,10 +138,23 @@ export default function LinqStakeTabMenu({
     seconds -= minutes * 60;
     return { hours, minutes, seconds };
   }
+  // unlockTime - currentTime
+  useEffect(() => {
+    // Calculate the unlockTimeInSeconds (e.g., subtract currentTime from unlockTime)
+    const unlockTimeInSeconds = unlocktime - currentTime;
+    setUnlockTimeInSeconds(unlockTimeInSeconds);
 
-  // Assuming unlocktime is in seconds
-  const unlocktimeInSeconds = parseInt(unlocktime, 10);
-  const { hours, minutes, seconds } = secondsToDHMS(unlocktimeInSeconds);
+    // Calculate hours, minutes, and seconds
+    const hours = Math.floor(unlockTimeInSeconds / 3600);
+    const remainingSeconds = unlockTimeInSeconds % 3600;
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = remainingSeconds % 60;
+
+    // Update state variables
+    setHours(hours);
+    setMinutes(minutes);
+    setSeconds(seconds);
+  }, [unlocktime, currentTime]);
 
   ///Glinq stuff
 
@@ -320,7 +337,7 @@ export default function LinqStakeTabMenu({
       console.error("Staking failed:", error);
     }
   }
-  
+
   const [totallinqStaked, settotalLinqStaked] = useState(0);
   const { data: daisys } = useContractRead({
     address: StaqeFarm,
@@ -386,11 +403,11 @@ export default function LinqStakeTabMenu({
         <>
           {owned == true ? (
             <h1 className="text-md  mb-6 text-white">
-              You are Perpetually Staked
+              You are Perpetually StaQed
             </h1>
           ) : (
             <h1 className="text-md mb-6 text-white">
-              You are in Basic Staking
+              You are in Basic StaQing
             </h1>
           )}
         </>
@@ -462,7 +479,6 @@ export default function LinqStakeTabMenu({
           )}
 
           <div className="flex-row justify-center my-3 items-center">
-          
             {unstaqeLoad ? (
               <Spin size="large" indicator={antIcon} className="add-spinner" />
             ) : (
@@ -519,8 +535,8 @@ export default function LinqStakeTabMenu({
           </div>
 
           <h2 className="text-lg text-red-600 w-80 mx-auto">
-        Unstaking before unlock time reaches 0 has a early withdraw fee
-        </h2>
+            UnstaQing before unlock time reaches 0 has a early withdraw fee
+          </h2>
           <div className="flex flex-col justify-center items-center my-3">
             {Number(unlocktime?.toString()) != 0 &&
             Number(unlocktime?.toString()) < currentTime &&
@@ -615,7 +631,35 @@ export default function LinqStakeTabMenu({
               : 0}{" "}
             Linq
           </h2>
+          <div className={"text-white text-sm mx-auto"}>
+            {" "}
+            <h2 className="text-white md:w-40 text-md px-2 py-2">
+              Time Until Unlock:{" "}
+            </h2>
+            <p>Hours: {hours}</p>
+            <p>Minutes: {minutes}</p>
+            <p>Seconds: {seconds}</p>
+          </div>
+          <h2 className="text-white md:w-40 text-sm px-2 py-2">
+            Your Pool %: <br />{" "}
+            {userdetails
+              ? (
+                  (Number(userdetails[0].toString()) /
+                    10 ** 18 /
+                    totallinqStaked) *
+                  100
+                ).toFixed(3)
+              : 0}
+            %{" "}
+          </h2>
+        </div>
+      </div>
+    </div>
+  );
+}
 
+/*
+ 
           <h2 className="text-white md:w-40 text-sm  px-2 py-2">
             Time Until Unlock:{" "}
             {owned == false ? (
@@ -646,24 +690,4 @@ export default function LinqStakeTabMenu({
               </>
             )}
           </h2>
-          <h2 className="text-white md:w-40 text-sm px-2 py-2">
-            Your Pool %: <br />{" "}
-            {userdetails
-              ? (
-                  (Number(userdetails[0].toString()) /
-                    10 ** 18 /
-                    totallinqStaked) *
-                  100
-                ).toFixed(3)
-              : 0}
-            %{" "}
-          </h2>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/*
- 
             */

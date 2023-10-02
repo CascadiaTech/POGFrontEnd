@@ -50,18 +50,21 @@ export default function LpStakeTabMenu({
     },
   });
   */
-
   useEffect(() => {
     const fetchTimestamp = async () => {
       try {
         const web3 =
           current_chain === 1
-            ? new Web3("https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad")
-            : new Web3("https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad");
+            ? new Web3(
+                "https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"
+              )
+            : new Web3(
+                "https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"
+              );
 
         const block = await web3.eth.getBlock("latest");
         if (block) {
-          const timestamp = block.timestamp; // This is the block timestamp
+          const timestamp = Number(block.timestamp); // This is the block timestamp
           setCurrentTime(timestamp);
         } else {
           console.log("Block is pending");
@@ -71,7 +74,7 @@ export default function LpStakeTabMenu({
       }
     };
     fetchTimestamp();
-    const intervalId = setInterval(fetchTimestamp, 4000);
+    const intervalId = setInterval(fetchTimestamp, 3000);
 
     return () => clearInterval(intervalId);
   }, [current_chain]);
@@ -328,7 +331,6 @@ export default function LpStakeTabMenu({
     },
   });
   const [qompounded, setQompounded]: any = useState();
-  const [unlocktime, setUnlockTime]: any = useState();
   const [finalUserLockTime, setfinalUserLockTime]: any = useState();
 
   const { data: UserDetails } = useContractRead({
@@ -348,15 +350,35 @@ export default function LpStakeTabMenu({
     },
   });
 
+  const [unlocktime, setUnlockTime]: any = useState();
+  console.log(unlocktime, "this is unlockTime");
+  console.log(currentTime, "this is currenttime");
+
+  const [unlockTimeInSeconds, setUnlockTimeInSeconds] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+
   function secondsToDHMS(seconds: number) {
-    const days = Math.floor(seconds / (3600 * 24));
-    seconds -= days * 3600 * 24;
     const hours = Math.floor(seconds / 3600);
     seconds -= hours * 3600;
     const minutes = Math.floor(seconds / 60);
     seconds -= minutes * 60;
-    return { days, hours, minutes, seconds };
+    return { hours, minutes, seconds };
   }
+  useEffect(() => {
+    const unlockTimeInSeconds = Number(unlocktime) - Number(currentTime);
+    setUnlockTimeInSeconds(unlockTimeInSeconds);
+
+    const hours = Math.floor(unlockTimeInSeconds / 3600);
+    const remainingSeconds = unlockTimeInSeconds % 3600;
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = remainingSeconds % 60;
+
+    setHours(hours);
+    setMinutes(minutes);
+    setSeconds(seconds);
+  }, [unlocktime, currentTime]);
 
   function FetchDetails() {
     UserDetails;
@@ -365,11 +387,6 @@ export default function LpStakeTabMenu({
     allowance;
   }
 
-useEffect(() => {
-  FetchDetails();
-  const { days, hours, minutes, seconds } = secondsToDHMS(unlocktime);
-  setfinalUserLockTime(unlocktime);
-}, [unlocktime]);
 
   return (
     <div
@@ -465,6 +482,9 @@ useEffect(() => {
             )}
           </div>
 
+          <h2 className="text-lg text-red-600 w-80 mx-auto">
+            UnstaQing before unlock time reaches 0 has a early withdraw fee
+          </h2>
           <div className="flex flex-col justify-center items-center my-1">
             {Number(unlocktime?.toString()) != 0 &&
             Number(unlocktime?.toString()) < Number(currentTime.toString()) &&
@@ -537,35 +557,15 @@ useEffect(() => {
             StaQed LP: <br />{" "}
             {userdetails ? Number(userdetails[0].toString()) / 10 ** 18 : 0} LP
           </h2>
-          <h2 className="text-white md:w-40 text-sm  px-2 py-2">
-            Time Till Unlock:{" "}
-            {owned == false ? (
-              <>
-                {" "}
-                {unlocktime && unlocktime > currentTime
-                  ? Number(unlocktime.toString()) -
-                      Number(currentTime.toString()) >
-                    0
-                    ? Number(unlocktime.toString()) -
-                      Number(currentTime.toString())
-                    : "0"
-                  : "0"}{" "}
-              </>
-            ) : (
-              <>
-                {" "}
-                {ownedTill && ownedTill > currentTime
-                  ? Number(ownedTill.toString()) -
-                      Number(currentTime.toString()) >
-                    0
-                    ? Number(ownedTill.toString()) -
-                      Number(currentTime.toString())
-                    : "0"
-                  : "0"}{" "}
-              </>
-            )}
-            Seconds
-          </h2>
+          <div className={"text-white text-sm mx-auto"}>
+            {" "}
+            <h2 className="text-white md:w-40 text-md px-2 py-2">
+              Time Until Unlock:{" "}
+            </h2>
+            <p>Hours: {hours}</p>
+            <p>Minutes: {minutes}</p>
+            <p>Seconds: {seconds}</p>
+          </div>
           <h2 className="text-white md:w-40 text-sm px-2 py-2">
             Your pool %: <br />{" "}
             {userdetails && totalLPStaked
