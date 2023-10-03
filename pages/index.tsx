@@ -22,7 +22,8 @@ import Link from "next/link";
 import { WagmiConfig, configureChains } from "wagmi";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";import {
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import {
   arbitrum,
   goerli,
   mainnet,

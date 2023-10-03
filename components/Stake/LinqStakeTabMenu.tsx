@@ -123,8 +123,6 @@ export default function LinqStakeTabMenu({
   });
 
   const [unlocktime, setUnlockTime]: any = useState();
-  console.log(unlocktime, "this is unlockTime");
-  console.log(currentTime, "this is currenttime");
 
   const [unlockTimeInSeconds, setUnlockTimeInSeconds] = useState(0);
   const [hours, setHours] = useState(0);
@@ -138,19 +136,22 @@ export default function LinqStakeTabMenu({
     seconds -= minutes * 60;
     return { hours, minutes, seconds };
   }
-  // unlockTime - currentTime
   useEffect(() => {
-    // Calculate the unlockTimeInSeconds (e.g., subtract currentTime from unlockTime)
     const unlockTimeInSeconds = unlocktime - currentTime;
     setUnlockTimeInSeconds(unlockTimeInSeconds);
 
-    // Calculate hours, minutes, and seconds
+    if (unlockTimeInSeconds <= 0) {
+      return; 
+    }
+    if (Number.isNaN(unlockTimeInSeconds)) {
+      return; 
+    }
+
     const hours = Math.floor(unlockTimeInSeconds / 3600);
     const remainingSeconds = unlockTimeInSeconds % 3600;
     const minutes = Math.floor(remainingSeconds / 60);
     const seconds = remainingSeconds % 60;
 
-    // Update state variables
     setHours(hours);
     setMinutes(minutes);
     setSeconds(seconds);

@@ -56,8 +56,12 @@ export default function LpStakeTabMenu({
       try {
         const web3 =
           current_chain === 1
-            ? new Web3("https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad")
-            : new Web3("https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad");
+            ? new Web3(
+                "https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"
+              )
+            : new Web3(
+                "https://goerli.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad"
+              );
 
         const block = await web3.eth.getBlock("latest");
         if (block) {
@@ -106,13 +110,13 @@ export default function LpStakeTabMenu({
     functionName: "approve",
     chainId: current_chain,
     account: address,
-    args: [StaqeFarm, (Number(allowance_default) * 10 ** 18) * 1.2],
+    args: [StaqeFarm, Number(allowance_default) * 10 ** 18 * 1.2],
     onSuccess(data: any) {
       Swal.fire({
         icon: "success",
         title: "you have successfully Approved",
       });
-      setAllowance((Number(allowance_default) * 10 ** 18) * 1.2);
+      setAllowance(Number(allowance_default) * 10 ** 18 * 1.2);
     },
   });
   let [Allowance, setAllowance]: any = useState();
@@ -255,29 +259,7 @@ export default function LpStakeTabMenu({
         confirmButtonText: "Continue", // Change the Confirm button text
         cancelButtonText: "Cancel", // Add a Cancel button
       }).then((result) => {
-        if (result.isConfirmed) { 
-          try {
-            setupdate("updatesunstake");
-            unStaQe();
-          } catch (error) {
-            console.error("Unstaking failed:", error);
-          }
-        }
-      });
-
-      return; // Exit the function
-    }
-    if (owned == true && ownedTill < currentTime) {
-      Swal.fire({
-        icon: "warning",
-        title: "Warning",
-        text: "You are unstaking before you are unlocked. You may encounter a larger withdrawal fee.",
-        showCancelButton: true,
-        confirmButtonText: "Continue",
-        cancelButtonText: "Cancel",
-      }).then((result) => {
         if (result.isConfirmed) {
-          unStaQe();
           try {
             setupdate("updatesunstake");
             unStaQe();
@@ -289,7 +271,6 @@ export default function LpStakeTabMenu({
 
       return; // Exit the function
     }
-
     try {
       unStaQe();
     } catch (error) {
@@ -315,7 +296,7 @@ export default function LpStakeTabMenu({
   const [ownedTill, setOwnedTill]: any = useState();
   const [lpstaked, setlpstaked]: any = useState(0);
   const [totalLPStaked, settotalLPStaked] = useState(0);
-  
+
   const { data: bessies } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
@@ -367,6 +348,13 @@ export default function LpStakeTabMenu({
     const unlockTimeInSeconds = Number(unlocktime) - Number(currentTime);
     setUnlockTimeInSeconds(unlockTimeInSeconds);
 
+    if (unlockTimeInSeconds <= 0) {
+      return; 
+    }
+    if (Number.isNaN(unlockTimeInSeconds)) {
+      return; 
+    }
+
     const hours = Math.floor(unlockTimeInSeconds / 3600);
     const remainingSeconds = unlockTimeInSeconds % 3600;
     const minutes = Math.floor(remainingSeconds / 60);
@@ -383,7 +371,6 @@ export default function LpStakeTabMenu({
     BalanceOfMilq;
     allowance;
   }
-
 
   return (
     <div
@@ -407,7 +394,7 @@ export default function LpStakeTabMenu({
         <h2 className="text-lg text-white">
           Please enter the amount of tokens
         </h2>
-        
+
         <h2 className="text-md my-1 text-white">
           Available LP To StaQe: {MilqBalance.toFixed(0)}
         </h2>
@@ -468,7 +455,7 @@ export default function LpStakeTabMenu({
                 {" "}
                 <button
                   disabled={userdetails ? userdetails[0] < _amountMilQ : true}
-                       onClick={() => unStaQe()}
+                  onClick={() => unStaQe()}
                   style={{ fontFamily: "GroupeMedium" }}
                   className="font-sans cursor-pointer w-64 text-md rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white bg-black py-2 px-4 sm:px-5 md:px-5"
                   type="button"
