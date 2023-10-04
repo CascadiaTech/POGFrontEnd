@@ -103,14 +103,14 @@ export default function LinqStakeTabMenu({
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
   const [ownedTill, setOwnedTill]: any = useState();
-
+  const user = '0x3063096Ddb0fa4091058434B425d1F626CecB69E';
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "LinQerParlours",
     chainId: current_chain,
     watch: true,
-    args: [address],
+    args: [user],
     onSuccess(data: any) {
       setUserDetails(data);
       setLinqStaqbalance(Number(data[0].toString()) / 10 ** 18);
@@ -629,13 +629,14 @@ export default function LinqStakeTabMenu({
               {owned == true && ownedTill == 32503680000 ? (
                 <></>
               ) : (
-                <div className={"text-white w-60 text-sm mx-auto"}>
-                  <h2 className="text-white text-md px-2 mb-2">
+                <div className={"flex flex-col text-white w-fit px-2 mx-auto"}>
+                  <h2 className="text-white text-sm px-2 mb-1">
                     Time Until request for Unlock Ends:{" "}
                   </h2>
-                  <div>
+                  <div className={'flex flex-row text-md mx-auto border border-white py-1 px-2'}
+                  style={{fontFamily: 'BebasNeue'}} >
                     <p>Hours: {perpHours}</p>
-                    <p>Minutes: {perpMinutes}</p>
+                    <p className={'mx-2'}>Minutes: {perpMinutes}</p>
                     <p>Seconds: {perpSeconds}</p>
                   </div>
                 </div>
