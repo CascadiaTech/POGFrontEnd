@@ -470,7 +470,7 @@ export default function NewStakeComponent(_token: any) {
               background:
                 "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
             }}
-            className={`flex absolute ml-96 -translate-x-72 -translate-y-80 md:-translate-y-80 md:-translate-x-52 z-20 h-12 w-52 mb-10 rounded-full bg-gray-200 ${
+            className={`flex absolute ml-96 -translate-x-72 -translate-y-80 md:-translate-y-80 md:-translate-x-52 z-20 h-12 w-52 mb-20 rounded-full bg-gray-200 ${
               isLpStakeOpen ? "bg-gray-200" : ""
             }`}
           >

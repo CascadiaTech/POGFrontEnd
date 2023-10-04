@@ -103,8 +103,6 @@ export default function LinqStakeTabMenu({
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
   const [ownedTill, setOwnedTill]: any = useState();
-  // rentedDaissysTill - CurrentBlockTimeStamp
-  // 345600 -
 
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
@@ -121,6 +119,12 @@ export default function LinqStakeTabMenu({
       setOwned(data[10]);
     },
   });
+  const [inputValue, setInputValue] = useState(0);
+  const calculateMaxBalance = () => {
+    const maxBalance = linqBalance;
+    setInputValue(maxBalance);
+    set_amountLinQ(maxBalance);
+  };
 
   const [unlocktime, setUnlockTime]: any = useState();
 
@@ -139,23 +143,44 @@ export default function LinqStakeTabMenu({
   useEffect(() => {
     const unlockTimeInSeconds = unlocktime - currentTime;
     setUnlockTimeInSeconds(unlockTimeInSeconds);
-
     if (unlockTimeInSeconds <= 0) {
-      return; 
+      return;
     }
     if (Number.isNaN(unlockTimeInSeconds)) {
-      return; 
+      return;
     }
-
     const hours = Math.floor(unlockTimeInSeconds / 3600);
     const remainingSeconds = unlockTimeInSeconds % 3600;
     const minutes = Math.floor(remainingSeconds / 60);
     const seconds = remainingSeconds % 60;
-
     setHours(hours);
     setMinutes(minutes);
     setSeconds(seconds);
   }, [unlocktime, currentTime]);
+  console.log(ownedTill, "this is ownedtill")
+
+  const [unlockPerpTimeInSeconds, setPerpUnlockTimeInSeconds] = useState(0);
+  const [perpHours, setperpHours] = useState(0);
+  const [perpMinutes, setperpMinutes] = useState(0);
+  const [perpSeconds, setperpSeconds] = useState(0);
+
+  useEffect(() => {
+    const unlockPerpTimeInSeconds = Number(ownedTill) - Number(currentTime);
+    setPerpUnlockTimeInSeconds(unlockPerpTimeInSeconds);
+    if (unlockPerpTimeInSeconds <= 0) {
+      return;
+    }
+    if (Number.isNaN(unlockPerpTimeInSeconds)) {
+      return;
+    }
+    const perpHours = Math.floor(unlockPerpTimeInSeconds / 3600);
+    const remainingSeconds = unlockPerpTimeInSeconds % 3600;
+    const perpMinutes = Math.floor(remainingSeconds / 60);
+    const perpSeconds = remainingSeconds % 60;
+    setperpHours(perpHours);
+    setperpMinutes(perpMinutes);
+    setperpSeconds(perpSeconds);
+  }, [ownedTill, currentTime]);
 
   ///Glinq stuff
 
@@ -319,7 +344,6 @@ export default function LinqStakeTabMenu({
   }
 
   const [update, setupdate] = useState("");
-
   function HandleUnStaQe() {
     if (!address) {
       return;
@@ -421,22 +445,32 @@ export default function LinqStakeTabMenu({
         </h2>
 
         <div className="flex flex-col items-center justify-center">
-          <input
-            defaultValue={linqBalance}
-            type="number"
-            id="stakeInput"
-            className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-            style={{ fontFamily: "ethnocentricRg" }}
-            onChange={(e) => {
-              //   let value = e.target.valueAsNumber; // Get the input value as a number
-              let inputValue = Number(e.target.value); // Parse the input value as a number
-              if (inputValue < 0) {
-                set_amountLinQ(0);
-              } else {
-                set_amountLinQ(inputValue);
-              }
-            }}
-          />
+          <div className={"flex flex-row"}>
+            <input
+              value={inputValue} // Use inputValue as the value of the input field
+              type="number"
+              id="stakeInput"
+              className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
+              style={{ fontFamily: "ethnocentricRg" }}
+              onChange={(e) => {
+                const newValue = Number(e.target.value);
+                setInputValue(newValue);
+                if (newValue < 0) {
+                  set_amountLinQ(0);
+                } else {
+                  set_amountLinQ(newValue);
+                }
+              }}
+            />
+            <button
+              style={{ fontFamily: "BebasNeue" }}
+              className="text-white text-xl tracking-wide border border-white w-fit h-fit px-2 self-center rounded-sm
+            hover:translate-x-1 hover:-translate-y-1 hover:scale-95 hover:duration-500"
+              onClick={calculateMaxBalance}
+            >
+              Max
+            </button>
+          </div>
           {Allowance >= _amountLinQ ? (
             <>
               {" "}
@@ -590,6 +624,23 @@ export default function LinqStakeTabMenu({
             ) : (
               <></>
             )}
+            <>
+              {" "}
+              {owned == true && ownedTill == 32503680000 ? (
+               <></>
+              ) : (
+                <div className={"text-white w-60 text-sm mx-auto"}>
+                <h2 className="text-white text-md px-2 py-2">
+                  Time Until request for Unlock Ends:{" "}
+                </h2>
+                <div>
+                <p>Hours: {perpHours}</p>
+                <p>Minutes: {perpMinutes}</p>
+                <p>Seconds: {perpSeconds}</p>
+                </div>
+              </div>
+              )}
+            </>
           </div>
           <div>
             {" "}

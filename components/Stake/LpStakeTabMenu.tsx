@@ -328,42 +328,38 @@ export default function LpStakeTabMenu({
     },
   });
 
+  const [inputValue, setInputValue] = useState(0);
+  const calculateMaxBalance = () => {
+    const maxBalance = MilqBalance; 
+    setInputValue(maxBalance); 
+    set_amountMilQ(maxBalance); 
+  };
+
   const [unlocktime, setUnlockTime]: any = useState();
-  console.log(unlocktime, "this is unlockTime");
-  console.log(currentTime, "this is currenttime");
 
   const [unlockTimeInSeconds, setUnlockTimeInSeconds] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  function secondsToDHMS(seconds: number) {
-    const hours = Math.floor(seconds / 3600);
-    seconds -= hours * 3600;
-    const minutes = Math.floor(seconds / 60);
-    seconds -= minutes * 60;
-    return { hours, minutes, seconds };
-  }
   useEffect(() => {
     const unlockTimeInSeconds = Number(unlocktime) - Number(currentTime);
     setUnlockTimeInSeconds(unlockTimeInSeconds);
-
     if (unlockTimeInSeconds <= 0) {
       return; 
     }
     if (Number.isNaN(unlockTimeInSeconds)) {
       return; 
     }
-
     const hours = Math.floor(unlockTimeInSeconds / 3600);
     const remainingSeconds = unlockTimeInSeconds % 3600;
     const minutes = Math.floor(remainingSeconds / 60);
     const seconds = remainingSeconds % 60;
-
     setHours(hours);
     setMinutes(minutes);
     setSeconds(seconds);
   }, [unlocktime, currentTime]);
+
 
   function FetchDetails() {
     UserDetails;
@@ -396,20 +392,35 @@ export default function LpStakeTabMenu({
         </h2>
 
         <h2 className="text-md my-1 text-white">
-          Available LP To StaQe: {MilqBalance.toFixed(0)}
+          Available LP To StaQe: {MilqBalance ? MilqBalance.toFixed(2) : "0"}{" "}
         </h2>
         <div className="flex flex-col items-center justify-center">
-          <input
-            defaultValue={MilqBalance}
-            type="number"
-            id="stakeInput"
-            className="w-64 border my-2 border-gray-300 outline-none p-2 pr-10 text-black"
-            style={{ fontFamily: "ethnocentricRg" }}
-            onChange={(e) => {
-              // Get the input value as a number
-              set_amountMilQ(Number(e.target.value));
-            }}
-          />
+          <div className={"flex flex-row"}>
+            <input
+              value={inputValue} // Use inputValue as the value of the input field
+              type="number"
+              id="stakeInput"
+              className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
+              style={{ fontFamily: "ethnocentricRg" }}
+              onChange={(e) => {
+                const newValue = Number(e.target.value);
+                setInputValue(newValue); 
+                if (newValue < 0) {
+                  set_amountMilQ(0);
+                } else {
+                  set_amountMilQ(newValue);
+                }
+              }}
+            />
+          <button
+          style={{fontFamily: 'BebasNeue'}}
+            className="text-white text-xl tracking-wide border border-white w-fit h-fit px-2 self-center rounded-sm
+            hover:translate-x-1 hover:-translate-y-1 hover:scale-95 hover:duration-500"
+            onClick={calculateMaxBalance}
+          >
+            Max
+          </button>
+          </div>
           {Allowance >= _amountMilQ ? (
             <>
               {" "}
