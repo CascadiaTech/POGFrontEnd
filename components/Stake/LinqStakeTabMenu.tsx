@@ -157,7 +157,7 @@ export default function LinqStakeTabMenu({
     setMinutes(minutes);
     setSeconds(seconds);
   }, [unlocktime, currentTime]);
-  console.log(ownedTill, "this is ownedtill")
+  console.log(ownedTill, "this is ownedtill");
 
   const [unlockPerpTimeInSeconds, setPerpUnlockTimeInSeconds] = useState(0);
   const [perpHours, setperpHours] = useState(0);
@@ -566,10 +566,10 @@ export default function LinqStakeTabMenu({
             )}
           </div>
 
-          <h2 className="text-lg text-red-600 w-80 mx-auto">
+          <h2 className="text-lg text-red-600 w-80 mx-auto mb-2">
             UnstaQing before unlock time reaches 0 has a early withdraw fee
           </h2>
-          <div className="flex flex-col justify-center items-center my-3">
+          <div className="flex flex-col justify-center items-center">
             {Number(unlocktime?.toString()) != 0 &&
             Number(unlocktime?.toString()) < currentTime &&
             owned == false ? (
@@ -627,18 +627,18 @@ export default function LinqStakeTabMenu({
             <>
               {" "}
               {owned == true && ownedTill == 32503680000 ? (
-               <></>
+                <></>
               ) : (
                 <div className={"text-white w-60 text-sm mx-auto"}>
-                <h2 className="text-white text-md px-2 py-2">
-                  Time Until request for Unlock Ends:{" "}
-                </h2>
-                <div>
-                <p>Hours: {perpHours}</p>
-                <p>Minutes: {perpMinutes}</p>
-                <p>Seconds: {perpSeconds}</p>
+                  <h2 className="text-white text-md px-2 mb-2">
+                    Time Until request for Unlock Ends:{" "}
+                  </h2>
+                  <div>
+                    <p>Hours: {perpHours}</p>
+                    <p>Minutes: {perpMinutes}</p>
+                    <p>Seconds: {perpSeconds}</p>
+                  </div>
                 </div>
-              </div>
               )}
             </>
           </div>
@@ -682,14 +682,14 @@ export default function LinqStakeTabMenu({
           </h2>
           <div className={"text-white text-sm mx-auto"}>
             {" "}
-            <h2 className="text-white md:w-40 text-md px-2 py-2">
+            <h2 className="text-white md:w-40 text-md px-2">
               Time Until Unlock:{" "}
             </h2>
             <p>Hours: {hours}</p>
             <p>Minutes: {minutes}</p>
             <p>Seconds: {seconds}</p>
           </div>
-          <h2 className="text-white md:w-40 text-sm px-2 py-2">
+          <h2 className="text-white md:w-40 text-sm px-2">
             Your Pool %: <br />{" "}
             {userdetails
               ? (
