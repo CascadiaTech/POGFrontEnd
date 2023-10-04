@@ -103,14 +103,13 @@ export default function LinqStakeTabMenu({
   const [owned, setOwned] = useState(false);
   const [linqstaked, setLinqStaqbalance]: any = useState(0);
   const [ownedTill, setOwnedTill]: any = useState();
-  const user = '0x3063096Ddb0fa4091058434B425d1F626CecB69E';
   const { data: UserDetails } = useContractRead({
     address: StaqeFarm,
     abi: LPStakingabiObject,
     functionName: "LinQerParlours",
     chainId: current_chain,
     watch: true,
-    args: [user],
+    args: [address],
     onSuccess(data: any) {
       setUserDetails(data);
       setLinqStaqbalance(Number(data[0].toString()) / 10 ** 18);
