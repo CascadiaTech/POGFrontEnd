@@ -330,9 +330,9 @@ export default function LpStakeTabMenu({
 
   const [inputValue, setInputValue] = useState(0);
   const calculateMaxBalance = () => {
-    const maxBalance = MilqBalance; 
-    setInputValue(maxBalance); 
-    set_amountMilQ(maxBalance); 
+    const maxBalance = parseFloat(MilqBalance.toFixed(2)); // Limit to two decimal places
+    setInputValue(maxBalance);
+    set_amountMilQ(maxBalance);
   };
 
   const [unlocktime, setUnlockTime]: any = useState();
@@ -377,11 +377,11 @@ export default function LpStakeTabMenu({
       className="rounded-2xl px-3 w-fit py-3 opacity-90"
     >
       <div>
-        <h1 className="text-xl md:text-2xl mb-10 text-white">
+        <h1 className="text-xl md:text-2xl my-16 text-white">
           LP Token StaQing
         </h1>
         {owned == true ? (
-          <h1 className="text-md  mb-6 text-white">
+          <h1 className="text-md mb-6 text-white">
             You are Perpetually Staked
           </h1>
         ) : (

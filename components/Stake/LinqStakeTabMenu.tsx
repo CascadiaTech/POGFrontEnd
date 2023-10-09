@@ -120,7 +120,7 @@ export default function LinqStakeTabMenu({
   });
   const [inputValue, setInputValue] = useState(0);
   const calculateMaxBalance = () => {
-    const maxBalance = linqBalance;
+    const maxBalance = parseFloat(linqBalance.toFixed(2)); // Limit to two decimal places
     setInputValue(maxBalance);
     set_amountLinQ(maxBalance);
   };
@@ -156,7 +156,6 @@ export default function LinqStakeTabMenu({
     setMinutes(minutes);
     setSeconds(seconds);
   }, [unlocktime, currentTime]);
-  console.log(ownedTill, "this is ownedtill");
 
   const [unlockPerpTimeInSeconds, setPerpUnlockTimeInSeconds] = useState(0);
   const [perpHours, setperpHours] = useState(0);
@@ -421,7 +420,7 @@ export default function LinqStakeTabMenu({
       className="rounded-2xl px-3 w-fit py-3 opacity-90"
     >
       <div>
-        <h1 className="text-xl md:text-2xl mb-10 text-white">
+        <h1 className="text-xl md:text-2xl my-16 text-white">
           Linq Token StaQing
         </h1>
         <>
@@ -446,7 +445,7 @@ export default function LinqStakeTabMenu({
         <div className="flex flex-col items-center justify-center">
           <div className={"flex flex-row"}>
             <input
-              value={inputValue} // Use inputValue as the value of the input field
+              value={inputValue} 
               type="number"
               id="stakeInput"
               className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"

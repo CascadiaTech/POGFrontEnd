@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Tooltip } from "react-tooltip";
 import styles from "../../styles/Home.module.css";
+import { Tooltip } from "react-tooltip";
 import {
   useAccount,
   useNetwork,
@@ -184,98 +184,172 @@ export default function ClaimStationComponent() {
   };
 
   return (
-    <div
-      style={{
-        background:
-          "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
-      }}
-      className={" mx-auto flex flex-col justify-center"}
-    >
-      <h1
-        className="text-xl mb-2 bg-black font-bold w-full mx-auto md:text-xl lg:text-3xl font-normal text-black"
+    <>
+      <div
         style={{
-          fontFamily: "Azonix",
-          textShadow: "0px 0px 6px rgba(255,255,255,0.8)",
-          background: "transparent",
+          background:
+            "linear-gradient(to bottom, #3C3C3C 0%, #000000 100%, #000000 100%)",
         }}
+        className={"w-fit mx-auto flex flex-col justify-center"}
       >
-        Qlaiming Station
-      </h1>
-      <h2
-        style={{ fontFamily: "BebasNeue" }}
-        className={
-          "text-xl border border-white rounded-xl w-fit mx-auto text-white px-4 py-2"
-        }
-      >
-        LINQ bought and StaQed if Qompounded: <br /> 54,445 LINQ
-      </h2>
-
-      <div className={"flex flex-row mx-auto my-2"}>
+        <h1
+          className="text-xl mb-2 bg-black font-bold w-full mx-auto md:text-xl lg:text-3xl font-normal text-black"
+          style={{
+            fontFamily: "Azonix",
+            textShadow: "0px 0px 6px rgba(255,255,255,0.8)",
+            background: "transparent",
+          }}
+        >
+          Qlaiming Station
+        </h1>
         <h2
           style={{ fontFamily: "BebasNeue" }}
           className={
-            "text-xl border border-white rounded-xl text-white px-4 py-2"
+            "text-xl border border-white rounded-xl w-fit mx-auto text-white px-4 py-2"
           }
         >
-          Eth Claimable:
+          LINQ bought and StaQed if Qompounded: <br /> 54,445 LINQ
         </h2>
-        <p className={"mx-2"}></p>
-        <div className={"w-fit h-fit bg-white rounded-2xl self-center"}>
-          <Image src={arrow} alt="arrow"></Image>
+
+        <div className={"flex flex-row mx-auto my-2"}>
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className={
+              "text-xl border border-white rounded-xl text-white px-4 py-2"
+            }
+          >
+            Eth Claimable:
+          </h2>
+          <p className={"mx-2"}></p>
+          <div className={"w-fit h-fit bg-white rounded-full self-center"}>
+            <Image src={arrow} alt="arrow"></Image>
+          </div>
+          <p className={"mx-2"}></p>
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className={
+              "text-xl border border-white rounded-xl text-white px-4 py-2"
+            }
+          >
+            LINQ Bought:
+          </h2>
         </div>
-        <p className={"mx-2"}></p>
-        <h2
-          style={{ fontFamily: "BebasNeue" }}
-          className={
-            "text-xl border border-white rounded-xl text-white px-4 py-2"
-          }
-        >
-          LINQ Bought:
-        </h2>
-      </div>
-        <button
-          className={`font-sans my-2 cursor-pointer text-sm rounded-lg text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white border border-white rounded-xl py-2 px-4 sm:px-5 md:px-5`}
-          onClick={() => Qompound()}
-        >
-          Qompound
-        </button>
+        <ul className={styles.ul}>
+          <button
+            style={{ fontFamily: "BebasNeue" }}
+            className={`${styles.button} w-40 my-2 cursor-pointer text-lg rounded-xl text-center focus:ring-2 focus:ring-blue-500
+           border-white border-2 text-white border border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5`}
+            onClick={() => Qompound()}
+            type="button"
+          >
+            Qompound
+          </button>
+        </ul>
 
-      <div className={"grid grid-cols-2 gap-4 mx-auto"}>
-        <h2
-          style={{ fontFamily: "BebasNeue" }}
-          className="text-white mb-2 md:w-40 border border-white rounded-xl px-2 py-2"
-          onMouseEnter={() => {}}
-        >
-          Claimable ETH <br />{" "}
-          {pendingRewards
-            ? (
-                pendingRewards +
-                pendingrewardsaddon +
-                Linqpendingrewardsaddon
-              ).toFixed(8)
-            : "0"}
-        </h2>
-        <h2
-          style={{ fontFamily: "BebasNeue" }}
-          className="text-white mb-2 md:w-40 border border-white rounded-xl px-2 py-2"
-        >
-          Claimable LP <br /> {pendingLP ? pendingLP.toFixed(8) : "0"}
-        </h2>
-        <button
-          style={{ fontFamily: "GroupeMedium" }}
-          className="font-sans cursor-pointer rounded-full w-fit bg-black hover:bg-white hover:text-black hover:duration-500 text-sm text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white border border-white px-2 py-2"
-          type="button"
-        >
-          Claim ETH
-        </button>
-        <button
-          style={{ fontFamily: "GroupeMedium" }}
-          className="font-sans cursor-pointer rounded-full w-fit bg-black hover:bg-white hover:text-black hover:duration-500 text-sm text-center focus:ring-2 focus:ring-blue-500 border-white border-2 text-white border border-white px-2 py-2"
-          type="button"
-        >
-          Claim LP
-        </button>
+        <div className={"grid grid-cols-2 gap-4 mx-auto"}>
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white mb-2 md:w-40 border border-white rounded-xl px-2 py-2"
+            onMouseEnter={() => {}}
+          >
+            Claimable ETH <br />{" "}
+            {pendingRewards
+              ? (
+                  pendingRewards +
+                  pendingrewardsaddon +
+                  Linqpendingrewardsaddon
+                ).toFixed(8)
+              : "0"}
+          </h2>
+          <button
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white mb-2 md:w-40 border border-white rounded-xl px-2 py-2"
+          >
+            Claimable LP <br /> {pendingLP ? pendingLP.toFixed(8) : "0"}
+          </button>
+
+          <button
+            style={{ fontFamily: "BebasNeue" }}
+            className={`${styles.button} my-2 cursor-pointer text-lg rounded-xl text-center focus:ring-2 focus:ring-blue-500 
+            text-white border-2 border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5`}
+            type="button"
+          >
+            Claim ETH
+          </button>
+          <button
+            style={{ fontFamily: "BebasNeue" }}
+            className={`${styles.button} my-2 cursor-pointer text-lg rounded-xl text-center focus:ring-2 focus:ring-blue-500
+            text-white border-2 border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5`}
+            type="button"
+          >
+            Claim LP
+          </button>
+        </div>
       </div>
-    </div>
+
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-azonix text-white border-b-2 border-white text-center text-shadow-md">
+        --------------------BREAK-----------------------
+      </h1>
+
+      <div className="w-fit px-3 py-3 mx-4 md:mx-auto justify-center rounded-2xl opaacity-90 bg-gradient-to-b from-gray-700 to-black">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-azonix text-white text-center text-shadow-md">
+          Qlaiming Station
+        </h1>
+        <h2 className="text-xl md:text-2xl text-white text-center font-bebas-neue border rounded-xl border-white px-4 py-2 my-4 bg-gray-800 shadow-lg">
+          LINQ bought and StaQed if Qompounded: <br /> 54,445 LINQ
+        </h2>
+
+        <div className="flex items-center justify-center my-4">
+          <h2 className="text-xl md:text-2xl text-white font-bebas-neue border rounded-xl border-white px-4 py-2 bg-gray-800 shadow-lg">
+            Eth Claimable:
+          </h2>
+          <div className="w-8 h-8 bg-white rounded-full mx-2 hover:rotate-90 transition-transform duration-300">
+            <Image src={arrow} alt="arrow" />
+          </div>
+          <h2 className="text-xl md:text-2xl text-white font-bebas-neue border rounded-xl border-white px-4 py-2 bg-gray-800 shadow-lg">
+            LINQ Bought:
+          </h2>
+        </div>
+        <ul className={styles.ul}>
+          <button
+            className={`w-40 my-2 text-lg text-white rounded-xl text-center focus:ring-2 focus:ring-blue-500 border-2 border-white border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5 ${styles.button} bg-gray-900 hover:bg-gray-700 transform hover:scale-105 transition-transform duration-300`}
+            onClick={() => Qompound()}
+            type="button"
+          >
+            Qompound
+          </button>
+        </ul>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto">
+          <h2 className="text-white text-center font-bebas-neue border rounded-xl border-white px-4 py-2 mb-4 bg-gray-800 shadow-lg">
+            Claimable ETH <br />
+            {pendingRewards
+              ? (
+                  pendingRewards +
+                  pendingrewardsaddon +
+                  Linqpendingrewardsaddon
+                ).toFixed(8)
+              : "0"}
+          </h2>
+          <button className="text-white text-center font-bebas-neue border rounded-xl border-white px-4 py-2 mb-4 bg-gray-800 shadow-lg
+           transition-transform duration-300">
+            Claimable LP <br /> {pendingLP ? pendingLP.toFixed(8) : "0"}
+          </button>
+
+          <button
+            className={`my-2 text-lg text-white rounded-xl text-center focus:ring-2 focus:ring-blue-500 border-2 border-white border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5 ${styles.button} bg-gray-900 hover:bg-gray-700 transform hover:scale-105 transition-transform duration-300`}
+            type="button"
+          >
+            Claim ETH
+          </button>
+          <button
+            className={`my-2 text-lg text-white rounded-xl text-center focus:ring-2 focus:ring-blue-500 border-2 border-white border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5 ${styles.button} bg-gray-900 hover:bg-gray-700 transform hover:scale-105 transition-transform duration-300`}
+            type="button"
+          >
+            Claim LP
+          </button>
+        </div>
+      </div>
+    </>
   );
 }

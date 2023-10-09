@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-//import Image from "next/image";
+import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import LinqLogo from "../../assets/images/LinqLogo.png";
@@ -42,7 +42,68 @@ export default function HeaderComponent() {
 
   return (
     <>
-      <nav className="px-2 sm:px-4 bg-none py-2 mt-1 -my-10 sm:my-0 sm:py-2 w-full fixed z-20 top-0">
+      <nav className="px-2 sm:px-4 bg-none mt-1 -my-10 sm:my-0 sm:py-2 w-full fixed z-20 top-0">
+        {/*
+        <div
+          className={`flex flex-row mx-auto justify-center text-center 
+          w-fit h-fit transition-all duration-300`}
+        >
+          <ul
+            style={{
+              fontFamily: "Mandalore",
+            }}
+            className={`${styles.nav} text-md  text-white px-2 py-2`}
+          >
+            <li
+              className="pt-1 border-gray-300 text-[16px]"
+              style={{ fontFamily: "Azonix" }}
+            >
+              <Link href={"/"}>Dashboard</Link>
+            </li>
+            <li
+              className="pt-1 border-gray-300 text-[16px]"
+              style={{ fontFamily: "Azonix" }}
+            >
+              <Link href={"/ClaimPage"}>LP Claim</Link>
+            </li>
+            <li
+              style={{ fontFamily: "Azonix" }}
+              className="pt-1 border-gray-300 text-[16px]"
+            >
+              <Link href={"/Dapp/LpStakingPage"}>Old StaQing</Link>
+            </li>
+            <li
+              style={{ fontFamily: "Azonix" }}
+              className="pt-1 border-gray-300 text-[16px]"
+            >
+              <Link href={"/StaQing"}>StaQing</Link>
+            </li>
+            <li
+              className="pt-1 border-gray-300 text-[16px]"
+              style={{ fontFamily: "Azonix" }}
+            >
+              <Link href={"https://linktr.ee/linqgroup"}>LinQ Tree</Link>
+            </li>
+            <li>
+              <a
+                onClick={() => window.open("https://www.linqgroup.io/")}
+                className=" cursor-pointer block px-4 pt-2 border-gray-300 text-[16px]"
+                style={{ fontFamily: "Azonix" }}
+              >
+                Website
+              </a>
+            </li>
+            <li
+              style={{ fontFamily: "BebasNeue" }}
+              className="pt-1 border-gray-300 text-[16px]"
+            >
+              <Link href={"/testPage"}>tst</Link>
+            </li>
+            
+          </ul>
+        </div>
+          */}
+        
         <div className="w-fit h-fit text-center mt-2  mx-auto justify-center py-2 ">
           <ConnectButton />
         </div>
@@ -94,7 +155,7 @@ export default function HeaderComponent() {
                   style={{ backgroundColor: "#131313",  width: 160 }}
                   className={`w-fit h-fit opacity-${hidden.hidden} transition-all duration-300`}
                 >
-                  {hidden.hidden === 0 ? null : ( // Check if the menu is closed // Render nothing when the menu is closed
+                  {hidden.hidden === 0 ? null : (
                     <ul
                       style={{
                         fontFamily: "Mandalore",
