@@ -172,12 +172,12 @@ const Home: NextPage = () => {
         <div className="w-full -translate-y-80 md:-translate-y-80 absolute z-10">
           <Image
             className={
-              " w-80 h-80 justify-center mx-auto js-show-on-scroll animate-fadeIn"
+              " w-80 h-80 justify-center mx-auto"
             }
             alt={"logo"}
             src={LinqLogo}
           ></Image>
-          <div className="flex flex-row mx-auto my-5 justify-center js-show-on-scroll animate-fadeIn">
+          <div className="flex flex-row mx-auto my-5 justify-center">
             <button
               style={{ boxShadow: "0px 0px 12px 2px rgba(123,123,123,0.6)" }}
               type="button"
