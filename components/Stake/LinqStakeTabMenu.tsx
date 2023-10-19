@@ -419,6 +419,7 @@ export default function LinqStakeTabMenu({
       }}
       className="rounded-2xl px-3 w-fit py-3 opacity-90"
     >
+      <div className={'border border-green-600 w-fit right-100 top-0'}>Perpetual</div>
       <div>
         <h1 className="text-xl md:text-2xl my-16 text-white">
           Linq Token StaQing
@@ -445,7 +446,7 @@ export default function LinqStakeTabMenu({
         <div className="flex flex-col items-center justify-center">
           <div className={"flex flex-row"}>
             <input
-              value={inputValue} 
+              value={inputValue}
               type="number"
               id="stakeInput"
               className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
@@ -631,10 +632,14 @@ export default function LinqStakeTabMenu({
                   <h2 className="text-white text-sm px-2 mb-1">
                     Time Until request for Unlock Ends:{" "}
                   </h2>
-                  <div className={'flex flex-row text-md mx-auto border border-white py-1 px-2'}
-                  style={{fontFamily: 'BebasNeue'}} >
+                  <div
+                    className={
+                      "flex flex-row text-md mx-auto border border-white py-1 px-2"
+                    }
+                    style={{ fontFamily: "BebasNeue" }}
+                  >
                     <p>Hours: {perpHours}</p>
-                    <p className={'mx-2'}>Minutes: {perpMinutes}</p>
+                    <p className={"mx-2"}>Minutes: {perpMinutes}</p>
                     <p>Seconds: {perpSeconds}</p>
                   </div>
                 </div>
@@ -681,12 +686,18 @@ export default function LinqStakeTabMenu({
           </h2>
           <div className={"text-white text-sm mx-auto"}>
             {" "}
-            <h2 className="text-white md:w-40 text-md px-2">
-              Time Until Unlock:{" "}
-            </h2>
-            <p>Hours: {hours}</p>
-            <p>Minutes: {minutes}</p>
-            <p>Seconds: {seconds}</p>
+            {hours > 0 && minutes > 0 && seconds > 0 ? (
+              <>
+              <h2 className="text-white md:w-40 text-md px-2">
+                Time Until Unlock:{" "}
+              </h2>
+                <p>Hours: {hours}</p>
+                <p>Minutes: {minutes}</p>
+                <p>Seconds: {seconds}</p>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
           <h2 className="text-white md:w-40 text-sm px-2">
             Your Pool %: <br />{" "}

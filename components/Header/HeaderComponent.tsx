@@ -42,44 +42,43 @@ export default function HeaderComponent() {
 
   return (
     <>
-      <nav className="px-2 sm:px-4 bg-none mt-1 -my-10 sm:my-0 sm:py-2 w-full fixed z-20 top-0">
-        {/*
+      <nav className="transition-all duration-700 px-2 sm:px-4 bg-none mt-3 pt-3 -my-10 sm:my-0 w-full fixed z-20 top-0">
         <div
-          className={`flex flex-row mx-auto justify-center text-center 
-          w-fit h-fit transition-all duration-300`}
+          className={`flex flex-row justify-center text-center 
+            h-fit transition-all duration-300`}
         >
           <ul
             style={{
               fontFamily: "Mandalore",
             }}
-            className={`${styles.nav} text-md  text-white px-2 py-2`}
+            className={`${styles.nav} text-md self-center text-white mr-10 px-2 py-2`}
           >
             <li
-              className="pt-1 border-gray-300 text-[16px]"
+              className=" border-gray-300"
               style={{ fontFamily: "Azonix" }}
             >
               <Link href={"/"}>Dashboard</Link>
             </li>
             <li
-              className="pt-1 border-gray-300 text-[16px]"
+              className=" border-gray-300"
               style={{ fontFamily: "Azonix" }}
             >
               <Link href={"/ClaimPage"}>LP Claim</Link>
             </li>
             <li
               style={{ fontFamily: "Azonix" }}
-              className="pt-1 border-gray-300 text-[16px]"
+              className=" border-gray-300"
             >
               <Link href={"/Dapp/LpStakingPage"}>Old StaQing</Link>
             </li>
             <li
               style={{ fontFamily: "Azonix" }}
-              className="pt-1 border-gray-300 text-[16px]"
+              className=" border-gray-300"
             >
               <Link href={"/StaQing"}>StaQing</Link>
             </li>
             <li
-              className="pt-1 border-gray-300 text-[16px]"
+              className=" border-gray-300"
               style={{ fontFamily: "Azonix" }}
             >
               <Link href={"https://linktr.ee/linqgroup"}>LinQ Tree</Link>
@@ -87,26 +86,19 @@ export default function HeaderComponent() {
             <li>
               <a
                 onClick={() => window.open("https://www.linqgroup.io/")}
-                className=" cursor-pointer block px-4 pt-2 border-gray-300 text-[16px]"
+                className=" cursor-pointer block px-4  border-gray-300"
                 style={{ fontFamily: "Azonix" }}
               >
                 Website
               </a>
             </li>
-            <li
-              style={{ fontFamily: "BebasNeue" }}
-              className="pt-1 border-gray-300 text-[16px]"
-            >
-              <Link href={"/testPage"}>tst</Link>
-            </li>
-            
           </ul>
+          <div className={'py-0 self-center'}>
+              <ConnectButton />
+              </div>
         </div>
-          */}
-        
-        <div className="w-fit h-fit text-center mt-2  mx-auto justify-center py-2 ">
-          <ConnectButton />
-        </div>
+
+        <div className="w-fit h-fit text-center mt-2  mx-auto justify-center py-2 "></div>
         <div
           className="justify-left  self-center items-left text-left w-full flex h-fit w-auto order-1"
           id="navbar-sticky"
@@ -138,7 +130,7 @@ export default function HeaderComponent() {
                 <div className={"flex flex-row"}>
                   <div
                     onClick={() => Onclick()}
-                    className="bg-purplegif rounded-full w-fit px-2"
+                    className="bg-purplegif hover:animate-wiggle rounded-full w-fit px-2"
                     ref={headerRef}
                   >
                     <Image
@@ -152,7 +144,7 @@ export default function HeaderComponent() {
                 </div>
 
                 <div
-                  style={{ backgroundColor: "#131313",  width: 160 }}
+                  style={{ backgroundColor: "#131313", width: 160 }}
                   className={`w-fit h-fit opacity-${hidden.hidden} transition-all duration-300`}
                 >
                   {hidden.hidden === 0 ? null : (

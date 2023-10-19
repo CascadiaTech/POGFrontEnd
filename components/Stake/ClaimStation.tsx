@@ -104,7 +104,6 @@ export default function ClaimStationComponent() {
     PendingLPRewards;
   }
 
-  const [unlocktime, setUnlockTime]: any = useState();
 
   function FetchBalances() {
     BalanceOfLinq;
@@ -171,20 +170,147 @@ export default function ClaimStationComponent() {
       });
     },
   });
+
+
   const [isHovered, setIsHovered] = useState(false);
 
-  const boxStyles = {
-    boxShadow: isHovered
-      ? "inset 6px 10px 0px -8px #FFFFFF, inset 6px -12px 0px -8px #FFFFFF, inset 17px -12px 0px -8px #FFFFFF, inset -38px 4px 0px -30px #FFFFFF, inset -38px 4px 0px -30px #FFFFFF"
-      : "none",
-    fontFamily: "Azonix",
-    textShadow: "0px 0px 6px rgba(255,255,255,0.8)",
-    background: "transparent",
-    transition: "box-shadow 0.3s ease-in-out",
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    
   };
 
   return (
     <>
+      <div style={{background: 'linear-gradient(to right, #000000 0%, #66E8AF 52%, #000000 100%)'}}
+       className="w-fit px-3 py-3 mx-4 md:mx-auto justify-center rounded-2xl opacity-90">
+        <h1 style={{fontFamily: 'Azonix'}}
+         className="text-3xl md:text-4xl text-white text-center text-shadow-md">
+          Qlaiming Station
+        </h1>
+        <h2 style={{fontFamily: 'Gotham', background: 'linear-gradient(135deg, #0B0417 0%, #45178E 100%, #45178E 100%)'}}
+         className="text-xl md:text-2xl text-white text-center font-bebas-neue border rounded-xl border-white px-4 py-2 my-4 shadow-lg">
+          LINQ bought and StaQed if Qompounded: <br /> 54,445 LINQ
+        </h2>
+
+        <div style={{fontFamily: 'Gotham'}}
+         className="flex items-center justify-center my-4">
+          <h2 style={{ background: 'linear-gradient(135deg, #0B0417 0%, #45178E 100%, #45178E 100%)'}}
+            className="text-xl md:text-2xl text-white font-bebas-neue border rounded-xl border-white px-4 py-2 shadow-lg">
+            Eth Claimable:
+          </h2>
+          <div className="w-8 h-8 bg-white rounded-full mx-2 hover:rotate-90 transition-transform duration-300">
+            <Image src={arrow} alt="arrow" />
+          </div>
+          <h2 style={{ background: 'linear-gradient(135deg, #0B0417 0%, #45178E 100%, #45178E 100%)'}}
+          className="text-xl md:text-2xl text-white font-bebas-neue border rounded-xl border-white px-4 py-2 shadow-lg">
+            LINQ Bought:
+          </h2>
+        </div>
+        <ul className={styles.ul}>
+          <button
+            style={{fontFamily: 'Gotham'}}
+            className={`w-40 my-2 text-lg text-white rounded-xl text-center focus:ring-2 focus:ring-blue-500
+             border-2 border-white border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5 ${styles.button}
+              bg-gray-900 hover:bg-gray-700 transform hover:scale-105 transition-transform duration-300`}
+            onClick={() => Qompound()}
+            type="button"
+          >
+            Qompound
+          </button>
+        </ul>
+
+        <div style={{fontFamily: 'Gotham'}}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto">
+          <h2 style={{ background: 'linear-gradient(135deg, #0B0417 0%, #45178E 100%, #45178E 100%)'}}
+           className="text-white text-center font-bebas-neue border rounded-xl border-white px-4 py-2 mb-4 shadow-lg">
+            Claimable ETH <br />
+            {pendingRewards
+              ? (
+                  pendingRewards +
+                  pendingrewardsaddon +
+                  Linqpendingrewardsaddon
+                ).toFixed(8)
+              : "0"}
+          </h2>
+          <button
+          style={{ background: 'linear-gradient(135deg, #0B0417 0%, #45178E 100%, #45178E 100%)'}}
+            className="text-white text-center font-bebas-neue border rounded-xl border-white px-4 py-2 mb-4 shadow-lg
+           transition-transform duration-300"
+          >
+            Claimable LP <br /> {pendingLP ? pendingLP.toFixed(8) : "0"}
+          </button>
+
+          <button
+            className={`my-2 text-lg text-white rounded-xl text-center focus:ring-2 focus:ring-blue-500 border-2
+             border-white border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5 ${styles.button} bg-gray-900 hover:bg-gray-700
+              transform hover:scale-105 transition-transform duration-300`}
+            type="button"
+          >
+            Claim ETH
+          </button>
+          <button
+            className={`my-2 text-lg text-white rounded-xl text-center focus:ring-2 focus:ring-blue-500 border-2
+             border-white border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5 ${styles.button} bg-gray-900 hover:bg-gray-700
+              transform hover:scale-105 transition-transform duration-300`}
+            type="button"
+          >
+            Claim LP
+          </button>
+        </div>
+        <h2
+        style={{fontFamily: 'Gotham'}}
+          className="text-white duration-500 transition-all w-full hover:bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%
+  text-left mx-auto font-bebas-neue border rounded-xl border-white px-4 py-2 mb-4 shadow-lg flex items-center w-3/4 h-fit relative"
+        >
+          <span className="flex-1">Stake your rewards to earn</span>
+
+          <button
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+       style={{background: 'linear-gradient(to bottom, #51FF38 0%, #25A400 51%, #57F739 100%)',
+          boxShadow: '0px 0px 9px 0px rgba(121,255,110,0.77)', fontFamily: 'Gotham'}} 
+          className="flex flex-row bg-green-500 self-start duration-500 transition-all px-4 py-2 h-10 w-20 rounded-2xl">
+            <Image
+              src={arrow}
+              alt="arrow"
+              className="duration-500 hover:delay-500 self-center transition-all hover:transform"
+            />
+            <p
+            className="self-center opacity-0 duration-700 delay-500 h-min-full w-full text-white text-sm">
+              click here for stakepage
+            </p>
+          </button>
+        </h2>
+
+        <style jsx>{`
+  h2:hover button {
+    width: 50%; /* Change the button's width when h2 is hovered */
+  }
+
+  h2:hover p {
+    opacity: 1; /* Change the p's opacity when hovered */
+    transition: opacity 700ms;
+    visibility: visible;
+    transition-delay: 500ms /* Add a duration only when hovered */
+  }
+  
+  h2 p:hover {
+    transition: none;
+    visibility: invisible;
+    transition-delay: 0ms /* Remove the duration when hovered off */
+  }
+`}</style>
+      </div>
+    </>
+  );
+}
+
+/*
+
       <div
         style={{
           background:
@@ -290,66 +416,4 @@ export default function ClaimStationComponent() {
       <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-azonix text-white border-b-2 border-white text-center text-shadow-md">
         --------------------BREAK-----------------------
       </h1>
-
-      <div className="w-fit px-3 py-3 mx-4 md:mx-auto justify-center rounded-2xl opaacity-90 bg-gradient-to-b from-gray-700 to-black">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-azonix text-white text-center text-shadow-md">
-          Qlaiming Station
-        </h1>
-        <h2 className="text-xl md:text-2xl text-white text-center font-bebas-neue border rounded-xl border-white px-4 py-2 my-4 bg-gray-800 shadow-lg">
-          LINQ bought and StaQed if Qompounded: <br /> 54,445 LINQ
-        </h2>
-
-        <div className="flex items-center justify-center my-4">
-          <h2 className="text-xl md:text-2xl text-white font-bebas-neue border rounded-xl border-white px-4 py-2 bg-gray-800 shadow-lg">
-            Eth Claimable:
-          </h2>
-          <div className="w-8 h-8 bg-white rounded-full mx-2 hover:rotate-90 transition-transform duration-300">
-            <Image src={arrow} alt="arrow" />
-          </div>
-          <h2 className="text-xl md:text-2xl text-white font-bebas-neue border rounded-xl border-white px-4 py-2 bg-gray-800 shadow-lg">
-            LINQ Bought:
-          </h2>
-        </div>
-        <ul className={styles.ul}>
-          <button
-            className={`w-40 my-2 text-lg text-white rounded-xl text-center focus:ring-2 focus:ring-blue-500 border-2 border-white border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5 ${styles.button} bg-gray-900 hover:bg-gray-700 transform hover:scale-105 transition-transform duration-300`}
-            onClick={() => Qompound()}
-            type="button"
-          >
-            Qompound
-          </button>
-        </ul>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto">
-          <h2 className="text-white text-center font-bebas-neue border rounded-xl border-white px-4 py-2 mb-4 bg-gray-800 shadow-lg">
-            Claimable ETH <br />
-            {pendingRewards
-              ? (
-                  pendingRewards +
-                  pendingrewardsaddon +
-                  Linqpendingrewardsaddon
-                ).toFixed(8)
-              : "0"}
-          </h2>
-          <button className="text-white text-center font-bebas-neue border rounded-xl border-white px-4 py-2 mb-4 bg-gray-800 shadow-lg
-           transition-transform duration-300">
-            Claimable LP <br /> {pendingLP ? pendingLP.toFixed(8) : "0"}
-          </button>
-
-          <button
-            className={`my-2 text-lg text-white rounded-xl text-center focus:ring-2 focus:ring-blue-500 border-2 border-white border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5 ${styles.button} bg-gray-900 hover:bg-gray-700 transform hover:scale-105 transition-transform duration-300`}
-            type="button"
-          >
-            Claim ETH
-          </button>
-          <button
-            className={`my-2 text-lg text-white rounded-xl text-center focus:ring-2 focus:ring-blue-500 border-2 border-white border-yellow-400 rounded-xl py-2 px-4 sm:px-5 md:px-5 ${styles.button} bg-gray-900 hover:bg-gray-700 transform hover:scale-105 transition-transform duration-300`}
-            type="button"
-          >
-            Claim LP
-          </button>
-        </div>
-      </div>
-    </>
-  );
-}
+      */

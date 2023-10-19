@@ -1,8 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "../styles/Home.module.css";
 import {
   usePublicClient,
@@ -24,6 +20,10 @@ import { abiObject } from "../contracts/abi/abi.mjs";
 import { LPStakingabiObject } from "../contracts/abi/LpStakingAbi.mjs";
 import Swal from "sweetalert2";
 import ClaimStationComponent from "../components/Stake/ClaimStation";
+import MarketplaceComponent from "../components/Marketplace/MarketplaceComponent";
+import NewClaim from "../components/Claim/NewClaim";
+import LPMarketPlace from "../components/LPMarketplace";
+
 export default function NewStakeComponent(_token: any) {
   const publicClient = usePublicClient();
   const [loading, setLoading] = useState(false);
@@ -377,7 +377,7 @@ export default function NewStakeComponent(_token: any) {
       title: "Account Summary",
       content: (
         <div
-          style={{ fontFamily: "Azonix" }}
+          style={{ fontFamily: "Azonix", background: 'linear-gradient(to right, #000000 0%, #66E8AF 52%, #000000 100%)' }}
           className="text-xl animate-LinearAnimaion duration-700 transition-all w-full grid grid-cols-2 col-span-4 mb-4 opacity-90
           text-white px-6 py-6 mx-auto"
         >
@@ -476,64 +476,65 @@ export default function NewStakeComponent(_token: any) {
     },
     {
       title: "Earnings Summary",
-      content: 
-      <div
-        className={
-          "text-xl animate-LinearAnimaion js-show-on-scroll-LinearAnimaion w-full grid grid-cols-2 col-span-4 mb-4 opacity-90 text-white px-16 py-4 mx-auto"
-        }
-      >
-        <h2
-          style={{ fontFamily: "BebasNeue" }}
-          className="text-white text-left border-b border-white px-2"
+      content: (
+        <div
+          className={
+            "text-xl animate-LinearAnimaion js-show-on-scroll-LinearAnimaion w-full grid grid-cols-2 col-span-4 mb-4 opacity-90 text-white px-16 py-4 mx-auto"
+          }
         >
-          ETH Earned (Linq + LP) Per 24hr:
-        </h2>{" "}
-        <h2
-          style={{ fontFamily: "BebasNeue" }}
-          className="text-white text-right border-b border-white px-2"
-        >
-          LINQ
-        </h2>
-        <h2
-          style={{ fontFamily: "BebasNeue" }}
-          className="text-white text-left border-b border-white px-2"
-        >
-          ETH Earned LINQ Per 24hr:
-        </h2>{" "}
-        <h2
-          style={{ fontFamily: "BebasNeue" }}
-          className="text-white text-right border-b border-white px-2"
-        >
-          {Linqapr && userdetails
-            ? (
-                Linqapr *
-                (Number(userdetails[0].toString()) / 10 ** 18) *
-                86400
-              ).toFixed(8)
-            : "0"}{" "}
-          ETH
-        </h2>
-        <h2
-          style={{ fontFamily: "BebasNeue" }}
-          className="text-white text-left border-b border-white px-2"
-        >
-          ETH Earned LP Per 24hr:
-        </h2>{" "}
-        <h2
-          style={{ fontFamily: "BebasNeue" }}
-          className="text-white text-right border-b border-white px-2"
-        >
-          {" "}
-          {LPapr && userLPDetails
-            ? (
-                LPapr *
-                (Number(userLPDetails[0].toString()) / 10 ** 18) *
-                86400
-              ).toFixed(8)
-            : "0"}{" "}
-          ETH
-        </h2>
-      </div>,
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            ETH Earned (Linq + LP) Per 24hr:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+            LINQ
+          </h2>
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            ETH Earned LINQ Per 24hr:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+            {Linqapr && userdetails
+              ? (
+                  Linqapr *
+                  (Number(userdetails[0].toString()) / 10 ** 18) *
+                  86400
+                ).toFixed(8)
+              : "0"}{" "}
+            ETH
+          </h2>
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-left border-b border-white px-2"
+          >
+            ETH Earned LP Per 24hr:
+          </h2>{" "}
+          <h2
+            style={{ fontFamily: "BebasNeue" }}
+            className="text-white text-right border-b border-white px-2"
+          >
+            {" "}
+            {LPapr && userLPDetails
+              ? (
+                  LPapr *
+                  (Number(userLPDetails[0].toString()) / 10 ** 18) *
+                  86400
+                ).toFixed(8)
+              : "0"}{" "}
+            ETH
+          </h2>
+        </div>
+      ),
     },
   ];
 
@@ -574,16 +575,18 @@ export default function NewStakeComponent(_token: any) {
         )}
         <div
           className={
-            "flex flex-col mx-auto justify-center text-center absolute z-10"
+            "flex flex-col mx-auto justify-center mt-96 text-center absolute z-10"
           }
         >
+          <NewClaim></NewClaim>
           <h1
-            className="text-3xl mb-2 md:text-4xl lg:text-4xl font-semibold text-white"
+            className={`${styles.animateZoomIn}  text-3xl mb-2 md:text-4xl lg:text-4xl font-semibold text-white`}
             style={{ fontFamily: "Azonix" }}
           >
             StaQing
           </h1>
-          <div className="w-fit mx-auto border border-white rounded-2xl px-6 py-6 text-white">
+          <div style={{background: 'radial-gradient(ellipse at center, #000000 0%, #7A7A7A 0%, #292929 100%)'}} 
+          className="animate-zoomIn w-fit mx-auto border border-white rounded-2xl px-6 py-6 text-white">
             {sections.map((section, index) => (
               <div key={index} className="mb-2">
                 <div
@@ -598,12 +601,22 @@ export default function NewStakeComponent(_token: any) {
                   </div>
                   <div>
                     {activeSection === index ? (
-                        <div className={'bg-white h-fit w-fit rounded-full'}>
-                      <Image width={30} height={30} src={minusIcon} alt="minus"></Image>
+                      <div className={"bg-white h-fit w-fit rounded-full"}>
+                        <Image
+                          width={30}
+                          height={30}
+                          src={minusIcon}
+                          alt="minus"
+                        ></Image>
                       </div>
                     ) : (
-                        <div className={'bg-white h-fit w-fit rounded-full'}>
-                      <Image width={30} height={30} src={plusIcon} alt="plus"></Image>
+                      <div className={"bg-white h-fit w-fit rounded-full"}>
+                        <Image
+                          width={30}
+                          height={30}
+                          src={plusIcon}
+                          alt="plus"
+                        ></Image>
                       </div>
                     )}
                   </div>
@@ -620,7 +633,7 @@ export default function NewStakeComponent(_token: any) {
               </div>
             ))}
           </div>
-          <p className={"my-5"}></p>
+          <p className={"mb-5"}></p>
           <ClaimStationComponent></ClaimStationComponent>
           <p className={"my-5"}></p>
           <div
@@ -680,61 +693,7 @@ export default function NewStakeComponent(_token: any) {
               />
             )}
           </div>
-          <div className={"text-center mx-auto flex flex-col px-10"}>
-            <button onClick={toggleModal}>
-              <h2
-                style={{ fontFamily: "Azonix" }}
-                className="mb-2 z-10 absolute mx-auto text-center cursor-pointer hover:text-gray-100 duration-700 mx-auto
-               text-3xl text-gray-400 opacity-90"
-              >
-                Account Summary
-              </h2>
-            </button>
-            <div
-              className={`transition-all ${
-                isModalOpen
-                  ? "h-auto duration-700 transition-all opacity-100 max-h-96"
-                  : "h-auto duration-700 transition-all opacity-0 max-h-96"
-              } duration-700 transition-all overflow-hidden`}
-            >
-              <div
-                className="text-xl duration-700 transition-all w-full grid grid-cols-2 col-span-4 mb-4 opacity-90
-              text-white px-6 py-6 mx-auto"
-              >
-                <div className="text-white text-left border-b border-white px-2">
-                  LINQ Balance:
-                </div>
-                <div className="text-white text-right border-b border-white px-2">
-                  {linqBalance ? linqBalance.toFixed(2) : "0"} LINQ
-                </div>
-                <div className="text-white text-left border-b border-white px-2">
-                  LP Balance:
-                </div>
-                <div className="text-white text-right border-b border-white px-2">
-                  {MilqBalance ? MilqBalance.toFixed(2) : "0"} LP
-                </div>
-                <div className="text-white text-left border-b border-white px-2">
-                  LINQ StaQed:
-                </div>
-                <div className="text-white text-right border-b border-white px-2">
-                  {userdetails
-                    ? (Number(userdetails[0].toString()) / 10 ** 18).toFixed(3)
-                    : 0}{" "}
-                  LINQ
-                </div>
-                <div className="text-white text-left border-b border-white px-2">
-                  LP StaQed:
-                </div>
-                <div className="text-white text-right border-b border-white px-2">
-                  {milqerUserDetails
-                    ? Number(milqerUserDetails[0].toString()) / 10 ** 18
-                    : 0}{" "}
-                  LP
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="fixed mb-10 px-2 text-white sm:px-5 md:px-10 lg:px-10 left-0 bottom-0 bg-transparent w-full grid grid-cols-2 ">
+          <div className="animate-fadeIn fixed mb-10 px-2 text-white sm:px-5 md:px-10 lg:px-10 left-0 bottom-0 bg-transparent w-full grid grid-cols-2 ">
             <p
               className="text-[18px] sm:text-[15px] md:text-[15px] lg:text-[16px] 
         col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 "

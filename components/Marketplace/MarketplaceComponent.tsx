@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import { configureChains, useAccount, Chain, PublicClient } from "wagmi";
 import { useWalletClient } from "wagmi";
-import { JsonRpcProvider, Theme } from '@uniswap/widgets/dist';
-import { SwapWidget } from "@uniswap/widgets";
+import { SwapWidget, Theme, darkTheme } from "@uniswap/widgets";
 import '@uniswap/widgets/fonts.css';
 import {
   arbitrum,
@@ -25,6 +24,15 @@ export default function MarketplaceComponent() {
     1: "https://mainnet.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad",
     3: "https://ropsten.infura.io/v3/e0171a3aab904c6bbe6622e6598770ad",
   };
+  const MY_TOKEN_LIST = [
+    {
+      name: "Cosmic Odyssey",
+      address: "0xb99405b00eF8D0Cf17aEf9D46a8d3cB9f3b72e57",
+      symbol: "COSMIC",
+      decimals: 18,
+      chainId: 1,
+    },
+  ];
 
   return (
     <>
@@ -35,7 +43,10 @@ export default function MarketplaceComponent() {
       >
         LP Marketplace
       </p>
-      <SwapWidget></SwapWidget>
+          <SwapWidget
+            tokenList={MY_TOKEN_LIST}
+            theme={darkTheme}
+          />
       <div className="fixed mb-10 px-2 sm:px-5 md:px-10 lg:px-10 left-0 bottom-0 bg-transparent  w-full  grid grid-cols-2 ">
         <p
           className="font-sans text-white text-[18px] sm:text-[15px] md:text-[15px] lg:text-[16px] 

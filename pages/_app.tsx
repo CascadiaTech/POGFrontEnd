@@ -2,6 +2,7 @@ import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import "../styles/fonts.css";
 import { infuraProvider } from 'wagmi/providers/infura';
+import { AnimatePresence, motion } from "framer-motion";
 import { darkTheme, getDefaultWallets, midnightTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import type { AppProps } from 'next/app';
 import { configureChains, createConfig, WagmiConfig, useAccount } from 'wagmi';
@@ -15,6 +16,7 @@ import {
   zora,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
+import router, { useRouter } from 'next/router';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -40,7 +42,12 @@ const wagmiConfig = createConfig({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-  
+  const variants = {
+    initial: { opacity: 0 },
+    enter: { opacity: 1, transition: { duration: 1.5 } },
+    exit: { opacity: 0, transition: { duration: 1.5 } },
+  };
+  const router = useRouter();
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider    theme={darkTheme({
@@ -50,7 +57,18 @@ function MyApp({ Component, pageProps }: AppProps) {
       fontStack: 'system',
       overlayBlur: 'small',
     })} chains={chains}>
-        <Component {...pageProps} />
+      
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={router.route}
+          variants={variants}
+          initial="initial"
+          animate="enter"
+          exit="exit"
+        >
+          <Component {...pageProps} />
+        </motion.div>
+      </AnimatePresence>
       </RainbowKitProvider>
     </WagmiConfig>
   );

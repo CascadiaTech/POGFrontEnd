@@ -35,38 +35,109 @@ module.exports = {
     },
 
     extend: {
+      backgroundImage: {
+        runewaterfall: "url('../assets/images/Falls.jpg')",
+        "footer-texture": "url('/img/footer-texture.png')",
+      },
+      spacing: {
+        100: "50vw",
+      },
+      fontFamily: {
+        serif: ["Cinzel", "serif"],
+      },
+      margin: {
+        "100vw": "100vw",
+        "1000px": "1000px",
+      },
+      clipPath: {
+        mypolygon: "polygon(0 0, 100% 0, 0% 100%, 0 calc(100% - 6vw))",
+        myoppositepolygon:
+          "polygon(100% 0, 100% 0, 100% 100%, 0 calc(100% - 0vw))",
+        clipsides:
+          "polygon(calc(60% - 10vw) 0, 100% 0, 100% 100%, 22% calc(100% - 0vw))",
+        mycorners:
+          "polygon(20px 0%, calc(100% - 20px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0% calc(100% - 20px), 0% 20px)",
+      },
+      height: {
+        1000: "1000px",
+      },
       animation: {
+        wiggle: 'wiggle 1s ease-in-out infinite',
         fadeIn: "fadeIn 3s ease-in forwards",
+        halfFadeIn: "halfFadeIn 3s ease-in forwards",
         fadeOut: "fadeIn 2s ease-in forwards",
-        LinearAnimaion: " 3s linear infinite",
-        animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        wiggle: " 3s linear infinite",
         fadeindown: "fadeindown 1s ease-out forwards",
-        fadeinleft: "fadeinleft 1s ease-out forwards",
+        fadeInUp: "fadeInUp 2s ease-in-out forwards",
+        fadeinleft: "fadeinleft 2s ease-in-out forwards",
         fadeinright: "fadeinright 1s ease-out forwards",
         scaleintopleft: "scaleintopleft 1.5s ease-in-out forwards",
       },
       keyframes: {
-        wiggle:  {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-5deg)' },
+          '50%': { transform: 'rotate(5deg)' },
+        },
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+        halfFadeIn: {
+          "0%": { opacity: 0.5 },
+          "100%": { opacity: 1 },
+        },
+        fadeOut: {
+          "0%": { opacity: 1 },
+          "100%": { opacity: 0 },
+        },
+        fadeindown: {
           "0%": {
-            background:
-              "linear-gradient(135deg, #696969 0%, #C2C2C2 0%, #757575 100%)",
-          },
-          "25%": {
-            background:
-              "linear-gradient(135deg, #696969 0%, #C2C2C2 25%, #757575 100%)",
-          },
-          "50%": {
-            background:
-              "linear-gradient(135deg, #696969 0%, #C2C2C2 50%, #757575 100%)",
-          },
-          "75%": {
-            background:
-              "linear-gradient(135deg, #696969 0%, #C2C2C2 75%, #757575 100%)",
+            opacity: 0,
+            transform: "translateY(-200px)",
           },
           "100%": {
-            background:
-              "linear-gradient(135deg, #696969 0%, #C2C2C2 100%, #757575 100%)",
+            opacity: 1,
+            transform: "translateY(0)",
+          },
+        },
+        
+        fadeInUp: {
+          "0%": {
+            opacity: 0,
+            transform: "translateY(200px)",
+          },
+          "100%": {
+            opacity: 1,
+            transform: "translateY(0)",
+          },
+        },
+        fadeinleft: {
+          "0%": {
+            opacity: 0.20,
+            transform: "translateX(-300px)",
+          },
+          "100%": {
+            opacity: 1,
+            transform: "translateX(0)",
+          },
+        },
+        fadeinright: {
+          "0%": {
+            opacity: 0,
+            transform: "translateX(100px)",
+          },
+          "100%": {
+            opacity: 1,
+            transform: "translateX(0)",
+          },
+        },
+        scaleintopleft: {
+          "0%": {
+            transform: "scale(0.3)",
+            opacity: 0,
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: 1,
           },
         },
       },
