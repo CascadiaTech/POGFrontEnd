@@ -377,7 +377,7 @@ export default function NewStakeComponent(_token: any) {
       title: "Account Summary",
       content: (
         <div
-          style={{ fontFamily: "Azonix", background: 'linear-gradient(to right, #000000 0%, #66E8AF 52%, #000000 100%)' }}
+          style={{ fontFamily: "Azonix" }}
           className="text-xl animate-LinearAnimaion duration-700 transition-all w-full grid grid-cols-2 col-span-4 mb-4 opacity-90
           text-white px-6 py-6 mx-auto"
         >

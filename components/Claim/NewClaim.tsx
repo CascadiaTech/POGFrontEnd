@@ -225,8 +225,8 @@ export default function NewClaim() {
   return (
     <>
       <div
-         style={{background: 'radial-gradient(ellipse at center, #000000 0%, #7A7A7A 0%, #292929 100%)'}} 
-        className="-translate-y-72 py-6 px-4 sm:p-10 mt-5 sm:mt-10 md:mt-10 lg:mt-15 w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px] overflow-x-auto"
+         style={{background: '#575757'}} 
+        className="-translate-y-72 opacity-90 rounded-2xl py-6 px-4 sm:p-10 mt-5 sm:mt-10 md:mt-10 lg:mt-15 w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px] overflow-x-auto"
       >
         <p
           className="text-[15px] sm:text-[20px] md:text-[23px] lg:md:text-[25px] font-semibold text-white"
