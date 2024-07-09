@@ -1,239 +1,196 @@
-import { useCallback, useEffect, useState } from "react";
-import styles from "../styles/Home.module.css";
-import {
-  configureChains,
-  createConfig,
-  WagmiConfig,
-  useAccount,
-  useEnsName,
-  useContractWrite,
-  useContractRead,
-} from "wagmi";
-import { abiObject } from "../../contracts/abi/abi.mjs";
-import { usePublicClient } from "wagmi";
-import { useWalletClient } from "wagmi";
-import { Spin } from "antd";
-import LPTokenAbi from "../../contracts/abi/LPTokenAbi.json";
-import { toast, ToastContainer, ToastContainerProps, Slide } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-const fourteenDayContractAddress = "0x7A8D1608327EdBdD5C4f1367fD6dD031F21AD7eb";
-const LPtokenContract = "0xA8A837E2bf0c37fEf5C495951a0DFc33aaEAD57A";
+//config
+import { useEffect, useState } from "react";
+import { useAccount, useContractWrite, useContractRead } from "wagmi";
+import { KurveABI } from "../../contracts/abi/Kurve.mjs";
+//styles
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import web3 from "web3";
+const kurveContract = "0x68B63BE19A15A83a41CD487B7f8D32B83423d6FE";
 
 export default function ClaimComponent() {
   const { address, isConnected } = useAccount();
-  const publicClient = usePublicClient();
-  const { data: walletClient } = useWalletClient();
+  let current_chain = 11155111;
+  const [_amount, _setBurnAmount] = useState("0");
+  const [mintValue, setMintValue] = useState("");
+  const [finalKurveBalance, setKurveBalance] = useState(0);
+  const [mintAmount, setMintAmount] = useState(0);
 
-  const [loading, setLoading] = useState(false);
-  const [claim, setcanclaim] = useState(Boolean);
-
-  const [Claimerish, setClaim] = useState(false);
-
-  const [pendingreflections, setpendingreflections] = useState(Number);
-  const [totaldistributed, settotaldistributed]: any = useState(Number);
-  const [balance, setbalance] = useState(Number);
-
-  const { data: PendingReflections } = useContractRead({
-    address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
-    abi: abiObject,
-    functionName: "withdrawableDividendOf",
-    chainId: 1,
-    args: [address],
-    onSuccess(data) {
-    },
-  });
-  const { data: TotalDividends } = useContractRead({
-    address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
-    abi: abiObject,
-    functionName: "getTotalDividendsDistributed",
-    chainId: 1,
-    onSuccess(data) {
-    },
-  });
-  const { data: balanceOf } = useContractRead({
-    address: LPtokenContract,
-    abi: LPTokenAbi,
+  const { data: kurveBalance } = useContractRead({
+    address: kurveContract,
+    abi: KurveABI,
     functionName: "balanceOf",
-    chainId: 1,
+    chainId: current_chain,
+    watch: true,
     args: [address],
-    onSuccess(data) {
+    onSuccess(data: any) {
+      setKurveBalance(Number(data) / 10 ** 18);
     },
   });
-  function Fetchbalance() {
+  console.log("this is my Kurve Balance:", kurveBalance);
+
+  const { data: mintReturn } = useContractRead({
+    address: kurveContract,
+    abi: KurveABI,
+    functionName: "calculateCurvedMintReturn",
+    chainId: current_chain,
+    watch: true,
+    args: [mintAmount],
+    onSuccess(data: any) {
+      setMintAmount(Number(data) / 10 ** 18);
+    },
+  });
+  console.log("this is my mint return:", mintReturn);
+
+  const { write: Burn } = useContractWrite({
+    address: kurveContract,
+    abi: KurveABI,
+    functionName: "burn",
+    chainId: current_chain,
+    watch: true,
+    args: [web3.utils.toWei(_amount, "ether")],
+    account: address,
+    onSuccess(data: any) {
+      Swal.fire({
+        icon: "success",
+        title: "You have successfully burned!",
+      });
+    },
+    onError(err: { cause: any }) {
+      Swal.fire({
+        icon: "error",
+        title: `An error occured with UnStaqing please contact support if issue perists${err.cause}`,
+      });
+    },
+  });
+
+  function HandleBurn() {
     if (!address) {
       return;
     }
-    try {
-      setLoading(true);
-      const divisor = 1e18;
-      const NumberBalance = Number(balanceOf)
-      const formattedNumber = NumberBalance / divisor
-      const finalNumber = formattedNumber.toFixed(6);
-      const realNumber = Number(finalNumber)
-      if (Number.isNaN(realNumber)) {
-        return 0;
-      }
-      setbalance(realNumber);
-      return realNumber;
-      /////
-    } catch (error) {
-      console.log(error, "ERROR 1111");
-      setLoading(false);
-    } finally {
-      setLoading(false);
+    if (!_amount) {
+      Swal.fire({
+        icon: "error",
+        title: `You must burn an amount above 0 you moron `,
+      });
+      return;
     }
-  }
-  
-
-  function fetchPendingReflections() {
     try {
-      setLoading(true);
-
-      const stringed: string = PendingReflections?.toString() as string;
-      const divisor = 1e18;
-      const fixedNumber = parseFloat(stringed).toFixed(6);
-      const NumberNum = Number(fixedNumber);
-      const formattedNumber = NumberNum / divisor;
-      const roundedNumber = Math.round(formattedNumber * 1e6) / 1e6;
-      if (Number.isNaN(roundedNumber)) {
-        return 0;
-      }
-      setpendingreflections(roundedNumber);
-
-      return roundedNumber;
+      Burn();
     } catch (error) {
-      console.log(error, "error 2");
-      setLoading(false);
-    } finally {
-      setLoading(false);
+      console.error("Staking failed:", error);
     }
   }
 
-  function FetchDistributed() {
-    try {
-      setLoading(true);
-      const abi = abiObject;
-
-      const divisor = 1e18;
-      const stringed: string = TotalDividends?.toString() as string;
-      const fixedNumber = parseFloat(stringed);
-      const NumberNum = Number(fixedNumber.toFixed(2));
-      const formattedNumber = NumberNum / divisor;
-      const roundedNumber = Math.round(formattedNumber * 1e6) / 1e6;
-      settotaldistributed(roundedNumber);
-      return roundedNumber;
-    } catch (error) {
-      console.log(error, "error 3");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchPendingReflections();
-    Fetchbalance();
-    FetchDistributed();
-  }, [address]);
-
-  const { write: Claimwrite } = useContractWrite({
-    address: "0x3e34eabF5858a126cb583107E643080cEE20cA64",
-    abi: abiObject,
-    functionName: "claim",
-    account: address,
+  const { write: Mint } = useContractWrite({
+    address: kurveContract,
+    abi: KurveABI,
+    functionName: "mint",
+    chainId: current_chain,
+    args: [],
+    value: web3.utils.toWei(mintValue, "ether"),
+    overrides: {
+      value: web3.utils.toWei(mintValue, "ether"), // Convert the amount from Ether to Wei
+    },
+    onSuccess(data: any) {
+      Swal.fire({
+        icon: "success",
+        title: "You have successfully bought! Good job there dum dum...",
+      });
+    },
+    onError(err: { cause: any }) {
+      Swal.fire({
+        icon: "error",
+        title: `An error occurred with minting, please contact support if issue persists. ${err.cause}`,
+      });
+    },
   });
 
-  const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 3000));
-
-  async function claimWithPromise() {
-    const toastId = 'fetched-nationalities';
-    try {
-      await Claimwrite();
-      toast.success('🦄 Wow so easy!', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        });
-    } catch (err) {
-      console.log(`err: ${console.error()}`);
-    }
-  }
+  useEffect(() => {
+    finalKurveBalance;
+  }, [address, finalKurveBalance]);
 
   return (
     <>
-      
-      <div className="-translate-y-72 py-6 px-4 sm:p-10 mt-5 sm:mt-10 md:mt-10 lg:mt-15 inline-block w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px] overflow-x-auto opacity-80 bg-white">
+      <div className=" py-6 px-4 flex flex-col mx-auto inline-block w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px] overflow-x-auto opacity-80 bg-white">
         <p
           className="text-[15px] sm:text-[20px] md:text-[23px] lg:md:text-[25px] font-semibold text-black"
           style={{ fontFamily: "Azonix" }}
         >
-          CLAIM LP REWARDS
+          KURVE TIME BITCHES
         </p>
-
-        <div className="flex flex-col md:flex-row lg:flex-row  md:justify-between lg:justify-between font-sans text-black border-b-[1px] pb-3 border-gray-500 mb-10 mt-10">
-          <p
-            className="col-span-2  sm:col-span-1  md:col-span-1 lg:col-span-1 text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] "
-            style={{ textAlign: "initial", fontFamily: "GroupeMedium" }}
-          >
-            Pending LP Rewards{" "}
-          </p>
-          <p
-            className="mr-6 flex justify-start
-            text-[10px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
-            style={{ fontFamily: "Azonix" }}
-          >
-            {pendingreflections}
-          </p>
-        </div>
-
-        <div className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
+        <p className={"my-5"}></p>
+        <div
+          className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between
+         font-sans text-black border-b-[1px] mx-auto pb-3 border-gray-500 mt-5 mb-5"
+        >
           <p
             className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px]"
             style={{ textAlign: "initial", fontFamily: "GroupeMedium" }}
           >
-            Total LP Distributed{" "}
+            Your Current KURVE Balance{" "}
           </p>
-          {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
           <p
             className="mr-6 flex justify-start
             text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
             style={{ fontFamily: "Azonix" }}
           >
-            {totaldistributed}
+            {finalKurveBalance}
           </p>
-        </div>
-              <p className={'my-5'}></p>
-              <div className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between font-sans text-black border-b-[1px] pb-3 border-gray-500 mt-5 mb-5">
-          <p
-            className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px]"
-            style={{ textAlign: "initial", fontFamily: "GroupeMedium" }}
-          >
-           Your Current  LP Balance{" "}
-          </p>
-          {/* <p className="mr-4 col-span-2 justify-self-start  sm:justify-self-end md:justify-self-end lg:justify-self-end  sm:col-span-1 md:col-span-1 lg:col-span-1">{totaldistributed}</p> */}
           <p
             className="mr-6 flex justify-start
             text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
             style={{ fontFamily: "Azonix" }}
           >
-            {balance}
+            your final mint return: {mintAmount}
           </p>
         </div>
-          <div className="flex justify-center items-center mt-10 ">
-            <button
-              style={{ fontFamily: "Azonix" }}
-              className="font-sans cursor-pointer text-[20px] rounded-lg text-center bg-gradient-to-r from-black to-black  text-white py-2 px-5 sm:px-10 md:px-10 lg:px-10"
-              type="button"
-              onClick={() => claimWithPromise()}
-            >
-              LP CLAIM
-            </button>
-          </div>
+        <div className="flex justify-center items-center mt-10 ">
+          <input
+            value={mintValue}
+            type="number"
+            id="mintInput"
+            placeholder="do it fucker"
+            className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
+            style={{ fontFamily: "ethnocentricRg" }}
+            onChange={(e) => {
+              setMintValue(e.target.value);
+              ("ETH");
+            }}
+          />
+          <button
+            style={{ fontFamily: "ethnocentricRg" }}
+            className="bg-black border border-white rounded-2xl duration-500 px-4 py-2 transition-all
+           text-md text-white hover:bg-white hover:text-black hover:border-4 hover:border-black active:scale-90"
+            onClick={() => Mint()}
+          >
+            BUY YO SHIT!
+          </button>
+        </div>
+        <div className="flex justify-center items-center mt-10 ">
+          <input
+            value={_amount}
+            type="number"
+            placeholder="do it fucker!"
+            className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
+            style={{ fontFamily: "ethnocentricRg" }}
+            onChange={(e) => {
+              _setBurnAmount(e.target.value);
+              ("KURVE");
+            }}
+          />
+
+          <button
+            style={{ fontFamily: "ethnocentricRg" }}
+            className="bg-black border border-white rounded-2xl duration-500 px-4 py-2 transition-all
+             text-md text-white hover:bg-white hover:text-black hover:border-4 hover:border-black active:scale-90"
+            type="button"
+            onClick={() => HandleBurn()}
+          >
+            SELL YO SHIT!
+          </button>
+        </div>
+        <p style={{ fontFamily: "Azonix", opacity: 0.5 }}>fucker</p>
       </div>
 
       <div className="fixed mb-10 text-white px-2 sm:px-5 md:px-10 lg:px-10 left-0 bottom-0 bg-transparent  w-full  grid grid-cols-2 ">
@@ -252,51 +209,6 @@ export default function ClaimComponent() {
           LINQGROUP2023
         </p>
       </div>
-
-      {/* 
-        <h5
-          style={{ fontFamily: "Azonix" }}
-          className="text-center mb-2 text-4xl font-bold tracking-wide self-center text-gray-300 dark:text-gray-300"
-        >
-          Claim LP Rewards
-        </h5>
-        <div className="md:grid grid-cols-2 mx-4 flex flex-col border-2 border-gray-500 rounded-xl">
-          <div className={"rounded-xl text-black text-xl px-4 py-2 m-3"}>
-            <p style={{fontFamily: 'GroupeMedium'}} className={"text-xl font-bold text-gray-300"}>
-              Pending LP Rewards:
-            </p>
-          </div>
-          <div className={"rounded-xl text-black text-xl px-4 py-2 m-3"}>
-            <p className={"text-xl text-gray-300 "}>{pendingreflections}</p>
-          </div>
-          <div className={"rounded-xl text-black  text-xl px-4 py-2 m-3"}>
-            <p style={{fontFamily: 'GroupeMedium'}} className={"text-xl font-bold text-gray-300"}>
-              Total LP Distributed
-            </p>
-          </div>
-          <div className={"rounded-xl text-black text-xl px-4 py-2 m-3"}>
-            <p className={"text-xl text-gray-300"}>{totaldistributed}</p>
-          </div>
-        </div> */}
-
-      {/* {loading ? (
-          <Spin indicator={antIcon} className="add-spinner" />
-        ) : (
-          <>
-            <div className="flex flex-row content-center mx-auto items-center max-w-screen">
-              <button
-                style={{ fontFamily: "Azonix" }}
-                type="button"
-                onClick={() => Claimtoken()}
-                className="w-fit mx-0 px-20 md:px-32 self-center content-center tn:mx-0 elevation-10 hover:elevation-50 md:mx-24 h-24
-                 clip-path-mycorners justify-self-center mt-10 text-gray-800 bg-gray-300 hover:bg-gray-400 hover:cursor-pointer transition ease-in-out duration-700
-                 text-3xl lg:text-4xl hover:scale-95 "
-              >
-                Claim
-              </button>
-            </div>
-          </>
-        )} */}
     </>
   );
 }

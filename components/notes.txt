@@ -1,0 +1,13 @@
+Bugs:
+1. Summary: 
+Once you have withdrawn from a certificate you cannot merge. also pops up with no confirmqtion message
+   Method for error:
+I Started on home-page, clicked on explore page. Clicked on Sandy Shores locker to deposit 7.23 ETH
+
+
+2. Summary: You can keep on splitting a certificate indefinitely without it accurately
+        Defining what percentage of the certificate you own before or after transaction.
+        MM popup and transaction will always appear even if you select 50.00% for the splittin
+    Method for error:
+
+3.

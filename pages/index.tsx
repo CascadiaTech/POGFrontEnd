@@ -1,15 +1,11 @@
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
-import {
-  useAccount,
-  useContractRead,
-  useContractWrite,
-} from "wagmi";
+import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import HeaderComponent from "../components/Header/HeaderComponent";
 import { abiObject } from "../contracts/abi/abi.mjs";
 import Image from "next/image";
-import LinqLogo from "../public/LinqLogoNorm.png";
 import { useWalletClient } from "wagmi";
+import menubars from "../assets/images/menuBars.png";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 const Home: NextPage = () => {
@@ -43,7 +39,6 @@ const Home: NextPage = () => {
   }, []);
   console.log(isMobile);
 
-
   useEffect(() => {
     async function ScrollpositionAnimation() {
       const targets = document.querySelectorAll(".js-show-on-scroll");
@@ -72,7 +67,6 @@ const Home: NextPage = () => {
     ScrollpositionAnimation();
   });
 
-
   return (
     <div className="scroll-smooth ">
       <header>
@@ -80,40 +74,40 @@ const Home: NextPage = () => {
       </header>
       {/* <div className={"flex flex-col  z-10 mx-auto justify-center "}></div> */}
       <main className={`${styles.main} `}>
-
-      {isMobile ? (
-        <video
-          ref={videoRefMobile}
-          className="min-w-full z-0 min-h-full relative object-cover"
-          playsInline
-          autoPlay
-          loop
-          muted
-        >
-          <source src="/LinqMobileBG.mp4" type="video/mp4" />
-          Your browser does not support the video tag, update your browser
-        </video>
-      ) : (
-        <video
-          ref={videoRefNonMobile}
-          className="min-w-full z-0 min-h-full relative object-cover"
-          playsInline
-          autoPlay
-          loop
-          muted
-        >
-          <source src="/LinqDesktopBG.mp4" type="video/mp4" />
-          Your browser does not support the video tag, update your browser
-        </video>
-      )}
+        {isMobile ? (
+          <video
+            ref={videoRefMobile}
+            className="min-w-full z-0 min-h-full relative object-cover"
+            playsInline
+            autoPlay
+            loop
+            muted
+          >
+            <source src="/backG.mp4" type="video/mp4" />
+            Your browser does not support the video tag, update your browser
+          </video>
+        ) : (
+          <video
+            ref={videoRefNonMobile}
+            className="min-w-full z-0 min-h-full relative object-cover"
+            playsInline
+            autoPlay
+            loop
+            muted
+          >
+            <source src="/backG.mp4" type="video/mp4" />
+            Your browser does not support the video tag, update your browser
+          </video>
+        )}
         <div className="w-full -translate-y-80 md:-translate-y-80 absolute z-10">
-          <Image
-            className={
-              "animate-halfFadeIn w-80 h-80 justify-center mx-auto"
-            }
-            alt={"logo"}
-            src={LinqLogo}
-          ></Image>
+          <h1
+            className="block my-10 text-[12px] sm:text-[18px]  md:text-[24px] lg:text-[32px] text-center
+              text-white rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
+            style={{ fontFamily: "GroupeMedium" }}
+          >
+            Logo goes here fuckers
+          </h1>
+
           <div className="flex flex-row mx-auto my-5 justify-center">
             <button
               style={{ boxShadow: "0px 0px 12px 2px rgba(123,123,123,0.6)" }}
@@ -125,7 +119,7 @@ const Home: NextPage = () => {
                 className="cursor-pointer  block  text-[12px] sm:text-[18px] md:text-[18px] lg:text-[22px] text-center  text-white rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
                 style={{ fontFamily: "GroupeMedium" }}
               >
-                <Link href={"/StaQing"}>StaQing</Link>
+                <Link href={"/StaQing"}>Booty Time</Link>
               </p>
             </button>
             <p className="mx-5"></p>
@@ -139,7 +133,7 @@ const Home: NextPage = () => {
                 className="cursor-pointer  block  text-[12px] sm:text-[18px]  md:text-[18px] lg:text-[22px] text-center  text-white rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
                 style={{ fontFamily: "GroupeMedium" }}
               >
-                <Link href={"/ClaimPage"}>LP Claim</Link>
+                <Link href={"/ClaimPage"}>Kurve Time</Link>
               </p>
             </button>
           </div>

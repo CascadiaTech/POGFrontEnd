@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import LinqLogo from "../../assets/images/LinqLogo.png";
-import MENUBar from "../../assets/images/menuBars.png";
-import LINQLogo from "../../assets/images/logoNew.png";
+import menubars from "../../assets/images/menuBars.png"
 
 import { useRouter } from "next/router";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -63,25 +61,7 @@ export default function HeaderComponent() {
               className=" border-gray-300"
               style={{ fontFamily: "Azonix" }}
             >
-              <Link href={"/ClaimPage"}>LP Claim</Link>
-            </li>
-            <li
-              style={{ fontFamily: "Azonix" }}
-              className=" border-gray-300"
-            >
-              <Link href={"/Dapp/LpStakingPage"}>Old StaQing</Link>
-            </li>
-            <li
-              style={{ fontFamily: "Azonix" }}
-              className=" border-gray-300"
-            >
-              <Link href={"/StaQing"}>StaQing</Link>
-            </li>
-            <li
-              className=" border-gray-300"
-              style={{ fontFamily: "Azonix" }}
-            >
-              <Link href={"https://linktr.ee/linqgroup"}>LinQ Tree</Link>
+              <Link href={"/ClaimPage"}>Kurve Time</Link>
             </li>
             <li>
               <a
@@ -89,7 +69,7 @@ export default function HeaderComponent() {
                 className=" cursor-pointer block px-4  border-gray-300"
                 style={{ fontFamily: "Azonix" }}
               >
-                Website
+                Booty Time
               </a>
             </li>
           </ul>
@@ -115,7 +95,7 @@ export default function HeaderComponent() {
                   className="self-center "
                   width={50}
                   height={50}
-                  src={LINQLogo}
+                  src={menubars}
                   alt="asa"
                 ></Image>
               </li>
@@ -137,7 +117,7 @@ export default function HeaderComponent() {
                       className={`${hidden.toString()} text-black transition-all duration-300 cursor-pointer`}
                       height={35}
                       width={35}
-                      src={MENUBar}
+                      src={menubars}
                       alt={""}
                     />
                   </div>
@@ -165,26 +145,6 @@ export default function HeaderComponent() {
                         style={{ fontFamily: "Azonix" }}
                       >
                         <Link href={"/ClaimPage"}>LP Claim</Link>
-                      </li>
-                      <li
-                        style={{ fontFamily: "Azonix" }}
-                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
-                      >
-                        <Link href={"/Dapp/LpStakingPage"}>Old StaQing</Link>
-                      </li>
-                      <li
-                        style={{ fontFamily: "Azonix" }}
-                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
-                      >
-                        <Link href={"/StaQing"}>StaQing</Link>
-                      </li>
-                      <li
-                        className="pt-1 hover:border-b-2 border-gray-300 text-[16px]"
-                        style={{ fontFamily: "Azonix" }}
-                      >
-                        <Link href={"https://linktr.ee/linqgroup"}>
-                          LinQ Tree
-                        </Link>
                       </li>
                       <li>
                         <a
