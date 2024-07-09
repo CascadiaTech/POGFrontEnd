@@ -65,7 +65,7 @@ export default function HeaderComponent() {
             </li>
             <li>
               <a
-                onClick={() => window.open("https://www.linqgroup.io/")}
+                onClick={() => window.open("https://www.google.com")}
                 className=" cursor-pointer block px-4  border-gray-300"
                 style={{ fontFamily: "Azonix" }}
               >
@@ -149,7 +149,7 @@ export default function HeaderComponent() {
                       <li>
                         <a
                           onClick={() =>
-                            window.open("https://www.linqgroup.io/")
+                            window.open("https://www.google.com/")
                           }
                           className=" cursor-pointer block px-4 pt-2 hover:border-b-2 border-gray-300 text-[16px]"
                           style={{ fontFamily: "Azonix" }}

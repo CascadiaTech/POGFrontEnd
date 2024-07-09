@@ -92,6 +92,8 @@ const SwapComponent: React.FC = () => {
   const [toToken, setToToken] = useState({ amount: "0", token: "KURVE" });
   const kurveContract = "0x68B63BE19A15A83a41CD487B7f8D32B83423d6FE";
   const { address, isConnected } = useAccount();
+  const [_amount, _setmintReturnAmount] = useState("0");
+  const [mintReturn, setMintReturn] = useState<string>("0");
 
   const [kurvedMintReturn, setKurvedMintReturn] = useState(0);
   // const [conversionRate, setConversionRate] = useState({ amount: "0", token: "ETH" });
@@ -120,25 +122,34 @@ const SwapComponent: React.FC = () => {
   });
   console.log("this is my Kurve Balance:", kurveBalance);
 
-
-  const { data: mintReturn } = useContractRead({
+  const { refetch: fetchMintReturn, data } = useContractRead({
     address: kurveContract,
     abi: KurveABI,
     functionName: "calculateCurvedMintReturn",
     chainId: current_chain,
-    watch: true,
-    args: [address],
+    args: [(Number(_amount) * 10 ** 18).toString()],
     onSuccess(data: any) {
-      setKurvedMintReturn(Number(data) / 10 ** 18);
+      setMintReturn((Number(data) / 10 ** 18).toString());
     },
   });
-  console.log("this is my Kurve mintReturned:", kurvedMintReturn);
 
   useEffect(() => {
-    const ethAmount = parseFloat(fromToken.amount);
-    const kurveAmount = isNaN(ethAmount) ? 0 : ethAmount * kurvedMintReturn;
-    setToToken((prev) => ({ ...prev, amount: kurveAmount.toString() }));
-  }, [fromToken.amount, kurvedMintReturn]);
+    const fetchReturn = async () => {
+      const { data } = await fetchMintReturn();
+      if (data) {
+        try {
+          const returnInEth = web3.utils.fromWei(data.toString(), "ether");
+          setMintReturn(returnInEth);
+        } catch (error) {
+          console.error("Error converting mint return:", error);
+        }
+      }
+    };
+
+    if (_amount && _amount !== "0") {
+      fetchReturn();
+    }
+  }, [_amount, fetchMintReturn]);
 
   const handleFromTokenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFromToken({ ...fromToken, token: e.target.value });
@@ -146,10 +157,6 @@ const SwapComponent: React.FC = () => {
 
   const handleToTokenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setToToken({ ...toToken, token: e.target.value });
-  };
-
-  const handleSwap = () => {
-    console.log("Swapping from token:", fromToken, "to token:", toToken);
   };
 
   const handleReverseTokens = () => {
@@ -221,7 +228,9 @@ const SwapComponent: React.FC = () => {
     <PageContainer>
       <SwapWidget>
         <SwapHeader>Swap</SwapHeader>
-        <p className="text-white text-xl font-bold">Here is pool balance: {finalKurveBalance}</p>
+        <p className="text-white text-xl font-bold">
+          Here is pool balance: {finalKurveBalance}
+        </p>
         <TokenInput>
           <div className="grid grid-rows-2 grid-cols-2 ">
             <div className="">
@@ -233,13 +242,18 @@ const SwapComponent: React.FC = () => {
                 From
               </label>
             </div>
-            <div></div>
+            <div />
             <div>
               <StyledInput
+                value={_amount}
                 type="number"
-                placeholder="0.0"
-                value={fromToken.amount}
-                onChange={handleFromAmountChange}
+                id="mintInput"
+                placeholder="Enter ETH amount"
+                className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
+                style={{ fontFamily: "ethnocentricRg" }}
+                onChange={(e) => {
+                  _setmintReturnAmount(e.target.value);
+                }}
               />
             </div>
             <div>
@@ -268,7 +282,7 @@ const SwapComponent: React.FC = () => {
         <TokenInput>
           <div className="grid grid-rows-2 grid-cols-2">
             <div className="">
-              <label 
+              <label
                 style={{ fontFamily: "ethnocentricRg" }}
                 className="ml-1 block text-left text-white"
                 htmlFor="toAmount"
@@ -278,12 +292,7 @@ const SwapComponent: React.FC = () => {
             </div>
             <div></div>
             <div>
-              <StyledInput
-                type="number"
-                placeholder="0.0"
-                value={toToken.amount}
-                onChange={handleToAmountChange}
-              />
+              <StyledInput type="number" readOnly value={mintReturn} />
             </div>
             <div>
               <TokenSelect value={toToken.token} onChange={handleToTokenChange}>

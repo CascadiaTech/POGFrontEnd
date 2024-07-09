@@ -21,7 +21,7 @@ export default function ClaimPage() {
       });
   };
 
-  useEffect(() => {
+  useEffect(() => { {}
     const videoRef = isMobile ? videoRefMobile : videoRefNonMobile;
     attemptPlay(videoRef);
   }, [isMobile]);
