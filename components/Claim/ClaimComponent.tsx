@@ -12,9 +12,11 @@ export default function ClaimComponent() {
   const { address, isConnected } = useAccount();
   let current_chain = 11155111;
   const [_amountt, _setBurnAmount] = useState("0");
+  
   const [_amount, _setmintReturnAmount] = useState("0");
   const [mintValue, setMintValue] = useState("");
   const [mintReturn, setMintReturn] = useState<string>("0");
+
   const [finalKurveBalance, setKurveBalance] = useState(0);
 
   const { data: kurveBalance } = useContractRead({
@@ -27,15 +29,13 @@ export default function ClaimComponent() {
       setKurveBalance(Number(data) / 10 ** 18);
     },
   });
-  console.log("this is my Kurve Balance:", kurveBalance);
-
 
   const { refetch: fetchMintReturn, data } = useContractRead({
     address: kurveContract,
     abi: KurveABI,
     functionName: "calculateCurvedMintReturn",
     chainId: current_chain,
-    args: [(Number(_amount) * 10**18).toString()],
+    args: [(Number(_amount) * 10 ** 18).toString()],
     onSuccess(data: any) {
       setMintReturn((Number(data) / 10 ** 18).toString());
     },
@@ -141,36 +141,23 @@ export default function ClaimComponent() {
           className="flex flex-col md:flex-row lg:flex-row md:justify-between lg:justify-between
          font-sans text-black border-b-[1px] mx-auto pb-3 border-gray-500 mt-5 mb-5"
         >
-          {/* <p
-            className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px]"
-            style={{ textAlign: "initial", fontFamily: "GroupeMedium" }}
-          >
-            Your Current KURVE Balance{" "}
-          </p>
+          <input
+            value={_amount}
+            type="number"
+            id="mintInput"
+            placeholder="Enter ETH amount"
+            className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
+            style={{ fontFamily: "ethnocentricRg" }}
+            onChange={(e) => {
+              _setmintReturnAmount(e.target.value);
+            }}
+          />
           <p
-            className="mr-6 flex justify-start
-            text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
+            className="mr-6 flex justify-start text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
             style={{ fontFamily: "Azonix" }}
           >
-            {finalKurveBalance}
-          </p> */}
-           <input
-        value={_amount}
-        type="number"
-        id="mintInput"
-        placeholder="Enter ETH amount"
-        className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
-        style={{ fontFamily: "ethnocentricRg" }}
-        onChange={(e) => {
-          _setmintReturnAmount(e.target.value);
-        }}
-      />
-      <p
-        className="mr-6 flex justify-start text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
-        style={{ fontFamily: "Azonix" }}
-      >
-        Your final mint return: {mintReturn} KURVE
-      </p>
+            Your final mint return: {mintReturn} KURVE
+          </p>
         </div>
         <div className="flex justify-center items-center mt-10 ">
           <input
@@ -240,3 +227,18 @@ export default function ClaimComponent() {
     </>
   );
 }
+
+
+          {/* <p
+            className="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px]"
+            style={{ textAlign: "initial", fontFamily: "GroupeMedium" }}
+          >
+            Your Current KURVE Balance{" "}
+          </p>
+          <p
+            className="mr-6 flex justify-start
+            text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
+            style={{ fontFamily: "Azonix" }}
+          >
+            {finalKurveBalance}
+          </p> */}
