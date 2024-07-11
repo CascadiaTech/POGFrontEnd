@@ -93,8 +93,31 @@ const SwapComponent: React.FC = () => {
   const kurveContract = "0x68B63BE19A15A83a41CD487B7f8D32B83423d6FE";
   const { address, isConnected } = useAccount();
 
-  const [_amount, _setBurnAmount] = useState();
-  const [_mintReturnAmount, _setmintReturnAmount] = useState("0");
+ // const [_amount, _setBurnAmount] = useState("0");
+  const [_amount, _setmintReturnAmount] = useState("0");
+
+
+
+  const [burnedcalc, setburnCalc] = useState("0");
+  const [mintcalc, setmintCalc] = useState("0");
+
+
+  const displayValue = fromToken.token == "ETH" ? mintcalc : burnedcalc
+
+
+  function handlePrice() {
+    if (fromToken.token == "ETH") {
+      fetchMintReturn
+    } else {
+      fetchBurnReturn;
+    }
+  }
+
+
+  useEffect(() => {
+  handlePrice()
+  setFromToken({ ...fromToken, amount: _amount });
+  },[_amount])
 
   const [kurvedMintReturn, setKurvedMintReturn] = useState<string>("0");
 
@@ -104,18 +127,18 @@ const SwapComponent: React.FC = () => {
   const handleFromAmountChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setFromToken({ ...fromToken, amount: e.target.value });
 
-  //   try {
-  //     const { data } = await fetchMintReturn();
-  //     if (data) {
-  //       const returnInEth = web3.utils.fromWei(data.toString(), "ether");
-  //       setKurvedMintReturn(returnInEth);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error converting mint return:", error);
-  //   }
-  // };
+    //   try {
+    //     const { data } = await fetchMintReturn();
+    //     if (data) {
+    //       const returnInEth = web3.utils.fromWei(data.toString(), "ether");
+    //       setKurvedMintReturn(returnInEth);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error converting mint return:", error);
+    //   }
+    // };
   }
-  console.log("this is my kurved mint returnb:", kurvedMintReturn)
+
 
   const handleToAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setToToken({ ...toToken, amount: e.target.value });
@@ -140,12 +163,25 @@ const SwapComponent: React.FC = () => {
     abi: KurveABI,
     functionName: "calculateCurvedMintReturn",
     chainId: current_chain,
-    args: [(Number(_mintReturnAmount) * 10 ** 18).toString()],
+    args: [(Number(_amount) * 10 ** 18).toString()],
     onSuccess(data: any) {
-      setKurvedMintReturn((Number(data) / 10 ** 18).toString());
+      setmintCalc((Number(data) / 10 ** 18).toString())
+      //  setKurvedMintReturn((Number(data) / 10 ** 18).toString());
     },
   });
 
+  const { refetch: fetchBurnReturn } = useContractRead({
+    address: kurveContract,
+    abi: KurveABI,
+    functionName: "calculateCurvedBurnReturn",
+    chainId: current_chain,
+    args: [(Number(_amount) * 10 ** 18).toString()],
+    onSuccess(data: any) {
+      setburnCalc((Number(data) / 10 ** 18).toString())
+     // setKurvedMintReturn((Number(data) / 10 ** 18).toString());
+    },
+  });
+/*
   useEffect(() => {
     const fetchReturn = async () => {
       const { data } = await fetchMintReturn();
@@ -163,7 +199,7 @@ const SwapComponent: React.FC = () => {
       fetchReturn();
     }
   }, [_amount, fetchMintReturn]);
-
+*/
   const handleFromTokenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFromToken({ ...fromToken, token: e.target.value });
   };
@@ -184,9 +220,6 @@ const SwapComponent: React.FC = () => {
     chainId: current_chain,
     args: [],
     value: web3.utils.toWei(fromToken.amount, "ether"),
-    overrides: {
-      value: web3.utils.toWei(fromToken.amount, "ether"), 
-    },
     onSuccess(data: any) {
       Swal.fire({
         icon: "success",
@@ -206,9 +239,9 @@ const SwapComponent: React.FC = () => {
     abi: KurveABI,
     functionName: "burn",
     chainId: current_chain,
-    args: [(Number(fromToken.amount) *10**18).toString()], 
+    args: [(Number(fromToken.amount) * 10 ** 18).toString()],
     overrides: {
-      gasLimit: 500000, 
+      gasLimit: 500000,
     },
     onSuccess(data: any) {
       Swal.fire({
@@ -225,21 +258,21 @@ const SwapComponent: React.FC = () => {
   });
 
   const handleConditionalSwap = () => {
-    if (fromToken.token === "ETH" && toToken.token === "KURVE") {
-      console.log("ETH:", "FromToken", "gggg")
+    if (fromToken.token === "ETH") {
       Mint();
-    } else if (fromToken.token === "KURVE" && toToken.token === "ETH") {
-      console.log("KURVE:", "FromToken","hhh")
+    } else if (fromToken.token === "KURVE") {
       Burn();
     }
   };
+
+
 
   return (
     <PageContainer>
       <SwapWidget>
         <SwapHeader>Swap</SwapHeader>
         <p className="text-white text-xl font-bold">
-          Here is your balance: {finalKurveBalance.toFixed(3)} <br />bitch
+          Pluto Balance: {finalKurveBalance.toFixed(3)} <br />
         </p>
         <TokenInput>
           <div className="grid grid-rows-2 grid-cols-2 ">
@@ -255,14 +288,13 @@ const SwapComponent: React.FC = () => {
             <div />
             <div>
               <StyledInput
-                value={fromToken.amount}
                 type="number"
                 id="mintInput"
                 placeholder="Enter ETH amount"
                 className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
                 style={{ fontFamily: "ethnocentricRg" }}
-                onChange={handleFromAmountChange || 
-                  _setmintReturnAmount}
+                onChange={(e) =>
+                  _setmintReturnAmount(e.target.value)}
               />
             </div>
             <div>
@@ -302,23 +334,16 @@ const SwapComponent: React.FC = () => {
             <div></div>
             <div>
               <StyledInput
-                      value={kurvedMintReturn}
-                      type="number"
-                      readOnly
-                      id="mintInput"
-                      placeholder="Enter ETH amount"
-                      className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
-                      style={{ fontFamily: "ethnocentricRg" }}
-                      onChange={handleToAmountChange}  
-                     />
+                value={displayValue}
+                type="number"
+                readOnly
+                id="mintInput"
+                placeholder="Enter ETH amount"
+                className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
+                style={{ fontFamily: "ethnocentricRg" }}
+                onChange={handleToAmountChange}
+              />
             </div>
-
-          <p
-            className="mr-6 flex justify-start text-[12px] sm:text-[15px] md:text-[15px] lg:text-[16px] max-w-[270px]"
-            style={{ fontFamily: "Azonix" }}
-          >
-            Your final mint return: {kurvedMintReturn} KURVE
-          </p>
             <div>
               <TokenSelect value={toToken.token} onChange={handleToTokenChange}>
                 <option value="ETH">ETH</option>

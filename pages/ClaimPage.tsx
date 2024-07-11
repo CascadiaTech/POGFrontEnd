@@ -52,7 +52,7 @@ export default function ClaimPage() {
           loop
           muted
         >
-          <source src="/backG.mp4" type="video/mp4" />
+          <source src="/KurveMobile.mov" type="video/mp4" />
           Your browser does not support the video tag, update your browser
         </video>
       ) : (
@@ -64,22 +64,18 @@ export default function ClaimPage() {
           loop
           muted
         >
-          <source src="/backG.mp4" type="video/mp4" />
+          <source src="/KurveDesktop.mov" type="video/mp4" />
           Your browser does not support the video tag, update your browser
         </video>
       )}
-        <div className="w-full absolute z-10">
+        <div className="w-full absolute z-10 ">
           <div
-            className={`w-fit flex flex-col justify-center mx-auto text-center`}
+            className={`w-fit flex flex-col justify-top mx-auto text-center`}
             style={{ fontFamily: "Mandalore" }}
           >
-            <div className={``}>
-              <ClaimComponent />
-              <div className="my-4" />
-            </div>
+      
             <SwapComponent />
 
-            <p className={"my-5"}></p>
           </div>
         </div>
       </main>
