@@ -99,14 +99,8 @@ const Home: NextPage = () => {
           </video>
         )}
         <div className="absolute z-10">
-           <Image src={logo} alt="logo" className="w-1/4 h-1/4 justify-center mx-auto"/>
-          <h1
-            className="block my-10 text-[12px] sm:text-[18px]  md:text-[24px] lg:text-[32px] text-center
-              text-white rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
-            style={{ fontFamily: "GroupeMedium" }}
-          >
-            Logo goes here fuckers
-          </h1>
+           <Image height={500} width={500} src={logo} alt="logo" className="w-1/4 h-1/4 justify-center mx-auto"/>
+
           <div className="flex flex-row mx-auto my-5 justify-center">
             <button
               style={{ boxShadow: "0px 0px 12px 2px rgba(123,123,123,0.6)" }}
@@ -118,7 +112,7 @@ const Home: NextPage = () => {
                 className="cursor-pointer  block  text-[12px] sm:text-[18px] md:text-[18px] lg:text-[22px] text-center  text-white rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
                 style={{ fontFamily: "GroupeMedium" }}
               >
-                <Link href={"/StaQing"}>Booty Time</Link>
+                <Link href={"/Swap"}>Booty Time</Link>
               </p>
             </button>
             <p className="mx-5"></p>
@@ -132,7 +126,7 @@ const Home: NextPage = () => {
                 className="cursor-pointer  block  text-[12px] sm:text-[18px]  md:text-[18px] lg:text-[22px] text-center  text-white rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
                 style={{ fontFamily: "GroupeMedium" }}
               >
-                <Link href={"/ClaimPage"}>Pluto Time</Link>
+                <Link href={"/Swap"}>Pluto Time</Link>
               </p>
             </button>
           </div>

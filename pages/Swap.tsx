@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import SwapComponent from "../components/swapc";
 
 
-export default function ClaimPage() {
+export default function Swap() {
   
   const videoRefMobile = useRef(null);
   const videoRefNonMobile = useRef(null);
