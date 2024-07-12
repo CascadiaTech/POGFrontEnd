@@ -67,7 +67,7 @@ const Home: NextPage = () => {
   });
 
   return (
-    <div className="scroll-smooth ">
+    <div className="scroll-smooth">
       <header>
         <HeaderComponent />
       </header>

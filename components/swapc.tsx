@@ -188,6 +188,17 @@ const SwapComponent: React.FC = () => {
     }
   };
 
+
+  function toggleTokens(){
+    if(fromToken.token == "ETH"){
+      setFromToken({ ...fromToken, token: "KURVE" });
+      setToToken({ ...toToken, token: "ETH" });
+    }else{
+      setFromToken({ ...fromToken, token: "ETH" });
+      setToToken({ ...toToken, token: "KURVE" });
+    }
+  }
+
   return (
     <div
       style={{ backgroundColor: "#191b1f" }}
@@ -230,10 +241,8 @@ const SwapComponent: React.FC = () => {
           <div>
             <TokenSelect
               value={fromToken.token}
-              onChange={handleFromTokenChange}
             >
-              <option value="ETH">ETH</option>
-              <option value="KURVE">KURVE</option>
+             <option value={`${fromToken.token}`}> {fromToken.token}</option>
             </TokenSelect>
           </div>
         </div>
@@ -242,7 +251,7 @@ const SwapComponent: React.FC = () => {
         className="cursor-pointer mx-auto justify-center"
         onClick={handleReverseTokens}
       >
-        <div className="w-1/2 h-1/2  border-2 border-gray-400 rounded-2xl px-2 py-2 mb-2 mx-auto">
+        <div className="w-1/2 h-1/2 bg-white border-2  border-gray-600 rounded-2xl px-2 py-2 mb-2 mx-auto" onClick={() => toggleTokens()}>
           {fromToken.token === "ETH" ? (
             <Image src={downArrow} alt="down" />
           ) : (
@@ -275,9 +284,8 @@ const SwapComponent: React.FC = () => {
             />
           </div>
           <div>
-            <TokenSelect value={toToken.token} onChange={handleToTokenChange}>
-              <option value="ETH">ETH</option>
-              <option value="KURVE">KURVE</option>
+            <TokenSelect value={toToken.token}>
+              <option value={`${toToken.token}`}>{toToken.token} </option>
             </TokenSelect>
           </div>
         </div>
