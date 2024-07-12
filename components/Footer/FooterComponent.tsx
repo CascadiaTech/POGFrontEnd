@@ -2,23 +2,15 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 export default function FooterComponent() {
-  const [hidden, sethidden] = useState(true);
-  //const ScrollY = useScrollPosition()
-  const [message, setmessage] = useState(String);
-  const [emails, setemail] = useState(String);
-  
-  const SERVICE_ID = "service_pbjqier";
-  const TEMPLATE_ID = "contact_form";
-  const USER_ID = "iBjsKXibozEgEn3zJ";
-
-
-  const form = React.useRef() as React.MutableRefObject<HTMLFormElement>;
-
 
 
   return (
     <div>
-      <footer className="bg-gray-200 p-5 w-full h-full">
+      <footer className="bg-gray-800 opacity-35 border-white w-full text-black relative border-2 rounded-lg">
+        <p> Disclaimer: we are in no way reposible for you buying this token, by using this application you
+          hereby agree that you are not expecting financial return from buying PLUTO and you do so just cause you
+          like buying random stuff online for fun.
+        </p>
       </footer>
     </div>
   );
