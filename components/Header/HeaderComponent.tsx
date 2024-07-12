@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import menubars from "../../assets/images/menuBars.png"
+import logo from "../../assets/images/plutoLogo.png";
 
 import { useRouter } from "next/router";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -49,7 +49,7 @@ export default function HeaderComponent() {
             style={{
               fontFamily: "Mandalore",
             }}
-            className={`${styles.nav} text-md self-center text-white mr-10 px-2 py-2`}
+            className={`${styles.nav} text-sm self-center text-white mr-10 px-2 py-2`}
           >
             <li
               className=" border-gray-300"
@@ -61,7 +61,7 @@ export default function HeaderComponent() {
               className=" border-gray-300"
               style={{ fontFamily: "Azonix" }}
             >
-              <Link href={"/ClaimPage"}>Kurve Time</Link>
+              <Link href={"/ClaimPage"}>Pluto Time</Link>
             </li>
             <li>
               <a
@@ -95,8 +95,8 @@ export default function HeaderComponent() {
                   className="self-center "
                   width={50}
                   height={50}
-                  src={menubars}
-                  alt="asa"
+                  src={logo}
+                  alt="logo"
                 ></Image>
               </li>
             </div>
@@ -117,8 +117,8 @@ export default function HeaderComponent() {
                       className={`${hidden.toString()} text-black transition-all duration-300 cursor-pointer`}
                       height={35}
                       width={35}
-                      src={menubars}
-                      alt={""}
+                      src={logo}
+                      alt={"logo"}
                     />
                   </div>
                 </div>

@@ -1,12 +1,8 @@
 import styles from "../styles/Home.module.css";
-import ClaimComponent from "../components/Claim/ClaimComponent";
 import HeaderComponent from "../components/Header/HeaderComponent";
 import { useEffect, useRef, useState } from "react";
 import SwapComponent from "../components/swapc";
 
-//dropdown, hard-coded eth and kurve token selection
-//calculateCurvedMintReturn() function implementation
-//
 
 export default function ClaimPage() {
   
@@ -52,7 +48,7 @@ export default function ClaimPage() {
           loop
           muted
         >
-          <source src="/KurveMobile.mov" type="video/mp4" />
+          <source src="/KurveMobile.mp4" type="video/mp4" />
           Your browser does not support the video tag, update your browser
         </video>
       ) : (
@@ -64,7 +60,7 @@ export default function ClaimPage() {
           loop
           muted
         >
-          <source src="/KurveDesktop.mov" type="video/mp4" />
+          <source src="/KurveDesktop.mp4" type="video/mp4" />
           Your browser does not support the video tag, update your browser
         </video>
       )}

@@ -1,13 +1,12 @@
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { useAccount } from "wagmi";
 import HeaderComponent from "../components/Header/HeaderComponent";
-import { abiObject } from "../contracts/abi/abi.mjs";
-import Image from "next/image";
 import { useWalletClient } from "wagmi";
-import menubars from "../assets/images/menuBars.png";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "../assets/images/plutoLogo.png"
 const Home: NextPage = () => {
   const { address, isConnected } = useAccount();
   const { data: walletClient }: any = useWalletClient();
@@ -83,7 +82,7 @@ const Home: NextPage = () => {
             loop
             muted
           >
-            <source src="/backG.mp4" type="video/mp4" />
+            <source src="/KurveMobile.mp4" type="video/mp4" />
             Your browser does not support the video tag, update your browser
           </video>
         ) : (
@@ -95,11 +94,12 @@ const Home: NextPage = () => {
             loop
             muted
           >
-            <source src="/backG.mp4" type="video/mp4" />
+            <source src="/KurveDesktop.mp4" type="video/mp4" />
             Your browser does not support the video tag, update your browser
           </video>
         )}
-        <div className="w-full -translate-y-80 md:-translate-y-80 absolute z-10">
+        <div className="absolute z-10">
+           <Image src={logo} alt="logo" className="w-1/4 h-1/4 justify-center mx-auto"/>
           <h1
             className="block my-10 text-[12px] sm:text-[18px]  md:text-[24px] lg:text-[32px] text-center
               text-white rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
@@ -107,7 +107,6 @@ const Home: NextPage = () => {
           >
             Logo goes here fuckers
           </h1>
-
           <div className="flex flex-row mx-auto my-5 justify-center">
             <button
               style={{ boxShadow: "0px 0px 12px 2px rgba(123,123,123,0.6)" }}
@@ -133,7 +132,7 @@ const Home: NextPage = () => {
                 className="cursor-pointer  block  text-[12px] sm:text-[18px]  md:text-[18px] lg:text-[22px] text-center  text-white rounded md:bg-transparent md:text-white md:p-0 dark:text-white"
                 style={{ fontFamily: "GroupeMedium" }}
               >
-                <Link href={"/ClaimPage"}>Kurve Time</Link>
+                <Link href={"/ClaimPage"}>Pluto Time</Link>
               </p>
             </button>
           </div>

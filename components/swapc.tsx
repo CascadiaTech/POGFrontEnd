@@ -9,26 +9,6 @@ import { KurveABI } from "../contracts/abi/Kurve.mjs";
 import Swal from "sweetalert2";
 import web3 from "web3";
 
-const PageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-`;
-const SwapWidget = styled.div`
-  width: 100%;
-  max-width: 400px;
-  background-color: #191b1f;
-  border-radius: 20px;
-  padding: 20px;
-`;
-const SwapHeader = styled.div`
-  color: #fff;
-  font-weight: bold;
-  font-size: 22px;
-  font-family: Azonix;
-  margin-bottom: 20px;
-`;
 const TokenInput = styled.div`
   background-color: #212429;
   border-radius: 15px;
@@ -36,17 +16,6 @@ const TokenInput = styled.div`
   margin-bottom: 10px;
   &:hover {
     border-color: #353a42;
-    border-width: 1px;
-  }
-`;
-const StyledInput = styled.input`
-  background-color: transparent;
-  border: none;
-  color: #fff;
-  width: 100%;
-  font-family: ethnocentricRg;
-  &:focus {
-    outline: none;
   }
 `;
 const TokenSelect = styled.select`
@@ -60,18 +29,6 @@ const TokenSelect = styled.select`
   }
   transition: all;
   transition-duration: 300ms;
-`;
-const SwapButton = styled.button`
-  background-color: #5090ea;
-  border: none;
-  border-radius: 20px;
-  color: #fff;
-  font-weight: bold;
-  padding: 10px;
-  width: 100%;
-  &:hover {
-    background-color: #4580d0;
-  }
 `;
 const ArrowWrapper = styled.div`
   text-align: center;
@@ -92,53 +49,33 @@ const SwapComponent: React.FC = () => {
   const [toToken, setToToken] = useState({ amount: "0", token: "KURVE" });
   const kurveContract = "0x68B63BE19A15A83a41CD487B7f8D32B83423d6FE";
   const { address, isConnected } = useAccount();
-
- // const [_amount, _setBurnAmount] = useState("0");
   const [_amount, _setmintReturnAmount] = useState("0");
-
-
-
   const [burnedcalc, setburnCalc] = useState("0");
   const [mintcalc, setmintCalc] = useState("0");
 
-
-  const displayValue = fromToken.token == "ETH" ? mintcalc : burnedcalc
-
+  const displayValue = fromToken.token == "ETH" ? mintcalc : burnedcalc;
 
   function handlePrice() {
     if (fromToken.token == "ETH") {
-      fetchMintReturn
+      fetchMintReturn;
     } else {
       fetchBurnReturn;
     }
   }
 
-
   useEffect(() => {
-  handlePrice()
-  setFromToken({ ...fromToken, amount: _amount });
-  },[_amount])
+    handlePrice();
+    setFromToken({ ...fromToken, amount: _amount });
+  }, [_amount]);
 
   const [kurvedMintReturn, setKurvedMintReturn] = useState<string>("0");
-
-  // const [conversionRate, setConversionRate] = useState({ amount: "0", token: "ETH" });
   let current_chain = 11155111;
 
-  const handleFromAmountChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFromAmountChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setFromToken({ ...fromToken, amount: e.target.value });
-
-    //   try {
-    //     const { data } = await fetchMintReturn();
-    //     if (data) {
-    //       const returnInEth = web3.utils.fromWei(data.toString(), "ether");
-    //       setKurvedMintReturn(returnInEth);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error converting mint return:", error);
-    //   }
-    // };
-  }
-
+  };
 
   const handleToAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setToToken({ ...toToken, amount: e.target.value });
@@ -165,8 +102,7 @@ const SwapComponent: React.FC = () => {
     chainId: current_chain,
     args: [(Number(_amount) * 10 ** 18).toString()],
     onSuccess(data: any) {
-      setmintCalc((Number(data) / 10 ** 18).toString())
-      //  setKurvedMintReturn((Number(data) / 10 ** 18).toString());
+      setmintCalc((Number(data) / 10 ** 18).toString());
     },
   });
 
@@ -177,29 +113,10 @@ const SwapComponent: React.FC = () => {
     chainId: current_chain,
     args: [(Number(_amount) * 10 ** 18).toString()],
     onSuccess(data: any) {
-      setburnCalc((Number(data) / 10 ** 18).toString())
-     // setKurvedMintReturn((Number(data) / 10 ** 18).toString());
+      setburnCalc((Number(data) / 10 ** 18).toString());
     },
   });
-/*
-  useEffect(() => {
-    const fetchReturn = async () => {
-      const { data } = await fetchMintReturn();
-      if (data) {
-        try {
-          const returnInEth = web3.utils.fromWei(data.toString(), "ether");
-          setKurvedMintReturn(returnInEth);
-        } catch (error) {
-          console.error("Error converting mint return:", error);
-        }
-      }
-    };
 
-    if (_amount && _amount !== "0") {
-      fetchReturn();
-    }
-  }, [_amount, fetchMintReturn]);
-*/
   const handleFromTokenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFromToken({ ...fromToken, token: e.target.value });
   };
@@ -265,96 +182,112 @@ const SwapComponent: React.FC = () => {
     }
   };
 
-
-
   return (
-    <PageContainer>
-      <SwapWidget>
-        <SwapHeader>Swap</SwapHeader>
-        <p className="text-white text-xl font-bold">
-          Pluto Balance: {finalKurveBalance.toFixed(3)} <br />
-        </p>
-        <TokenInput>
-          <div className="grid grid-rows-2 grid-cols-2 ">
-            <div className="">
-              <label
-                style={{ fontFamily: "ethnocentricRg" }}
-                className="block text-left text-white"
-                htmlFor="fromAmount"
-              >
-                From
-              </label>
-            </div>
-            <div />
-            <div>
-              <StyledInput
-                type="number"
-                id="mintInput"
-                placeholder="Enter ETH amount"
-                className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
-                style={{ fontFamily: "ethnocentricRg" }}
-                onChange={(e) =>
-                  _setmintReturnAmount(e.target.value)}
-              />
-            </div>
-            <div>
-              <TokenSelect
-                value={fromToken.token}
-                onChange={handleFromTokenChange}
-              >
-                <option value="ETH">ETH</option>
-                <option value="KURVE">KURVE</option>
-              </TokenSelect>
-            </div>
+    <div
+      style={{ backgroundColor: "#191b1f" }}
+      className="  w-full max-w-md rounded-2xl p-5"
+    >
+      <h2
+        style={{ fontFamily: "Gotham-Ultra" }}
+        className="text-white text-2xl"
+      >
+        Swap Pluto for ETH
+      </h2>
+      <p
+        style={{ fontFamily: "Gotham-Ultra" }}
+        className="text-white text-sm font-bold mb-4"
+      >
+        Pluto Balance: {finalKurveBalance.toFixed(3)} <br />
+      </p>
+      <TokenInput>
+        <div className="grid grid-rows-2 grid-cols-2 ">
+          <div className="">
+            <label
+              style={{ fontFamily: "Gotham-Bold" }}
+              className="block text-left text-white"
+              htmlFor="fromAmount"
+            >
+              From
+            </label>
           </div>
-        </TokenInput>
-        <ArrowWrapper
-          className="cursor-pointer mx-auto justify-center"
-          onClick={handleReverseTokens}
+          <div />
+          <div>
+            <input
+              type="number"
+              id="mintInput"
+              placeholder="0.00"
+              className="w-full border h-8 my-2 mr-4 bg-transparent rounded-2xl border border-gray-300 outline-none p-4 pr-10 text-white"
+              style={{ fontFamily: "Gotham-Bold" }}
+              onChange={(e) => _setmintReturnAmount(e.target.value)}
+            />
+          </div>
+          <div>
+            <TokenSelect
+              value={fromToken.token}
+              onChange={handleFromTokenChange}
+            >
+              <option value="ETH">ETH</option>
+              <option value="KURVE">KURVE</option>
+            </TokenSelect>
+          </div>
+        </div>
+      </TokenInput>
+      <ArrowWrapper
+        className="cursor-pointer mx-auto justify-center"
+        onClick={handleReverseTokens}
+      >
+        <div className="w-1/2 h-1/2  border-2 border-gray-400 rounded-2xl px-2 py-2 mb-2 mx-auto">
+          {fromToken.token === "ETH" ? (
+            <Image src={downArrow} alt="down" />
+          ) : (
+            <Image src={upArrow} alt="up" />
+          )}
+        </div>
+      </ArrowWrapper>
+      <TokenInput>
+        <div className="grid grid-rows-2 grid-cols-2">
+          <div className="">
+            <label
+              style={{ fontFamily: "Gotham-Bold" }}
+              className="ml-1 block text-left text-white"
+              htmlFor="toAmount"
+            >
+              To
+            </label>
+          </div>
+          <div />
+          <div>
+            <input
+              value={displayValue}
+              type="number"
+              readOnly
+              id="mintInput"
+              placeholder="0.00"
+              className="w-full border h-8 my-2 mr-4 bg-transparent rounded-2xl border border-gray-300 outline-none p-4 pr-10 text-white"
+              style={{ fontFamily: "Gotham-Bold" }}
+              onChange={handleToAmountChange}
+            />
+          </div>
+          <div>
+            <TokenSelect value={toToken.token} onChange={handleToTokenChange}>
+              <option value="ETH">ETH</option>
+              <option value="KURVE">KURVE</option>
+            </TokenSelect>
+          </div>
+        </div>
+      </TokenInput>
+      <button
+        className="w-full bg-blue-600 rounded-2xl text-white font-bold p-3 hover:bg-blue-500"
+        onClick={handleConditionalSwap}
+      >
+        <p
+          className="text-xl text-white"
+          style={{ fontFamily: "Gotham-Ultra" }}
         >
-          <div className="w-1/2 h-1/2  border-2 border-gray-400 rounded-2xl px-2 py-2 mb-2 mx-auto">
-            {fromToken.token === "ETH" ? (
-              <Image src={downArrow} alt="down" />
-            ) : (
-              <Image src={upArrow} alt="up" />
-            )}
-          </div>
-        </ArrowWrapper>
-        <TokenInput>
-          <div className="grid grid-rows-2 grid-cols-2">
-            <div className="">
-              <label
-                style={{ fontFamily: "ethnocentricRg" }}
-                className="ml-1 block text-left text-white"
-                htmlFor="toAmount"
-              >
-                To
-              </label>
-            </div>
-            <div></div>
-            <div>
-              <StyledInput
-                value={displayValue}
-                type="number"
-                readOnly
-                id="mintInput"
-                placeholder="Enter ETH amount"
-                className="w-64 border h-8 my-2 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
-                style={{ fontFamily: "ethnocentricRg" }}
-                onChange={handleToAmountChange}
-              />
-            </div>
-            <div>
-              <TokenSelect value={toToken.token} onChange={handleToTokenChange}>
-                <option value="ETH">ETH</option>
-                <option value="KURVE">KURVE</option>
-              </TokenSelect>
-            </div>
-          </div>
-        </TokenInput>
-        <SwapButton onClick={handleConditionalSwap}>Swap</SwapButton>
-      </SwapWidget>
-    </PageContainer>
+          Swap
+        </p>
+      </button>
+    </div>
   );
 };
 
