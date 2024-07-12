@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import web3 from "web3";
 
 const TokenInput = styled.div`
+  font-family: Gotham-Bold;
   background-color: #212429;
   border-radius: 15px;
   padding: 15px;
@@ -19,6 +20,7 @@ const TokenInput = styled.div`
   }
 `;
 const TokenSelect = styled.select`
+ font-family: Gotham-Bold;
   background-color: #191b1f;
   border: 1px solid #40444f;
   border-radius: 20px;
@@ -43,15 +45,60 @@ const ArrowWrapper = styled.div`
   transition: all;
   transition-duration: 300ms;
 `;
+import { getBalance } from '@wagmi/core'
+import { http, createConfig } from '@wagmi/core'
+import { mainnet, sepolia } from '@wagmi/core/chains'
+
+
 
 const SwapComponent: React.FC = () => {
   const [fromToken, setFromToken] = useState({ amount: "0", token: "ETH" });
   const [toToken, setToToken] = useState({ amount: "0", token: "KURVE" });
   const kurveContract = "0x68B63BE19A15A83a41CD487B7f8D32B83423d6FE";
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, } = useAccount();
   const [_amount, _setmintReturnAmount] = useState("0");
   const [burnedcalc, setburnCalc] = useState("0");
   const [mintcalc, setmintCalc] = useState("0");
+
+ const config = createConfig({
+    chains: [mainnet, sepolia],
+    transports: {
+      [mainnet.id]: http(),
+      [sepolia.id]: http(),
+    },
+  })
+/*
+
+  async function fetchBalance(){
+    const balance = await getBalance(config, {
+      address: address || "0x"
+    })
+    return balance
+  }
+
+
+  useEffect(() => {
+
+    let balance;
+    async function fetchBalance(){
+      balance = await getBalance(config, {
+        address: address || "0x"
+      })
+      return balance
+    }
+
+    fetchBalance()
+    console.log(fetchBalance())
+   },[])
+*/
+  function SetMintAmount(input:string){
+    const value = Number(input);
+    if(value <= 0){
+      return
+    }else{
+      _setmintReturnAmount(value.toString())
+    }
+  }
 
   const displayValue = fromToken.token == "ETH" ? mintcalc : burnedcalc;
 
@@ -136,7 +183,7 @@ const SwapComponent: React.FC = () => {
     functionName: "mint",
     chainId: current_chain,
     args: [],
-    value: web3.utils.toWei(fromToken.amount, "ether"),
+    value:[(Number(fromToken.amount) * 10 ** 18).toString()],
     onSuccess(data: any) {
       Swal.fire({
         icon: "success",
@@ -189,11 +236,11 @@ const SwapComponent: React.FC = () => {
   };
 
 
-  function toggleTokens(){
-    if(fromToken.token == "ETH"){
+  function toggleTokens() {
+    if (fromToken.token == "ETH") {
       setFromToken({ ...fromToken, token: "KURVE" });
       setToToken({ ...toToken, token: "ETH" });
-    }else{
+    } else {
       setFromToken({ ...fromToken, token: "ETH" });
       setToToken({ ...toToken, token: "KURVE" });
     }
@@ -230,19 +277,20 @@ const SwapComponent: React.FC = () => {
           <div />
           <div>
             <input
-              type="number"
+
+              type="text"
               id="mintInput"
               placeholder="0.00"
               className="w-full border h-8 my-2 mr-4 bg-transparent rounded-2xl border border-gray-300 outline-none p-4 pr-10 text-white"
               style={{ fontFamily: "Gotham-Bold" }}
-              onChange={(e) => _setmintReturnAmount(e.target.value)}
+              onChange={(e) => SetMintAmount(e.target.value)}
             />
           </div>
           <div>
-            <TokenSelect
+            <TokenSelect 
               value={fromToken.token}
             >
-             <option value={`${fromToken.token}`}> {fromToken.token}</option>
+              <option value={`${fromToken.token}`}> {fromToken.token}</option>
             </TokenSelect>
           </div>
         </div>
@@ -291,7 +339,7 @@ const SwapComponent: React.FC = () => {
         </div>
       </TokenInput>
       <button
-        className="w-full bg-blue-600 rounded-2xl text-white font-bold p-3 hover:bg-blue-500"
+        className="w-full bg-pink-500 rounded-2xl text-white font-bold p-3 hover:bg-blue-500"
         onClick={handleConditionalSwap}
       >
         <p
