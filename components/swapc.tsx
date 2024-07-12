@@ -175,6 +175,12 @@ const SwapComponent: React.FC = () => {
   });
 
   const handleConditionalSwap = () => {
+    if (address == null) {
+      Swal.fire({
+        icon: "error",
+        title: `You Must Connect Your Wallet To Swap`,
+      });
+    }
     if (fromToken.token === "ETH") {
       Mint();
     } else if (fromToken.token === "KURVE") {

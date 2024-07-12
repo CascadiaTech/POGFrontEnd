@@ -99,7 +99,7 @@ const Home: NextPage = () => {
           </video>
         )}
         <div className="absolute z-10">
-           <Image height={500} width={500} src={logo} alt="logo" className="w-1/4 h-1/4 justify-center mx-auto"/>
+           <Image height={500} width={500} src={logo} alt="logo" className="justify-center mx-auto"/>
 
           <div className="flex flex-row mx-auto my-5 justify-center">
             <button
