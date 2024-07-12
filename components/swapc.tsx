@@ -91,6 +91,7 @@ const SwapComponent: React.FC = () => {
     console.log(fetchBalance())
    },[])
 */
+//////
   function SetMintAmount(input:string){
     const value = Number(input);
     if(value <= 0){
