@@ -25,12 +25,12 @@ export default function HeaderComponent() {
               className=" border-gray-300"
               style={{ fontFamily: "Gotham-Ultra" }}
             >
-              <Link href={"/Swap"}>Pluto Time</Link>
+              <Link href={"/Swap"}>Fox Time</Link>
             </li>
           </ul>
           <div className={'py-0 self-center'}>
               <ConnectButton />
-              </div>
+          </div>
         </div>
 
         <div className="w-fit h-fit text-center mt-2  mx-auto justify-center py-2 "></div>
@@ -38,7 +38,7 @@ export default function HeaderComponent() {
           className="justify-left  self-center items-left text-left w-full flex h-fit w-auto order-1"
           id="navbar-sticky"
         >
-          <ul className="h-auto  flex flex-row justify-left self-center sm:my-0 text-left items-left p-4 mt-4 rounded-lg md:mt-0 md:text-md ">
+          <ul className="h-auto flex flex-row justify-left self-center sm:my-0 text-left items-left p-4 mt-4 rounded-lg md:mt-0 md:text-md ">
             <div
               className={
                 " flex flex-row top-0 left-0 absolute self-center mt-4 md:px-4 lg:px-4 "

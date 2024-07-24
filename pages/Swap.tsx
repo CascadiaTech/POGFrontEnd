@@ -40,30 +40,43 @@ export default function Swap() {
       </header>
       <main className={`${styles.main} `}>
       {isMobile ? (
-        <video
-          ref={videoRefMobile}
-          className="min-w-full z-0 min-h-full relative object-cover"
-          playsInline
-          autoPlay
-          loop
-          muted
-        >
-          <source src="/KurveMobile.mp4" type="video/mp4" />
-          Your browser does not support the video tag, update your browser
-        </video>
-      ) : (
-        <video
-          ref={videoRefNonMobile}
-          className="min-w-full z-0 min-h-full relative object-cover"
-          playsInline
-          autoPlay
-          loop
-          muted
-        >
-          <source src="/KurveDesktop.mp4" type="video/mp4" />
-          Your browser does not support the video tag, update your browser
-        </video>
-      )}
+          <>
+            <video
+              ref={videoRefMobile}
+              className="min-w-full z-0 min-h-full relative object-cover bg-repeat"
+              playsInline
+              autoPlay
+              loop
+              muted
+            >
+              <source src="/newBg.mp4" type="video/mp4" />
+              Your browser does not support the video tag, update your browser
+            </video>
+            <video
+              ref={videoRefMobile}
+              className="min-w-full z-0 min-h-full relative object-cover bg-repeat"
+              playsInline
+              autoPlay
+              loop
+              muted
+            >
+              <source src="/newBg.mp4 " type="video/mp4" />
+              Your browser does not support the video tag, update your browser
+            </video>
+          </>
+        ) : (
+          <video
+            ref={videoRefNonMobile}
+            className="min-w-full z-0  relative "
+            playsInline
+            autoPlay
+            loop
+            muted
+          >
+            <source src="/newBg.mp4" type="video/mp4" />
+            Your browser does not support the video tag, update your browser
+          </video>
+        )} 
         <div className="w-full absolute z-10 ">
           <div
             className={`w-fit flex flex-col justify-top mx-auto text-center`}

@@ -87,7 +87,7 @@ const Home: NextPage = () => {
               loop
               muted
             >
-              <source src="/KurveMobile.mp4" type="video/mp4" />
+              <source src="/newBg.mp4" type="video/mp4" />
               Your browser does not support the video tag, update your browser
             </video>
             <video
@@ -98,7 +98,7 @@ const Home: NextPage = () => {
               loop
               muted
             >
-              <source src="/KurveMobile.mp4" type="video/mp4" />
+              <source src="/newBg.mp4 " type="video/mp4" />
               Your browser does not support the video tag, update your browser
             </video>
           </>
@@ -111,16 +111,17 @@ const Home: NextPage = () => {
             loop
             muted
           >
-            <source src="/KurveDesktop.mp4" type="video/mp4" />
+            <source src="/newBg.mp4" type="video/mp4" />
             Your browser does not support the video tag, update your browser
           </video>
         )}
         <MainPageContent/>
-
-        <FooterComponent />
       </main>
     </div>
   );
 };
 
 export default Home;
+
+
+

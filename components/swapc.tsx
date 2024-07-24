@@ -7,67 +7,26 @@ import { useAccount, useContractRead, useContractWrite } from "wagmi";
 //abi's
 import { KurveABI } from "../contracts/abi/Kurve.mjs";
 import Swal from "sweetalert2";
-import web3 from "web3";
-
-const TokenInput = styled.div`
-  font-family: Gotham-Bold;
-  background-color: #212429;
-  border-radius: 15px;
-  padding: 15px;
-  margin-bottom: 10px;
-  &:hover {
-    border-color: #353a42;
-  }
-`;
-const TokenSelect = styled.select`
- font-family: Gotham-Bold;
-  background-color: #191b1f;
-  border: 1px solid #40444f;
-  border-radius: 20px;
-  color: #fff;
-  padding: 5px 10px;
-  &:hover {
-    border-color: #ffffff;
-  }
-  transition: all;
-  transition-duration: 300ms;
-`;
-const ArrowWrapper = styled.div`
-  text-align: center;
-  color: #ffffff;
-  width: fit-content;
-  height: fit-content;
-  margin-botton: 6px
-  margin-top: 6px  
-  &:hover {
-    border-color: #ffffff;
-  }
-  transition: all;
-  transition-duration: 300ms;
-`;
-import { getBalance } from '@wagmi/core'
-import { http, createConfig } from '@wagmi/core'
-import { mainnet, sepolia } from '@wagmi/core/chains'
-
-
+import { http, createConfig } from "@wagmi/core";
+import { mainnet, sepolia } from "@wagmi/core/chains";
 
 const SwapComponent: React.FC = () => {
   const [fromToken, setFromToken] = useState({ amount: "0", token: "ETH" });
-  const [toToken, setToToken] = useState({ amount: "0", token: "KURVE" });
+  const [toToken, setToToken] = useState({ amount: "0", token: "FOX" });
   const kurveContract = "0x68B63BE19A15A83a41CD487B7f8D32B83423d6FE";
-  const { address, isConnected, } = useAccount();
+  const { address, isConnected } = useAccount();
   const [_amount, _setmintReturnAmount] = useState("0");
   const [burnedcalc, setburnCalc] = useState("0");
   const [mintcalc, setmintCalc] = useState("0");
 
- const config = createConfig({
+  const config = createConfig({
     chains: [mainnet, sepolia],
     transports: {
       [mainnet.id]: http(),
       [sepolia.id]: http(),
     },
-  })
-/*
+  });
+  /*
 
   async function fetchBalance(){
     const balance = await getBalance(config, {
@@ -91,13 +50,13 @@ const SwapComponent: React.FC = () => {
     console.log(fetchBalance())
    },[])
 */
-//////
-  function SetMintAmount(input:string){
+  //////
+  function SetMintAmount(input: string) {
     const value = Number(input);
-    if(value <= 0){
-      return
-    }else{
-      _setmintReturnAmount(value.toString())
+    if (value <= 0) {
+      return;
+    } else {
+      _setmintReturnAmount(value.toString());
     }
   }
 
@@ -184,7 +143,7 @@ const SwapComponent: React.FC = () => {
     functionName: "mint",
     chainId: current_chain,
     args: [],
-    value:[(Number(fromToken.amount) * 10 ** 18).toString()],
+    value: [(Number(fromToken.amount) * 10 ** 18).toString()],
     onSuccess(data: any) {
       Swal.fire({
         icon: "success",
@@ -231,19 +190,18 @@ const SwapComponent: React.FC = () => {
     }
     if (fromToken.token === "ETH") {
       Mint();
-    } else if (fromToken.token === "KURVE") {
+    } else if (fromToken.token === "PLUTO") {
       Burn();
     }
   };
 
-
   function toggleTokens() {
     if (fromToken.token == "ETH") {
-      setFromToken({ ...fromToken, token: "KURVE" });
+      setFromToken({ ...fromToken, token: "PLUTO" });
       setToToken({ ...toToken, token: "ETH" });
     } else {
       setFromToken({ ...fromToken, token: "ETH" });
-      setToToken({ ...toToken, token: "KURVE" });
+      setToToken({ ...toToken, token: "PLUTO" });
     }
   }
 
@@ -256,15 +214,18 @@ const SwapComponent: React.FC = () => {
         style={{ fontFamily: "Gotham-Ultra" }}
         className="text-white text-2xl"
       >
-        Swap Pluto for ETH
+        Swap Fox for ETH
       </h2>
       <p
         style={{ fontFamily: "Gotham-Ultra" }}
         className="text-white text-sm font-bold mb-4"
       >
-        Pluto Balance: {finalKurveBalance.toFixed(3)} <br />
+        Fox Balance: {finalKurveBalance.toFixed(3)} <br />
       </p>
-      <TokenInput>
+      <div
+        style={{ fontFamily: "Gotham-Bold", backgroundColor: "#212429" }}
+        className="rounded-2xl p-5 mb-2"
+      >
         <div className="grid grid-rows-2 grid-cols-2 ">
           <div className="">
             <label
@@ -278,7 +239,6 @@ const SwapComponent: React.FC = () => {
           <div />
           <div>
             <input
-
               type="text"
               id="mintInput"
               placeholder="0.00"
@@ -288,27 +248,34 @@ const SwapComponent: React.FC = () => {
             />
           </div>
           <div>
-            <TokenSelect 
+            <select
               value={fromToken.token}
+              style={{ fontFamily: "Gotham-Bold", backgroundColor: "#191b1f" }}
+              className="border border-gray-300 rounded-3xl text-white px-2 py-2 hover:border-white transition-all duration-300"
             >
               <option value={`${fromToken.token}`}> {fromToken.token}</option>
-            </TokenSelect>
+            </select>
           </div>
         </div>
-      </TokenInput>
-      <ArrowWrapper
-        className="cursor-pointer mx-auto justify-center"
+      </div>
+      <button 
         onClick={handleReverseTokens}
-      >
-        <div className="w-1/2 h-1/2 bg-white border-2  border-gray-600 rounded-2xl px-2 py-2 mb-2 mx-auto" onClick={() => toggleTokens()}>
+        className="text-center text-white w-fit h-fit mb-2 mt-3 hover:border-white transition-all duration-300">
+        <div
+          className="w-1/2 h-1/2 bg-white border-2 cursor-pointer border-gray-600 rounded-2xl px-2 py-2 mb-2 mx-auto"
+          onClick={() => toggleTokens()}
+        >
           {fromToken.token === "ETH" ? (
             <Image src={downArrow} alt="down" />
           ) : (
             <Image src={upArrow} alt="up" />
           )}
         </div>
-      </ArrowWrapper>
-      <TokenInput>
+      </button>
+      <div
+        style={{ fontFamily: "Gotham-Bold", backgroundColor: "#212429" }}
+        className="rounded-2xl p-5 mb-2"
+      >
         <div className="grid grid-rows-2 grid-cols-2">
           <div className="">
             <label
@@ -333,12 +300,16 @@ const SwapComponent: React.FC = () => {
             />
           </div>
           <div>
-            <TokenSelect value={toToken.token}>
-              <option value={`${toToken.token}`}>{toToken.token} </option>
-            </TokenSelect>
+            <select
+              value={toToken.token}
+              style={{ fontFamily: "Gotham-Bold", backgroundColor: "#191b1f" }}
+              className="border border-gray-300 rounded-3xl text-white px-2 py-2 hover:border-white transition-all duration-300"
+            >
+              <option value={`${toToken.token}`}> {toToken.token}</option>
+            </select>
           </div>
         </div>
-      </TokenInput>
+      </div>
       <button
         className="w-full bg-pink-500 rounded-2xl text-white font-bold p-3 hover:bg-blue-500"
         onClick={handleConditionalSwap}
