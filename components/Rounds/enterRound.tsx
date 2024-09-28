@@ -8,7 +8,7 @@ export default function EnterRound() {
   const contract = "0x7fB3b2E60F75289f59b2A95Bb204fC648C97b5E6";
   const { address, isConnected } = useAccount();
   let current_chain = 1;
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(BigInt(1000 * 10 ** 18).toString());
   const [hasAllowance, setHasAllowance] = useState(false);
   const amountToBurn = ethers.parseUnits("1000", 18);
 
@@ -60,7 +60,7 @@ export default function EnterRound() {
     functionName: "enterDrawRound",
     chainId: current_chain,
     watch: true,
-    args: [(1000 * 10 ** 18).toString()],
+    args: [amount],
     account: address,
     onSuccess(data: any) {
       Swal.fire({
@@ -79,7 +79,7 @@ export default function EnterRound() {
       return;
     }
     try {
-      EnterCurrentRound({args: [BigInt(1000 * 10 ** 18).toString()]});
+      EnterCurrentRound();
     } catch (error) {
       console.error("Entering draw round failed:", error);
     }
@@ -101,25 +101,6 @@ export default function EnterRound() {
           <p className={"my-5"}></p>
 
           <div className="flex flex-col justify-center items-center mt-10 ">
-            <label
-              htmlFor="Draw-enter"
-              style={{ fontFamily: "Gotham-Bold" }}
-              className="text-stone-200 text-left text-sm font-bold"
-            >
-              Enter ETH amount for draw
-            </label>
-            <input
-              value={amount}
-              type="number"
-              min="0"
-              id="Draw-enter"
-              placeholder="1000"
-              className="w-64 border h-8 mt-2 mb-10 mr-4 border-gray-300 outline-none p-2 pr-10 text-black"
-              style={{ fontFamily: "ethnocentricRg" }}
-              onChange={(e) => {
-                setAmount(e.target.value);
-              }}
-            />
           </div>
           {!hasAllowance ? (
             <button
