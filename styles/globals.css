@@ -4,11 +4,12 @@
 
 html,
 body {
-  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  padding: 0;
+  overflow: hidden; /* Prevents scrollbars */
 }
+
+
 
 a {
   color: inherit;
@@ -45,8 +46,24 @@ a {
 .swal2-styled {
 
   box-shadow: 0 0 0 1px rgb(93 93 93) !important;
-
 }
+
+/* Add this to your styles.css or inside a <style> tag */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  animation: marquee 15s linear infinite;
+}
+
+
 .iekbcc0 {
   font-family: "GroupeMedium" !important;
 }

@@ -3,7 +3,6 @@ import styles from "../../styles/Home.module.css";
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 export default function HeaderComponent() {
-
   return (
     <>
       <nav className="transition-all duration-700 px-2 sm:px-4 bg-none mt-3 pt-3 -my-10 sm:my-0 w-full fixed z-20 top-0">
@@ -13,23 +12,32 @@ export default function HeaderComponent() {
         >
           <ul
             style={{ fontFamily: "Gotham-Ultra" }}
-            className={`${styles.nav} text-sm self-center text-white mr-10 px-2 py-2`}
+            className={`${styles.nav} text-md self-center mr-10 px-2 py-2`}
           >
             <li
               className=" border-gray-300"
-              style={{ fontFamily: "Gotham-Ultra" }}
+              style={{ fontFamily: "Gotham-Ultra", color: '#4C397E' }}
             >
               <Link href={"/"}>Dashboard</Link>
             </li>
             <li
-              className=" border-gray-300"
-              style={{ fontFamily: "Gotham-Ultra" }}
+              className=" border-gray-300 my-2 sm:my-2 md:my-0"
+              style={{ fontFamily: "Gotham-Ultra", color: '#4C397E' }}
             >
-              <Link href={"/Swap"}>Fox Time</Link>
+              <Link href={"/Swap"}>POG Time</Link>
+            </li>
+            <li
+              className=" border-gray-300"
+              style={{ fontFamily: "Gotham-Ultra", color: '#4C397E' }}
+            >
+              <Link href={"/ClaimPage"}>Claim Time</Link>
             </li>
           </ul>
-          <div className={'py-0 self-center'}>
-              <ConnectButton />
+          <div
+            style={{ fontFamily: "Gotham-Ultra" }}
+            className={"py-0 self-center"}
+          >
+            <ConnectButton />
           </div>
         </div>
 
@@ -43,8 +51,7 @@ export default function HeaderComponent() {
               className={
                 " flex flex-row top-0 left-0 absolute self-center mt-4 md:px-4 lg:px-4 "
               }
-            >
-            </div>
+            ></div>
 
             <ul
               className={
@@ -52,9 +59,7 @@ export default function HeaderComponent() {
               }
             >
               <div className="flex transition-all flex-col items-center ">
-                <div className={"flex flex-row"}>
-
-                </div>
+                <div className={"flex flex-row"}></div>
               </div>
             </ul>
           </ul>

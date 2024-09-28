@@ -30,7 +30,7 @@
   padding: 0;}
 .nav a {
   padding: .5em .8em;
-  color: rgba(255,255,255,.5);
+  color: #4C397E;
   position: relative;
   text-decoration: none;}
 .nav a::before,
@@ -101,7 +101,6 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: black;
 }
 @keyframes zoomIn {
   0% {
@@ -110,6 +109,25 @@
   100% {
     transform: scale(1); /* End at 100% scale */
   }
+}
+
+.fullscreenBg {
+  position: fixed; /* Keeps the image fixed even when scrolling */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-image: url('../assets/images/POGBackground.png'); /* Replace with your image path */
+  background-size: cover; /* Ensures the image covers the entire screen */
+  background-position: center center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  z-index: 0; /* Sets the z-index below other elements */
+  object-fit: cover; /* Ensures the aspect ratio is preserved */
+  opacity: 1; /* Adjust if you want some transparency */
+}
+
+.pogButton {
+  background-color: #4C397E;
 }
 
 .image-container {

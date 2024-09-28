@@ -207,7 +207,7 @@ const SwapComponent: React.FC = () => {
 
   return (
     <div
-      style={{ backgroundColor: "#191b1f" }}
+      style={{ backgroundColor: "#191b1f", fontFamily: "Gotham-Ultra" }}
       className="  w-full max-w-md rounded-2xl p-5"
     >
       <h2
