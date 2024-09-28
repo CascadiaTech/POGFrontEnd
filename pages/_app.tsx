@@ -31,8 +31,8 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "LinqTest",
-  projectId: "e860804a2106941d3e0efee245ad7d7a",
+  appName: "POG",
+  projectId: "d8a9ecf8ae526b558ae75b69bf7d9a9b",
   chains,
 });
 
