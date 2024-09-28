@@ -92,7 +92,7 @@ export default function EnterRound() {
     try {
       EnterCurrentRound();
     } catch (error) {
-      console.error("Entering draw round failed:", error);
+      console.error("Entering draw round failed for other reasons:", error);
     }
   }
 
@@ -125,7 +125,6 @@ export default function EnterRound() {
             <button
               style={{ fontFamily: "Gotham-Bold", backgroundColor: '#4C397E' }}
               className="border border-stone-700 rounded-2xl duration-500 px-4 py-2 transition-all text-md text-stone-300 hover:text-white hover:border-stone-300 active:scale-90"
-              onClick={() => HandleEnter()}
             >
               Enter Draw
             </button>

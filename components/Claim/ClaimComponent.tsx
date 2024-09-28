@@ -8,10 +8,10 @@ export default function ClaimComponent() {
   const { address, isConnected } = useAccount();
   let current_chain = 1;
 
-  const { write: ClaimWinningCertificate } = useContractWrite({
+  const { write: ClaimWinningCertificates } = useContractWrite({
     address: contract,
     abi: POGAbi,
-    functionName: "ClaimWinningCertificate",
+    functionName: "ClaimWinningCertificates",
     chainId: current_chain,
     watch: true,
     args: [],
@@ -59,7 +59,7 @@ export default function ClaimComponent() {
           <button
             style={{ fontFamily: "Gotham-Bold", backgroundColor: "#4C397E" }}
             className="border border-stone-700 rounded-2xl duration-500 px-4 py-2 mt-5 transition-all text-md text-stone-300 hover:text-white hover:border-stone-300 active:scale-90"
-            onClick={() => ClaimWinningCertificate()}
+            onClick={() => ClaimWinningCertificates()}
           >
             Claim the Winning Certificate You Mighty Winner!
           </button>
