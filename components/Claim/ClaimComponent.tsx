@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import POGAbi from "../../abi/Pot_Of_Greed.mjs";
 import Swal from "sweetalert2";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
@@ -7,7 +7,6 @@ export default function ClaimComponent() {
   const contract = "0x7fB3b2E60F75289f59b2A95Bb204fC648C97b5E6";
   const { address, isConnected } = useAccount();
   let current_chain = 1;
-  const [amount, setAmount] = useState("");
 
   const { write: ClaimWinningCertificate } = useContractWrite({
     address: contract,
