@@ -68,6 +68,17 @@ export default function EnterRound() {
         title: `You have successfuully entered the draw round!`,
       });
     },
+    onError(error: { reason: string; }) {
+      // Extract the reason for revert if possible
+      const errorMessage =
+        error.reason || "Rounds must be active. Come back when there has been a round started!";
+  
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: errorMessage,
+      });
+    },
   });
 
   async function HandleEnter() {
