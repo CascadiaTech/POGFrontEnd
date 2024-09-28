@@ -1,7 +1,7 @@
 import React from "react";
 import POGAbi from "../../abi/Pot_Of_Greed.mjs";
 import Swal from "sweetalert2";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { useAccount, useContractWrite } from "wagmi";
 
 export default function ClaimComponent() {
   const contract = "0x7fB3b2E60F75289f59b2A95Bb204fC648C97b5E6";

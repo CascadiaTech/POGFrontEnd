@@ -836,7 +836,7 @@ const POGAbi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-  {
+  {  
     inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
     name: "transferOwnership",
     outputs: [],

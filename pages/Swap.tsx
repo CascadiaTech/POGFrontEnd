@@ -1,7 +1,6 @@
 import styles from "../styles/Home.module.css";
 import HeaderComponent from "../components/Header/HeaderComponent";
 import EnterRound from "../components/Rounds/enterRound";
-import Image from "next/image";
 
 
 export default function Swap() {

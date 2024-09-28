@@ -1,7 +1,6 @@
 import styles from "../styles/Home.module.css";
 import HeaderComponent from "../components/Header/HeaderComponent";
 import { useEffect, useRef, useState } from "react";
-import SwapComponent from "../components/swapc";
 
 
 export default function RoundTime() {

@@ -1,5 +1,5 @@
 import getConfig from "next/config";
-import { goerli, mainnet, sepolia } from "wagmi/chains";
+import { mainnet, sepolia } from "wagmi/chains";
 // import { FeeAmount } from "@uniswap/v3-sdk";
 // import { CONTRACT_NAMES } from "../constants/contractReferences";
 // import { ProtocolVersion } from "../constants/uniswap";
