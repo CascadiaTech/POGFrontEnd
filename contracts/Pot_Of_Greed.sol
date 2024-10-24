@@ -315,7 +315,7 @@ https://x.com/PotOfGreedX
 
 
 */
-
+ 
 contract Pot_Of_Greed is RrpRequesterV0, ERC20, Ownable {
     using EnumerableSet for EnumerableSet.AddressSet;
 
@@ -1052,7 +1052,6 @@ contract Pot_Of_Greed is RrpRequesterV0, ERC20, Ownable {
     function addLiquidity(uint256 tokenAmount, uint256 ethAmount) private {
         // approve token transfer to cover all possible scenarios
         _approve(address(this), address(router), tokenAmount);
-
         // add the liquidity
         router.addLiquidityETH{value: ethAmount}(
             address(this),
