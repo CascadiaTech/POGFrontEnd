@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { useAccount, useContractWrite } from "wagmi";
 
 export default function ClaimComponent() {
-  const contract = "0x7fB3b2E60F75289f59b2A95Bb204fC648C97b5E6";
+  const contract = "0xA63842Abbb011770125045929164A95949779C70";
   const { address, isConnected } = useAccount();
   let current_chain = 1;
 
@@ -61,7 +61,7 @@ export default function ClaimComponent() {
             className="border border-stone-700 rounded-2xl duration-500 px-4 py-2 mt-5 transition-all text-md text-stone-300 hover:text-white hover:border-stone-300 active:scale-90"
             onClick={() => ClaimWinningCertificates()}
           >
-            Claim the Winning Certificate You Mighty Winner!
+            Claim the Winning Certificate!
           </button>
         </div>
       </div>

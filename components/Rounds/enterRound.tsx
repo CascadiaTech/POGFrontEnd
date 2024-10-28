@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
+import POGExtensionAbi from "../../abi/POGPOTExtensionContract.json";
 import POGAbi from "../../abi/Pot_Of_Greed.mjs";
 import Swal from "sweetalert2";
-import {
-  useAccount,
-  useContractEvent,
-  useContractRead,
-  useContractWrite,
-} from "wagmi";
+import styles from "../styles/Home.module.css";
+import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import { ethers, JsonRpcProvider } from "ethers";
-import WinnerInfo from "../WinnerInfo";
 
 export default function EnterRound() {
-  const contract = "0x7fB3b2E60F75289f59b2A95Bb204fC648C97b5E6";
+  const extensionContract = "0xA63842Abbb011770125045929164A95949779C70";
+  const pogContract = "0x7fb3b2e60f75289f59b2a95bb204fc648c97b5e6";
+  const abi = POGExtensionAbi.abi;
+
   const { address, isConnected } = useAccount();
   let current_chain = 1;
   const [amount, setAmount] = useState("");
@@ -21,40 +20,59 @@ export default function EnterRound() {
   const [getRoundState, setRoundState] = useState(false);
   const [state, setState] = useState(true);
   const [sliderValue, setSliderValue] = useState(1);
-
-  const [pogPotDropData, setPogPotDropData] = useState<{ LPDROP: string }[]>(
-    []
-  );
-  const provider = new ethers.JsonRpcProvider(
-    "https://mainnet.infura.io/v3/828ea3605e46462dac5189cc7a852d79"
-  );
-  const pogContractInstance = new ethers.Contract(contract, POGAbi, provider);
+  const tokenAmount = sliderValue * 1000; // Adjust token amount based on slider
+  const [calculatedTimeRemaining, setCalculatedTimeRemaining] = useState<
+    string | undefined
+  >();
 
   const { data: allowance } = useContractRead({
-    address: contract,
-    abi: POGAbi,
+    address: pogContract,
     functionName: "allowance",
-    args: [address, contract], // Owner and spender addresses
+    args: [address, extensionContract], // Owner and spender addresses
+    abi: POGAbi,
     chainId: current_chain,
     watch: true,
     enabled: isConnected, // Enable only if connected
   });
 
   const { data: participantCount } = useContractRead({
-    address: contract,
-    abi: POGAbi,
+    address: extensionContract,
     functionName: "getParticpantCount",
     args: [],
+    abi: abi,
     chainId: current_chain,
     watch: true,
     enabled: isConnected, // Enable only if connected
   });
 
-  // async function getRoundInfo() {
-  //   const roundData = await contract.returnRoundsWon(roundId);
-  // }
+  const { data: timeRemaining } = useContractRead({
+    address: extensionContract,
+    functionName: "getTimeRemaining",
+    args: [],
+    abi: abi,
+    chainId: current_chain,
+    watch: true,
+    enabled: isConnected, // Enable only if connected
+  });
 
-  // Effect to update the state based on allowance data
+  const formatTime = (seconds: number): string => {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    const formattedHrs = String(hrs).padStart(2, "0");
+    const formattedMins = String(mins).padStart(2, "0");
+    const formattedSecs = String(secs).padStart(2, "0");
+
+    return `${formattedHrs}:${formattedMins}:${formattedSecs}`;
+  };
+
+  useEffect(() => {
+    if (timeRemaining !== undefined) {
+      const seconds = Number(timeRemaining);
+      setCalculatedTimeRemaining(formatTime(seconds)); 
+    }
+  }, [timeRemaining]);
+
   useEffect(() => {
     if (allowance && allowance !== 0) {
       setHasAllowance(true);
@@ -64,12 +82,12 @@ export default function EnterRound() {
   }, [allowance, getRoundState]);
 
   const { write: Approve } = useContractWrite({
-    address: contract,
+    address: pogContract,
     abi: POGAbi,
     functionName: "approve",
     chainId: current_chain,
     watch: true,
-    args: [contract, amountToBurn],
+    args: [pogContract, amountToBurn],
     account: address,
     onSuccess() {
       Swal.fire({
@@ -87,12 +105,12 @@ export default function EnterRound() {
   });
 
   const { write: EnterCurrentRound } = useContractWrite({
-    address: contract,
-    abi: POGAbi,
+    address: extensionContract,
+    abi: abi,
     functionName: "enterDrawRound",
     chainId: current_chain,
     watch: true,
-    args: [ethers.parseUnits(String(sliderValue * 1000), 0)],
+    args: [ethers.parseUnits(String(tokenAmount), 18), sliderValue],
     account: address,
     onSuccess(data: any) {
       Swal.fire({
@@ -101,7 +119,6 @@ export default function EnterRound() {
       });
     },
     onError(error: { reason: string }) {
-      // Extract the reason for revert if possible
       const errorMessage =
         error.reason ||
         "Rounds must be active. Come back when there has been a round started!";
@@ -128,13 +145,15 @@ export default function EnterRound() {
     }
     try {
       EnterCurrentRound({
-        args: [ethers.parseUnits(String(sliderValue * 1000), 18)], 
+        args: [
+          ethers.parseUnits(String(tokenAmount), 18), // amount
+          sliderValue, // numberOfTickets
+        ],
       });
     } catch (error) {
       console.error("Entering draw round failed for other reasons:", error);
     }
   }
-  console.log(`this is my amount: ${sliderValue}`);
 
   return (
     <>
@@ -160,16 +179,24 @@ export default function EnterRound() {
             <input
               type="range"
               min="1"
-              max="10"
+              max="50"
               value={sliderValue}
               onChange={handleSliderChange}
-              style={{ width: "80%" }}
+              style={{ width: "80%", backgroundColor: "#8e4dff" }}
             />
-            <p style={{ fontFamily: "Gotham-Bold" }} className=" text-lg text-stone-300">Selected Amount: {sliderValue *1000} Tokens</p>
+            <p
+              style={{ fontFamily: "Gotham-Bold" }}
+              className=" text-lg text-stone-300"
+            >
+              Selected Amount: {sliderValue * 1000} Tokens
+            </p>
 
-            <button  style={{ fontFamily: "Gotham-Bold" }} className="my-4 text-lg text-stone-300" onClick={HandleEnter}>
+            <p
+              style={{ fontFamily: "Gotham-Bold" }}
+              className="my-4 text-lg text-stone-300"
+            >
               Enter Draw Round with: {sliderValue} Tickets
-            </button>
+            </p>
           </div>
           {!hasAllowance ? (
             <button
@@ -196,7 +223,15 @@ export default function EnterRound() {
               "radial-gradient(ellipse at center, #328AAD 0%, #5D41A5 100%, #D1FBE5 100%)",
           }}
           className=" py-8 px-6 flex flex-row mt-5 mx-auto inline-block rounded-2xl w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px] overflow-x-auto opacity-90"
-        ></div>
+        >
+          {/* <Timer initialHours={18} initialMinutes={35}/>  */}
+          <p
+            style={{ fontFamily: "Gotham-Bold" }}
+            className="my-4 mx-auto text-center text-lg text-stone-300"
+          >
+            Here is timer: {calculatedTimeRemaining}
+          </p>
+        </div>
       </div>
     </>
   );
