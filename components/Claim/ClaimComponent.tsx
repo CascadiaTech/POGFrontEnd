@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { useAccount, useContractWrite } from "wagmi";
 
 export default function ClaimComponent() {
-  const contract = "0xA63842Abbb011770125045929164A95949779C70";
+  const contract = "0xabCC3EbfBecbc9b290199860011049fB85D538A7";
   const { address, isConnected } = useAccount();
   let current_chain = 1;
 

@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import POGExtensionAbi from "../../abi/POGPOTExtensionContract.json";
 import POGAbi from "../../abi/Pot_Of_Greed.mjs";
 import Swal from "sweetalert2";
-import styles from "../styles/Home.module.css";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import { ethers, JsonRpcProvider } from "ethers";
 
 export default function EnterRound() {
-  const extensionContract = "0xA63842Abbb011770125045929164A95949779C70";
+  const extensionContract = "0xabCC3EbfBecbc9b290199860011049fB85D538A7";
   const pogContract = "0x7fb3b2e60f75289f59b2a95bb204fc648c97b5e6";
   const abi = POGExtensionAbi.abi;
 
