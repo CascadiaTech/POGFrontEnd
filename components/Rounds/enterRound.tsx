@@ -21,25 +21,14 @@ export default function EnterRound() {
   const [state, setState] = useState(true);
   const [sliderValue, setSliderValue] = useState(1);
   const tokenAmount = sliderValue * 1000; // Adjust token amount based on slider
-  const [calculatedTimeRemaining, setCalculatedTimeRemaining] = useState<
-    string | undefined
-  >();
+  const [calculatedTimeRemaining, setCalculatedTimeRemaining] = useState<string>("00:00:00");
+
 
   const { data: allowance } = useContractRead({
     address: pogContract,
     functionName: "allowance",
     args: [address, extensionContract], // Owner and spender addresses
     abi: POGAbi,
-    chainId: current_chain,
-    watch: true,
-    enabled: isConnected, // Enable only if connected
-  });
-
-  const { data: participantCount } = useContractRead({
-    address: extensionContract,
-    functionName: "getParticpantCount",
-    args: [],
-    abi: abi,
     chainId: current_chain,
     watch: true,
     enabled: isConnected, // Enable only if connected
@@ -87,7 +76,7 @@ export default function EnterRound() {
     functionName: "approve",
     chainId: current_chain,
     watch: true,
-    args: [pogContract, amountToBurn],
+    args: [extensionContract, amountToBurn],
     account: address,
     onSuccess() {
       Swal.fire({
@@ -154,6 +143,7 @@ export default function EnterRound() {
       console.error("Entering draw round failed for other reasons:", error);
     }
   }
+  console.log(`time remaining: ${calculatedTimeRemaining}`)
 
   return (
     <>
@@ -223,14 +213,16 @@ export default function EnterRound() {
               "radial-gradient(ellipse at center, #328AAD 0%, #5D41A5 100%, #D1FBE5 100%)",
           }}
           className=" py-8 px-6 flex flex-row mt-5 mx-auto inline-block rounded-2xl w-[350px] sm:w-[350px] md:w-[550px] lg:w-[650px] overflow-x-auto opacity-90"
-        >
-          {/* <Timer initialHours={18} initialMinutes={35}/>  */}
+        > 
+          
           <p
             style={{ fontFamily: "Gotham-Bold" }}
             className="my-4 mx-auto text-center text-lg text-stone-300"
           >
-            Here is timer: {calculatedTimeRemaining}
+            Timer for when the POG round begins: {calculatedTimeRemaining || "Loading..."}
           </p>
+         
+          
         </div>
       </div>
     </>
