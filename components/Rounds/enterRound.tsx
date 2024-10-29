@@ -32,32 +32,44 @@ export default function EnterRound() {
     enabled: isConnected, // Enable only if connected
   });
 
-  const { data: timeRemaining } = useContractRead({
+   // Read time remaining from the contract
+   const { data: timeRemaining } = useContractRead({
     address: extensionContract,
     functionName: "getTimeRemaining",
     args: [],
-    abi: abi,
+    abi: POGExtensionAbi.abi,
     chainId: current_chain,
     watch: true,
-    enabled: isConnected, // Enable only if connected
+    enabled: isConnected,
   });
 
+  // Format time in HH:MM:SS format
   const formatTime = (seconds: number): string => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    const formattedHrs = String(hrs).padStart(2, "0");
-    const formattedMins = String(mins).padStart(2, "0");
-    const formattedSecs = String(secs).padStart(2, "0");
-
-    return `${formattedHrs}:${formattedMins}:${formattedSecs}`;
+    return `${String(hrs).padStart(2, "0")}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
+  // Timer logic with real-time updates
   useEffect(() => {
+    let interval:any;
     if (timeRemaining !== undefined) {
-      const seconds = Number(timeRemaining);
-      setCalculatedTimeRemaining(formatTime(seconds)); 
+      let seconds = Number(timeRemaining);
+
+      setCalculatedTimeRemaining(formatTime(seconds));
+
+      interval = setInterval(() => {
+        seconds -= 1;
+        if (seconds >= 0) {
+          setCalculatedTimeRemaining(formatTime(seconds));
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000);
     }
+
+    return () => clearInterval(interval); // Cleanup on unmount
   }, [timeRemaining]);
 
   useEffect(() => {
