@@ -3,13 +3,12 @@ import POGExtensionAbi from "../../abi/POGPOTExtensionContract.json";
 import POGAbi from "../../abi/Pot_Of_Greed.mjs";
 import Swal from "sweetalert2";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
-import { ethers, JsonRpcProvider } from "ethers";
+import { ethers } from "ethers";
 
 export default function EnterRound() {
   const extensionContract = "0xabCC3EbfBecbc9b290199860011049fB85D538A7";
   const pogContract = "0x7fb3b2e60f75289f59b2a95bb204fc648c97b5e6";
   const abi = POGExtensionAbi.abi;
-
   const { address, isConnected } = useAccount();
   let current_chain = 1;
   const [amount, setAmount] = useState("");
@@ -218,7 +217,7 @@ export default function EnterRound() {
             style={{ fontFamily: "Gotham-Bold" }}
             className="my-4 mx-auto text-center text-lg text-stone-300"
           >
-            Timer for when the POG round begins: {calculatedTimeRemaining || "Loading..."}
+            Timer for when the POG round will end: {calculatedTimeRemaining || "Loading..."}
           </p>
          
           
