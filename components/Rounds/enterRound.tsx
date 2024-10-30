@@ -11,14 +11,12 @@ export default function EnterRound() {
   const abi = POGExtensionAbi.abi;
   const { address, isConnected } = useAccount();
   let current_chain = 1;
-  const [amount, setAmount] = useState("");
   const [hasAllowance, setHasAllowance] = useState(false);
-  const amountToBurn = ethers.parseUnits("1000", 18);
-  const [participantCountNumber, setParticipantCountNumber] = useState(Number);
   const [getRoundState, setRoundState] = useState(false);
-  const [state, setState] = useState(true);
-  const [sliderValue, setSliderValue] = useState(1);
+  const [sliderValue, setSliderValue] = useState<number>(1);
+
   const tokenAmount = sliderValue * 1000; // Adjust token amount based on slider
+  const amountToBurn = ethers.parseUnits((sliderValue * 1000).toString(), 18);
   const [calculatedTimeRemaining, setCalculatedTimeRemaining] = useState<string>("00:00:00");
 
 
@@ -130,9 +128,10 @@ export default function EnterRound() {
     },
   });
 
-  const handleSliderChange = (e: { target: { value: string } }) => {
-    setSliderValue(parseInt(e.target.value));
-  };
+// Slider change handler
+const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setSliderValue(parseInt(e.target.value)); // Ensure it's always a number
+};
 
   async function HandleEnter() {
     if (!address) {
