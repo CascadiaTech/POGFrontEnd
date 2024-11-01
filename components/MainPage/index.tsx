@@ -12,14 +12,14 @@ const MainPage: React.FC = () => {
         <div className="flex flex-row mx-auto my-10 justify-center">
           <button
             style={{ fontFamily: "Gotham-Bold", backgroundColor: "#4C397E" }}
-            className="border border-stone-700 rounded-2xl duration-500 px-6 py-3 transition-all text-lg text-stone-300 hover:text-white hover:border-stone-300 active:scale-90"
+            className="border border-stone-700 w-28 md:w-44 rounded-2xl duration-500 px-4 py-2 transition-all text-lg text-stone-300 hover:text-white hover:border-stone-300 active:scale-90"
           >
             <Link href={"/Swap"}>Enter Raffle</Link>
           </button>
           <p className="mx-5"></p>
           <button
             style={{ fontFamily: "Gotham-Bold", backgroundColor: "#4C397E" }}
-            className="border border-stone-700 rounded-2xl duration-500 px-6 py-3 transition-all text-lg text-stone-300 hover:text-white hover:border-stone-300 active:scale-90"
+            className="border border-stone-700 w-28 md:w-44 rounded-2xl duration-500 px-4 py-2 transition-all text-lg text-stone-300 hover:text-white hover:border-stone-300 active:scale-90"
           >
             <Link href={"/ClaimPage"}>Claim The Winning Certificate</Link>
           </button>

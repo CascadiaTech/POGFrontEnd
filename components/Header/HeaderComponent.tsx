@@ -16,19 +16,19 @@ export default function HeaderComponent() {
           >
             <li
               className=" border-gray-300"
-              style={{ fontFamily: "Gotham-Ultra", color: '#4C397E' }}
+              style={{ fontFamily: "Gotham-Ultra", color: '#c078ff' }}
             >
               <Link href={"/"}>Dashboard</Link>
             </li>
             <li
               className=" border-gray-300 my-2 sm:my-2 md:my-0"
-              style={{ fontFamily: "Gotham-Ultra", color: '#4C397E' }}
+              style={{ fontFamily: "Gotham-Ultra", color: '#c078ff' }}
             >
               <Link href={"/Swap"}>POG Time</Link>
             </li>
             <li
               className=" border-gray-300"
-              style={{ fontFamily: "Gotham-Ultra", color: '#4C397E' }}
+              style={{ fontFamily: "Gotham-Ultra", color: '#c078ff' }}
             >
               <Link href={"/ClaimPage"}>Claim Time</Link>
             </li>
